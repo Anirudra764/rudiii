@@ -55,16 +55,7 @@ export default function App() {
   });
 
   // Page Tabs - dynamically adjusted depending on persistent authentication
-  const [activeTab, setActiveTab] = useState<string>(() => {
-    const saved = localStorage.getItem('currentUser');
-    if (saved) {
-      try {
-        const u = JSON.parse(saved);
-        if (u && u.role !== 'user') return 'admin';
-      } catch (e) {}
-    }
-    return 'home';
-  });
+  const [activeTab, setActiveTab] = useState<string>('home');
   
   // Real-time backend states - populated instantly with local resilient fallbacks, backed by localStorage for extreme persistence
   const [events, setEvents] = useState<Event[]>(() => {

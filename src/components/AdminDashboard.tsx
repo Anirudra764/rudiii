@@ -336,9 +336,9 @@ export default function AdminDashboard({
       .catch(err => console.error("Could not fetch system security passcodes:", err));
   }, []);
 
-  // Everyone opening the Administrative Operations Console has full master level permissions for extreme simulation and sandboxing convenience
-  const isSuperadmin = true;
-  const isAdminOrSuper = true;
+  // Operational permissions are dynamically resolved from the current simulated role
+  const isSuperadmin = currentUser.role === 'superadmin';
+  const isAdminOrSuper = currentUser.role === 'superadmin' || currentUser.role === 'admin';
 
   // Math aggregates
   const activeConfirmedBookings = bookings.filter(b => b.status === 'confirmed');
@@ -1063,7 +1063,9 @@ export default function AdminDashboard({
             {/* List scheduler view with edit/delete controls */}
             <div className="col-span-12 lg:col-span-8 space-y-4">
               <h3 className="text-sm font-bold tracking-widest text-[#D4AF37] uppercase font-mono font-sans mb-1">Current Live Tour schedule</h3>
-              <p className="text-zinc-400 text-xs font-sans">Click on the edit tool to fine-tune date info, poster images, prices, capacities, and taglines.</p>
+              {isAdminOrSuper && (
+                <p className="text-zinc-400 text-xs font-sans">Click on the edit tool to fine-tune date info, poster images, prices, capacities, and taglines.</p>
+              )}
               
               <div className="grid md:grid-cols-2 gap-4">
                 {events.map(e => (
@@ -1084,7 +1086,13 @@ export default function AdminDashboard({
                     </div>
 
                     <div className="flex items-center justify-between border-t border-white/5 pt-3">
-                      <span className="text-[10px] font-bold text-green-400 font-mono">₹{e.totalSales} Sales Total</span>
+                      {isAdminOrSuper ? (
+                        <span className="text-[10px] font-bold text-green-400 font-mono">₹{e.totalSales} Sales Total</span>
+                      ) : (
+                        <div className="flex items-center gap-1">
+                          <span className="text-[10px] text-zinc-500 font-sans">View-only mode</span>
+                        </div>
+                      )}
                       
                       <div className="flex items-center gap-1">
                         {isAdminOrSuper && (
