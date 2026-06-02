@@ -140,25 +140,36 @@ export function ImageUploadWidget({
       // Compress in-browser first to guarantee ultra-fast transfer speeds
       const base64Data = await compressImage(file);
 
-      // Post compressed/optimized base64 data to backend
-      const res = await fetch('/api/upload', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          filename: file.name.replace(/\.[^/.]+$/, "") + ".jpg", // adjust ext
-          base64Data
-        })
-      });
+      // Post compressed/optimized base64 data to backend, but gracefully fall back if offline or serverless
+      let finalUrl = base64Data;
+      try {
+        const res = await fetch('/api/upload', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            filename: file.name.replace(/\.[^/.]+$/, "") + ".jpg", // adjust ext
+            base64Data
+          })
+        });
 
-      const data = await res.json();
-
-      if (!res.ok || !data.success) {
-        throw new Error(data.error || "Server rejected the upload file package");
+        const contentType = res.headers.get("content-type");
+        if (res.ok && contentType && contentType.includes("application/json")) {
+          const data = await res.json();
+          if (data && data.success && data.url) {
+            finalUrl = data.url;
+          } else if (data && data.error) {
+            throw new Error(data.error);
+          }
+        } else {
+          console.warn("Server returned a non-JSON response or error status. Falling back to local data URL representation.");
+        }
+      } catch (backendErr: any) {
+        console.warn("Backend upload failed/offline, using base64 fallback:", backendErr);
       }
 
-      onChange(data.url);
+      onChange(finalUrl);
       setUploadSuccess(true);
       setTimeout(() => setUploadSuccess(false), 3000);
     } catch (err: any) {

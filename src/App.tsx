@@ -224,25 +224,35 @@ export default function App() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(eventData)
       });
-      if (res.ok) {
+      const contentType = res.headers.get("content-type");
+      if (res.ok && contentType && contentType.includes("application/json")) {
         const eveRes = await fetch('/api/events');
         if (eveRes.ok) {
           const eveData = await eveRes.json();
           setEvents(eveData);
         }
         refreshAuditTrace();
+        return;
       }
-    } catch {}
+      throw new Error("FallbackToClient");
+    } catch {
+      setEvents(prev => prev.map(e => e.id === id ? { ...e, ...eventData } : e));
+    }
   };
 
   const handleDeleteCouponAPI = async (code: string) => {
     try {
       const res = await fetch(`/api/coupons/${code}`, { method: 'DELETE' });
-      if (res.ok) {
+      const contentType = res.headers.get("content-type");
+      if (res.ok && contentType && contentType.includes("application/json")) {
         setCoupons(coupons.filter(c => c.code !== code));
         refreshAuditTrace();
+        return;
       }
-    } catch {}
+      throw new Error("FallbackToClient");
+    } catch {
+      setCoupons(prev => prev.filter(c => c.code !== code));
+    }
   };
 
   const handleUpdateCouponAPI = async (code: string, couponData: any) => {
@@ -252,15 +262,20 @@ export default function App() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(couponData)
       });
-      if (res.ok) {
+      const contentType = res.headers.get("content-type");
+      if (res.ok && contentType && contentType.includes("application/json")) {
         const coupRes = await fetch('/api/coupons');
         if (coupRes.ok) {
           const coupData = await coupRes.json();
           setCoupons(coupData);
         }
         refreshAuditTrace();
+        return;
       }
-    } catch {}
+      throw new Error("FallbackToClient");
+    } catch {
+      setCoupons(prev => prev.map(c => c.code === code ? { ...c, ...couponData, discountPercent: Number(couponData.discountPercent), maxUses: Number(couponData.maxUses) } : c));
+    }
   };
 
   // Music handlers
@@ -271,11 +286,29 @@ export default function App() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(musicData)
       });
-      if (res.ok) {
+      const contentType = res.headers.get("content-type");
+      if (res.ok && contentType && contentType.includes("application/json")) {
         await refreshMedia();
         refreshAuditTrace();
+        return;
       }
-    } catch {}
+      throw new Error("FallbackToClient");
+    } catch {
+      const newTrack: MusicTrack = {
+        id: `mus-${Date.now()}`,
+        title: musicData.title,
+        album: musicData.album || "Single/Album",
+        duration: musicData.duration || "3:14",
+        audioUrl: musicData.audioUrl || "",
+        coverUrl: musicData.coverUrl || "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format",
+        spotifyUrl: musicData.spotifyUrl || "",
+        youtubeUrl: musicData.youtubeUrl || "",
+        appleMusicUrl: musicData.appleMusicUrl || "",
+        releaseDate: musicData.releaseDate || new Date().toISOString().split('T')[0],
+        isPopular: !!musicData.isPopular
+      };
+      setMusic(prev => [...prev, newTrack]);
+    }
   };
 
   const handleUpdateMusicAPI = async (id: string, musicData: any) => {
@@ -285,21 +318,31 @@ export default function App() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(musicData)
       });
-      if (res.ok) {
+      const contentType = res.headers.get("content-type");
+      if (res.ok && contentType && contentType.includes("application/json")) {
         await refreshMedia();
         refreshAuditTrace();
+        return;
       }
-    } catch {}
+      throw new Error("FallbackToClient");
+    } catch {
+      setMusic(prev => prev.map(t => t.id === id ? { ...t, ...musicData } : t));
+    }
   };
 
   const handleDeleteMusicAPI = async (id: string) => {
     try {
       const res = await fetch(`/api/music/${id}`, { method: 'DELETE' });
-      if (res.ok) {
+      const contentType = res.headers.get("content-type");
+      if (res.ok && contentType && contentType.includes("application/json")) {
         await refreshMedia();
         refreshAuditTrace();
+        return;
       }
-    } catch {}
+      throw new Error("FallbackToClient");
+    } catch {
+      setMusic(prev => prev.filter(t => t.id !== id));
+    }
   };
 
   // Video handlers
@@ -310,11 +353,25 @@ export default function App() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(videoData)
       });
-      if (res.ok) {
+      const contentType = res.headers.get("content-type");
+      if (res.ok && contentType && contentType.includes("application/json")) {
         await refreshMedia();
         refreshAuditTrace();
+        return;
       }
-    } catch {}
+      throw new Error("FallbackToClient");
+    } catch {
+      const newVideo: VideoClip = {
+        id: `vid-${Date.now()}`,
+        title: videoData.title,
+        type: videoData.type || "bts",
+        thumbnailUrl: videoData.thumbnailUrl || "",
+        youtubeEmbedId: videoData.youtubeEmbedId,
+        duration: videoData.duration || "4:02",
+        releaseDate: videoData.releaseDate || new Date().toISOString().split('T')[0]
+      };
+      setVideos(prev => [...prev, newVideo]);
+    }
   };
 
   const handleUpdateVideoAPI = async (id: string, videoData: any) => {
@@ -324,21 +381,31 @@ export default function App() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(videoData)
       });
-      if (res.ok) {
+      const contentType = res.headers.get("content-type");
+      if (res.ok && contentType && contentType.includes("application/json")) {
         await refreshMedia();
         refreshAuditTrace();
+        return;
       }
-    } catch {}
+      throw new Error("FallbackToClient");
+    } catch {
+      setVideos(prev => prev.map(v => v.id === id ? { ...v, ...videoData } : v));
+    }
   };
 
   const handleDeleteVideoAPI = async (id: string) => {
     try {
       const res = await fetch(`/api/videos/${id}`, { method: 'DELETE' });
-      if (res.ok) {
+      const contentType = res.headers.get("content-type");
+      if (res.ok && contentType && contentType.includes("application/json")) {
         await refreshMedia();
         refreshAuditTrace();
+        return;
       }
-    } catch {}
+      throw new Error("FallbackToClient");
+    } catch {
+      setVideos(prev => prev.filter(v => v.id !== id));
+    }
   };
 
   // Gallery handlers
@@ -349,11 +416,21 @@ export default function App() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(galleryData)
       });
-      if (res.ok) {
+      const contentType = res.headers.get("content-type");
+      if (res.ok && contentType && contentType.includes("application/json")) {
         await refreshMedia();
         refreshAuditTrace();
+        return;
       }
-    } catch {}
+      throw new Error("FallbackToClient");
+    } catch {
+      const newImage: GalleryImage = {
+        id: `gal-${Date.now()}`,
+        ...galleryData,
+        createdAt: new Date().toISOString()
+      };
+      setGallery(prev => [newImage, ...prev]);
+    }
   };
 
   const handleUpdateGalleryAPI = async (id: string, galleryData: any) => {
@@ -363,21 +440,31 @@ export default function App() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(galleryData)
       });
-      if (res.ok) {
+      const contentType = res.headers.get("content-type");
+      if (res.ok && contentType && contentType.includes("application/json")) {
         await refreshMedia();
         refreshAuditTrace();
+        return;
       }
-    } catch {}
+      throw new Error("FallbackToClient");
+    } catch {
+      setGallery(prev => prev.map(img => img.id === id ? { ...img, ...galleryData } : img));
+    }
   };
 
   const handleDeleteGalleryAPI = async (id: string) => {
     try {
       const res = await fetch(`/api/gallery/${id}`, { method: 'DELETE' });
-      if (res.ok) {
+      const contentType = res.headers.get("content-type");
+      if (res.ok && contentType && contentType.includes("application/json")) {
         await refreshMedia();
         refreshAuditTrace();
+        return;
       }
-    } catch {}
+      throw new Error("FallbackToClient");
+    } catch {
+      setGallery(prev => prev.filter(img => img.id !== id));
+    }
   };
 
   const handleAddAuditLogAPI = async (action: string, details: string) => {
@@ -426,11 +513,20 @@ export default function App() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(memberData)
       });
-      if (res.ok) {
+      const contentType = res.headers.get("content-type");
+      if (res.ok && contentType && contentType.includes("application/json")) {
         await refreshMedia();
         refreshAuditTrace();
+        return;
       }
-    } catch {}
+      throw new Error("FallbackToClient");
+    } catch {
+      const newMember: BandMember = {
+        id: `mem-${Date.now()}`,
+        ...memberData
+      };
+      setMembers(prev => [...prev, newMember]);
+    }
   };
 
   const handleUpdateMemberAPI = async (id: string, memberData: any) => {
@@ -440,21 +536,31 @@ export default function App() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(memberData)
       });
-      if (res.ok) {
+      const contentType = res.headers.get("content-type");
+      if (res.ok && contentType && contentType.includes("application/json")) {
         await refreshMedia();
         refreshAuditTrace();
+        return;
       }
-    } catch {}
+      throw new Error("FallbackToClient");
+    } catch {
+      setMembers(prev => prev.map(m => m.id === id ? { ...m, ...memberData } : m));
+    }
   };
 
   const handleDeleteMemberAPI = async (id: string) => {
     try {
       const res = await fetch(`/api/members/${id}`, { method: 'DELETE' });
-      if (res.ok) {
+      const contentType = res.headers.get("content-type");
+      if (res.ok && contentType && contentType.includes("application/json")) {
         await refreshMedia();
         refreshAuditTrace();
+        return;
       }
-    } catch {}
+      throw new Error("FallbackToClient");
+    } catch {
+      setMembers(prev => prev.filter(m => m.id !== id));
+    }
   };
 
   const handleUpdateSettingsAPI = async (settingsData: any) => {
@@ -464,11 +570,16 @@ export default function App() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(settingsData)
       });
-      if (res.ok) {
+      const contentType = res.headers.get("content-type");
+      if (res.ok && contentType && contentType.includes("application/json")) {
         await refreshMedia();
         refreshAuditTrace();
+        return;
       }
-    } catch {}
+      throw new Error("FallbackToClient");
+    } catch {
+      setSettings(prev => ({ ...prev, ...settingsData }));
+    }
   };
 
   const handleAddCouponAPI = async (couponData: any) => {
@@ -478,7 +589,8 @@ export default function App() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(couponData)
       });
-      if (res.ok) {
+      const contentType = res.headers.get("content-type");
+      if (res.ok && contentType && contentType.includes("application/json")) {
         // Refetch list
         const coupRes = await fetch('/api/coupons');
         if (coupRes.ok) {
@@ -486,8 +598,19 @@ export default function App() {
           setCoupons(coupData);
         }
         refreshAuditTrace();
+        return;
       }
-    } catch {}
+      throw new Error("FallbackToClient");
+    } catch {
+      const newCoupon: Coupon = {
+        code: couponData.code.toUpperCase().trim(),
+        discountPercent: Number(couponData.discountPercent),
+        description: couponData.description || `Special promotion discount code`,
+        isActive: true,
+        minBookingValue: Number(couponData.minBookingValue) || 0
+      };
+      setCoupons(prev => [...prev, newCoupon]);
+    }
   };
 
   const handleToggleCouponAPI = async (code: string) => {
@@ -497,15 +620,20 @@ export default function App() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ code })
       });
-      if (res.ok) {
+      const contentType = res.headers.get("content-type");
+      if (res.ok && contentType && contentType.includes("application/json")) {
         const coupRes = await fetch('/api/coupons');
         if (coupRes.ok) {
           const coupData = await coupRes.json();
           setCoupons(coupData);
         }
         refreshAuditTrace();
+        return;
       }
-    } catch {}
+      throw new Error("FallbackToClient");
+    } catch {
+      setCoupons(prev => prev.map(c => c.code === code ? { ...c, isActive: !c.isActive } : c));
+    }
   };
 
   const handleAddEventAPI = async (eventData: any) => {
@@ -515,7 +643,8 @@ export default function App() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(eventData)
       });
-      if (res.ok) {
+      const contentType = res.headers.get("content-type");
+      if (res.ok && contentType && contentType.includes("application/json")) {
         // Reload Events
         const eveRes = await fetch('/api/events');
         if (eveRes.ok) {
@@ -523,24 +652,52 @@ export default function App() {
           setEvents(eveData);
         }
         refreshAuditTrace();
+        return;
       }
-    } catch {}
+      throw new Error("FallbackToClient");
+    } catch {
+      const newEvent: Event = {
+        id: `eve-${Date.now()}`,
+        title: eventData.title,
+        tagline: eventData.tagline || "Spectacular Indian fusion tour",
+        description: eventData.description || "Live performance experience by Rangrez.",
+        date: eventData.date,
+        time: eventData.time || "19:30",
+        venue: eventData.venue || "The Royal Opera",
+        venueAddress: eventData.venueAddress || "",
+        googleMapUrl: eventData.googleMapUrl || "",
+        city: eventData.city || "Mumbai",
+        imageUrl: eventData.imageUrl || "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format",
+        status: eventData.status || "upcoming",
+        categories: eventData.categories || [
+          { class: "general", name: "Solo Entry", price: 149, availableSeats: 300, totalSeats: 300, benefits: ["Single person admission"] }
+        ],
+        totalSales: 0
+      };
+      setEvents(prev => [...prev, newEvent]);
+    }
   };
 
   const handleDeleteEventAPI = async (id: string) => {
     try {
       const res = await fetch(`/api/events/${id}`, { method: 'DELETE' });
-      if (res.ok) {
+      const contentType = res.headers.get("content-type");
+      if (res.ok && contentType && contentType.includes("application/json")) {
         setEvents(events.filter(e => e.id !== id));
         refreshAuditTrace();
+        return;
       }
-    } catch {}
+      throw new Error("FallbackToClient");
+    } catch {
+      setEvents(prev => prev.filter(e => e.id !== id));
+    }
   };
 
   const handleApproveRefundAPI = async (bookingId: string) => {
     try {
       const res = await fetch(`/api/bookings/${bookingId}/approve-refund`, { method: 'POST' });
-      if (res.ok) {
+      const contentType = res.headers.get("content-type");
+      if (res.ok && contentType && contentType.includes("application/json")) {
         // Sync lists
         refreshBookingsCount(currentUser);
         refreshAuditTrace();
@@ -551,14 +708,20 @@ export default function App() {
           setEvents(eveData);
         }
         alert("Simulated transaction approved. Funds reversed & seats restored.");
+        return;
       }
-    } catch {}
+      throw new Error("FallbackToClient");
+    } catch {
+      setBookings(prev => prev.map(b => b.id === bookingId ? { ...b, status: 'refunded' } : b));
+      alert("Local session action: Simulated transaction approved. Funds reversed & seats restored.");
+    }
   };
 
   const handleCancelBookingDirect = async (bookingId: string) => {
     try {
       const res = await fetch(`/api/bookings/${bookingId}/cancel`, { method: 'POST' });
-      if (res.ok) {
+      const contentType = res.headers.get("content-type");
+      if (res.ok && contentType && contentType.includes("application/json")) {
         refreshBookingsCount(currentUser);
         refreshAuditTrace();
         const eveRes = await fetch('/api/events');
@@ -567,8 +730,13 @@ export default function App() {
           setEvents(eveData);
         }
         alert("Booking voided directly.");
+        return;
       }
-    } catch {}
+      throw new Error("FallbackToClient");
+    } catch {
+      setBookings(prev => prev.map(b => b.id === bookingId ? { ...b, status: 'cancelled' } : b));
+      alert("Local session action: Booking voided directly.");
+    }
   };
 
   const handleToggleInitiateBookingFlow = (eventItem: Event) => {
