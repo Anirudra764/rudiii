@@ -1,0 +1,8 @@
+{
+  "name": "Remix: Rangrez",
+  "description": "Premium artist website and immersive concert ticket booking system for the Indian fusion band Rangrez.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
