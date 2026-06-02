@@ -88,11 +88,11 @@ export default function App() {
 
   // Authentication Login simulation fields
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-  const [loginUsername, setLoginUsername] = useState('anirudrapaul764@gmail.com'); // Quick autofill value for convenience
-  const [loginPassword, setLoginPassword] = useState('987654321');
+  const [loginUsername, setLoginUsername] = useState(''); // Empty initially
+  const [loginPassword, setLoginPassword] = useState('');
   const [loginWithEmailTab, setLoginWithEmailTab] = useState<'credentials' | 'simulator'>('credentials');
-  const [loginEmailInput, setLoginEmailInput] = useState('anirudrapaul764@gmail.com');
-  const [loginPasswordInput, setLoginPasswordInput] = useState('987654321');
+  const [loginEmailInput, setLoginEmailInput] = useState('');
+  const [loginPasswordInput, setLoginPasswordInput] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loginErrorMsg, setLoginErrorMsg] = useState<string | null>(null);
 
@@ -972,8 +972,8 @@ export default function App() {
 
     // Otherwise, open our custom switch role modal manually for credential verification
     setRoleSwitchTarget(targetRole);
-    setRoleSwitchPasscode('987654321');
-    setRoleSwitchEmail('anirudrapaul764@gmail.com');
+    setRoleSwitchPasscode('');
+    setRoleSwitchEmail('');
     setIsRoleSwitchModalOpen(true);
   };
 
