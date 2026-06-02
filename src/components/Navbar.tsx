@@ -162,19 +162,45 @@ export default function Navbar({
 
         {/* Mobile controls */}
         <div className="flex items-center gap-2 lg:hidden">
-          {/* Quick toggle list for mobile screen size */}
-          <button
-            onClick={() => {
-              const roles: UserRole[] = ['user', 'admin', 'superadmin'];
-              const idx = roles.indexOf(currentUser.role as UserRole);
-              const nextRole = roles[(idx + 1) % roles.length];
-              onSwitchRole(nextRole);
-            }}
-            className="md:hidden text-[9px] px-2 py-1 bg-purple-900/30 rounded border border-[#8A2BE2]/40 text-[#D4AF37] uppercase font-mono"
-            title="Shorthand Role Selector for mobile"
-          >
-            Role: {currentUser.role}
-          </button>
+          {/* Mobile Explicit Role Selector Dropdown */}
+          <div className="relative md:hidden">
+            <button
+              onClick={() => setRoleDropdownOpen(!roleDropdownOpen)}
+              className="text-[11px] px-2.5 py-1.5 bg-[#181524] rounded-lg border border-[#8A2BE2]/40 text-[#D4AF37] uppercase font-mono font-bold flex items-center gap-1 transition-all"
+              title="Select simulation role"
+            >
+              <span>Role: {currentUser.role}</span>
+              <ChevronDown className="w-3 h-3 text-[#D4AF37]" />
+            </button>
+
+            {roleDropdownOpen && (
+              <div 
+                className="absolute right-0 mt-2 w-48 bg-[#0f0e13] border border-[#8A2BE2]/40 rounded-xl shadow-2xl z-50 p-1.5 backdrop-blur-xl animate-in fade-in slide-in-from-top-3"
+              >
+                <div className="px-3 py-1.5 text-[9px] uppercase font-mono tracking-widest text-[#D4AF37] border-b border-white/10 mb-1">
+                  RBAC Role Sandbox Simulator
+                </div>
+                
+                {(['superadmin', 'admin', 'manager', 'user'] as UserRole[]).map(role => (
+                  <button
+                    key={role}
+                    onClick={() => {
+                      onSwitchRole(role);
+                      setRoleDropdownOpen(false);
+                    }}
+                    className={`w-full text-left px-3 py-2 text-xs rounded-lg flex items-center justify-between transition-colors ${
+                      currentUser.role === role 
+                        ? 'bg-purple-900/40 text-white font-semibold' 
+                        : 'text-zinc-300 hover:bg-white/5'
+                    }`}
+                  >
+                    <span className="capitalize">{role === 'manager' ? 'Staff Manager' : role}</span>
+                    {currentUser.role === role && <CheckCheck className="w-3.5 h-3.5 text-[#D4AF37]" />}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
 
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -188,7 +214,7 @@ export default function Navbar({
 
       {/* Mobile Menu Backdrop */}
       {mobileMenuOpen && (
-        <div className="lg:hidden mt-3 p-4 bg-[#0f0e13]/95 border-t border-purple-900/40 rounded-xl space-y-3.5">
+        <div className="lg:hidden mt-3 p-4 bg-[#0f0e13]/95 border-t border-purple-900/40 rounded-xl space-y-3.5 animate-in slide-in-from-top-4 duration-150">
           <div className="grid grid-cols-2 gap-2">
             {menuItems.map(item => (
               <button
@@ -228,7 +254,33 @@ export default function Navbar({
               </button>
             )}
 
-            <div className="flex items-center justify-between p-2.5 bg-zinc-900/50 rounded-lg border border-white/5">
+            {/* Mobile explicit Role Sandbox Selectors */}
+            <div className="bg-purple-950/20 border border-purple-900/40 rounded-lg p-2.5 mt-1 space-y-2">
+              <span className="block text-[9px] text-[#D4AF37] font-mono tracking-wider uppercase">
+                RBAC Sandbox Simulator
+              </span>
+              <div className="grid grid-cols-2 gap-1.5">
+                {(['superadmin', 'admin', 'manager', 'user'] as UserRole[]).map(role => (
+                  <button
+                    key={role}
+                    onClick={() => {
+                      onSwitchRole(role);
+                      setMobileMenuOpen(false);
+                    }}
+                    className={`px-2.5 py-1.5 text-[11px] rounded transition-all text-center font-medium capitalize flex items-center justify-center gap-1 ${
+                      currentUser.role === role
+                        ? 'bg-gradient-to-r from-[#D4AF37] to-amber-500 text-black font-semibold shadow-md'
+                        : 'bg-white/5 text-zinc-300 hover:bg-white/10'
+                    }`}
+                  >
+                    <span>{role === 'manager' ? 'Staff' : role}</span>
+                    {currentUser.role === role && <CheckCheck className="w-3 h-3" />}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between p-2.5 bg-zinc-900/50 rounded-lg border border-white/5 mt-1">
               <div className="text-xs">
                 <span className="block text-[9px] text-zinc-400 font-mono">Current Identity</span>
                 <span className="font-semibold text-zinc-200">{currentUser.fullName}</span>
