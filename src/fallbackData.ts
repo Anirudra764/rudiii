@@ -439,5 +439,6 @@ export const FALLBACK_SETTINGS: SystemSettings = {
   "contactEmail": "rangrezencore@gmail.com",
   "contactPhone": "+91 98765 43210",
   "contactOffice": "Koregaon Park Road, Pune, Maharashtra",
-  "contactInstagram": "https://www.instagram.com/rangrezencore?igsh=MWNpZThta3A3aDc3cQ=="
+  "contactInstagram": "https://www.instagram.com/rangrezencore?igsh=MWNpZThta3A3aDc3cQ==",
+  "areTicketsReleased": false
 };

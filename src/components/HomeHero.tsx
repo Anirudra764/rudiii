@@ -5,6 +5,7 @@
 
 import React from 'react';
 import { Calendar, ArrowRight } from 'lucide-react';
+import { motion } from 'motion/react';
 import { Event, SystemSettings } from '../types.js';
 
 interface HomeHeroProps {
@@ -60,9 +61,21 @@ export default function HomeHero({
             {activeSettings.tagline}
           </span>
 
-          <h1 className="text-6xl md:text-9xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-zinc-100 via-slate-100 to-[#D4AF37] leading-none select-none text-center uppercase font-display">
+          <motion.h1 
+            className="text-6xl md:text-9xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white via-neutral-100 to-[#D4AF37] leading-none select-none text-center uppercase font-display cursor-default relative drop-shadow-[0_4px_30px_rgba(227,38,54,0.35)]"
+            initial={{ opacity: 0, scale: 0.95, letterSpacing: "-0.05em" }}
+            animate={{ opacity: 1, scale: 1, letterSpacing: "-0.025em" }}
+            whileHover={{ scale: 1.03, letterSpacing: "0.01em" }}
+            transition={{ 
+              duration: 1.2, 
+              ease: [0.16, 1, 0.3, 1], // Custom sophisticated EaseOutExpo
+              scale: { duration: 0.4, ease: "easeOut" },
+              letterSpacing: { duration: 0.6, ease: "easeOut" }
+            }}
+            style={{ textShadow: "0 0 45px rgba(227,38,54,0.2)" }}
+          >
             {activeSettings.bandName}
-          </h1>
+          </motion.h1>
 
           <p className="text-sm md:text-lg text-zinc-300 max-w-2xl mx-auto leading-relaxed font-semibold text-center whitespace-pre-line">
             {activeSettings.creedBody}
@@ -99,7 +112,7 @@ export default function HomeHero({
       </div>
 
       {/* 2. LIVE UPCOMING CONCERT CALL TO ACTION */}
-      {upcomingEvent && (
+      {upcomingEvent && activeSettings.areTicketsReleased && (
         <div className="py-12 bg-gradient-to-r from-[#181524] to-[#0f0e13] border-y border-[#8A2BE2]/20 px-6">
           <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-4">

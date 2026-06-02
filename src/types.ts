@@ -177,6 +177,7 @@ export interface SystemSettings {
   spotlightSectionTitle?: string;
   spotlightSectionSubtitle?: string;
   spotlightSectionBody?: string;
+  areTicketsReleased?: boolean;
 }
 
 export interface SalesStat {

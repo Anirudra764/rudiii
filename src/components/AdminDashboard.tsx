@@ -149,6 +149,7 @@ export default function AdminDashboard({
   const [spotlightSectionTitleInput, setSpotlightSectionTitleInput] = useState(settings?.spotlightSectionTitle || '');
   const [spotlightSectionSubtitleInput, setSpotlightSectionSubtitleInput] = useState(settings?.spotlightSectionSubtitle || '');
   const [spotlightSectionBodyInput, setSpotlightSectionBodyInput] = useState(settings?.spotlightSectionBody || '');
+  const [areTicketsReleased, setAreTicketsReleased] = useState(settings?.areTicketsReleased ?? false);
 
   // --- PASSWORDS MANAGEMENT STATES ---
   const [superadminPasscode, setSuperadminPasscode] = useState('');
@@ -317,6 +318,7 @@ export default function AdminDashboard({
       setSpotlightSectionTitleInput(settings.spotlightSectionTitle || 'Live Experience Poster Sandbox');
       setSpotlightSectionSubtitleInput(settings.spotlightSectionSubtitle || 'Marquee Feature Spotlight');
       setSpotlightSectionBodyInput(settings.spotlightSectionBody || 'We have integrated the official Rangrez Live Experience concert design from Sunday 24th May 2026. Use our interactive suite to customize your dynamic concert badge, enable theatrical fx, and trigger live background sessions.');
+      setAreTicketsReleased(settings.areTicketsReleased ?? false);
     }
   }, [settings]);
 
@@ -2914,6 +2916,21 @@ export default function AdminDashboard({
                         onChange={(e) => setEventsSectionBannerSubtitleInput(e.target.value)}
                       />
                     </div>
+                    <div className="pt-2">
+                      <label className="flex items-center gap-3 cursor-pointer bg-black/40 border border-white/5 hover:border-[#D4AF37]/35 px-4 py-3 rounded-xl transition-all">
+                        <input
+                          type="checkbox"
+                          className="w-4 h-4 rounded border-white/10 bg-black/50 text-[#D4AF37] focus:ring-[#D4AF37] focus:ring-offset-0 cursor-pointer"
+                          checked={areTicketsReleased}
+                          onChange={(e) => setAreTicketsReleased(e.target.checked)}
+                          id="are-tickets-released-toggle"
+                        />
+                        <div>
+                          <span className="text-xs font-bold text-white block">★ Release Tickets Live</span>
+                          <span className="text-[10px] text-zinc-400 block leading-tight">Makes tickets booking & live banner CTA visible to visitors</span>
+                        </div>
+                      </label>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -2966,7 +2983,8 @@ export default function AdminDashboard({
                       eventsSectionBannerSubtitle: eventsSectionBannerSubtitleInput,
                       spotlightSectionTitle: spotlightSectionTitleInput,
                       spotlightSectionSubtitle: spotlightSectionSubtitleInput,
-                      spotlightSectionBody: spotlightSectionBodyInput
+                      spotlightSectionBody: spotlightSectionBodyInput,
+                      areTicketsReleased: areTicketsReleased
                     });
                     if (onAddAuditLog) {
                       onAddAuditLog('UPDATE_BRANDING_METRICS', 'Customized and updated unified brand copy fields and statistics via Administrative Console.');

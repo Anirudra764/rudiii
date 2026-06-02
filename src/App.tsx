@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { motion } from 'motion/react';
 import { 
   Instagram, Mail, Phone, MapPin, Youtube, ExternalLink, Send, 
   Map, ZoomIn, Eye, Sparkles, CheckSquare, MessageSquare, ShieldCheck, Heart, RefreshCw,
@@ -65,16 +66,79 @@ export default function App() {
     return 'home';
   });
   
-  // Real-time backend states - populated instantly with local resilient fallbacks
-  const [events, setEvents] = useState<Event[]>(FALLBACK_EVENTS);
-  const [music, setMusic] = useState<MusicTrack[]>(FALLBACK_MUSIC);
-  const [videos, setVideos] = useState<VideoClip[]>(FALLBACK_VIDEOS);
-  const [gallery, setGallery] = useState<GalleryImage[]>(FALLBACK_GALLERY);
+  // Real-time backend states - populated instantly with local resilient fallbacks, backed by localStorage for extreme persistence
+  const [events, setEvents] = useState<Event[]>(() => {
+    const saved = localStorage.getItem('admin_events');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      } catch (e) {}
+    }
+    return FALLBACK_EVENTS;
+  });
+  const [music, setMusic] = useState<MusicTrack[]>(() => {
+    const saved = localStorage.getItem('admin_music');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      } catch (e) {}
+    }
+    return FALLBACK_MUSIC;
+  });
+  const [videos, setVideos] = useState<VideoClip[]>(() => {
+    const saved = localStorage.getItem('admin_videos');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      } catch (e) {}
+    }
+    return FALLBACK_VIDEOS;
+  });
+  const [gallery, setGallery] = useState<GalleryImage[]>(() => {
+    const saved = localStorage.getItem('admin_gallery');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      } catch (e) {}
+    }
+    return FALLBACK_GALLERY;
+  });
   const [bookings, setBookings] = useState<Booking[]>([]);
-  const [coupons, setCoupons] = useState<Coupon[]>(FALLBACK_COUPONS);
+  const [coupons, setCoupons] = useState<Coupon[]>(() => {
+    const saved = localStorage.getItem('admin_coupons');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      } catch (e) {}
+    }
+    return FALLBACK_COUPONS;
+  });
   const [auditLogs, setAuditLogs] = useState<AuditLog[]>([]);
-  const [members, setMembers] = useState<BandMember[]>(FALLBACK_MEMBERS);
-  const [settings, setSettings] = useState<SystemSettings>(FALLBACK_SETTINGS);
+  const [members, setMembers] = useState<BandMember[]>(() => {
+    const saved = localStorage.getItem('admin_members');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      } catch (e) {}
+    }
+    return FALLBACK_MEMBERS;
+  });
+  const [settings, setSettings] = useState<SystemSettings>(() => {
+    const saved = localStorage.getItem('admin_settings');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (parsed && typeof parsed === 'object') return parsed;
+      } catch (e) {}
+    }
+    return FALLBACK_SETTINGS;
+  });
 
   // Loading/API state
   const [isLoading, setIsLoading] = useState(true);
@@ -253,6 +317,35 @@ export default function App() {
   useEffect(() => {
     refreshBookingsCount(currentUser);
   }, [currentUser]);
+
+  // Synchronize admin modified states in real-time to localStorage so that they remain fixed and visible across reloads or boots
+  useEffect(() => {
+    localStorage.setItem('admin_events', JSON.stringify(events));
+  }, [events]);
+
+  useEffect(() => {
+    localStorage.setItem('admin_music', JSON.stringify(music));
+  }, [music]);
+
+  useEffect(() => {
+    localStorage.setItem('admin_videos', JSON.stringify(videos));
+  }, [videos]);
+
+  useEffect(() => {
+    localStorage.setItem('admin_gallery', JSON.stringify(gallery));
+  }, [gallery]);
+
+  useEffect(() => {
+    localStorage.setItem('admin_coupons', JSON.stringify(coupons));
+  }, [coupons]);
+
+  useEffect(() => {
+    localStorage.setItem('admin_members', JSON.stringify(members));
+  }, [members]);
+
+  useEffect(() => {
+    localStorage.setItem('admin_settings', JSON.stringify(settings));
+  }, [settings]);
 
   // --- AUDIO PLAYER CALLBACKS ---
   const handleSelectTrackToPlay = (track: MusicTrack) => {
@@ -1218,18 +1311,74 @@ export default function App() {
       </main>
 
       {/* FOOTER AREA */}
-      <footer className="bg-black/80 border-t border-white/5 py-10 px-6 relative z-10 text-center text-zinc-400 text-xs">
-        <div className="max-w-7xl mx-auto flex flex-col items-center gap-6">
-          <LOGO_ITEMS.IconLogo className="w-10 h-10 filter brightness-95" />
-          <div className="space-y-1.5">
-            <span className="text-[10px] tracking-[0.25em] text-[#D4AF37] font-mono uppercase font-bold block">
-               Rangrez Fusion Band © 2026
-            </span>
-            <p className="max-w-md mx-auto text-[11px] text-zinc-500">
-              Rooted In Soul. Driven By Energy. Sitar fusion, heavy classical rock and high-energy vocals of Pune. All rights reserved. Registered under Cultural Shreyora Brands.
+      <footer className="bg-black/90 border-t border-white/5 py-12 px-6 relative z-10 text-center text-zinc-400 text-xs overflow-hidden">
+        {/* Decorative background glow */}
+        <div className="absolute inset-x-0 -top-24 h-48 bg-gradient-to-b from-[#8A2BE2]/10 to-transparent pointer-events-none blur-3xl opacity-60" />
+
+        <motion.div 
+          id="system-footer-container"
+          className="max-w-7xl mx-auto flex flex-col items-center gap-8 relative z-10"
+          initial={{ opacity: 0, y: 15 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+        >
+          {/* Logo container with radial pulse animation */}
+          <div className="relative group cursor-pointer">
+            <div className="absolute -inset-4 bg-gradient-to-r from-[#E32636]/30 to-[#8A2BE2]/30 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+            <motion.div
+              whileHover={{ scale: 1.08, rotate: 360 }}
+              transition={{ duration: 0.6, ease: "easeInOut" }}
+              className="relative"
+            >
+              <LOGO_ITEMS.IconLogo className="w-12 h-12 filter drop-shadow-[0_0_8px_rgba(227,38,54,0.5)]" />
+            </motion.div>
+          </div>
+
+          <div className="space-y-4 max-w-xl">
+            <motion.span 
+              className="text-xs tracking-[0.3em] font-mono text-transparent bg-clip-text bg-gradient-to-r from-[#FF4D4D] via-[#D4AF37] to-[#8A2BE2] uppercase font-extrabold block"
+              animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
+              transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+              style={{ backgroundSize: "200% 200%" }}
+            >
+              Rangrez Fusion Band © {new Date().getFullYear()}
+            </motion.span>
+            
+            <p className="text-sm md:text-base text-zinc-300 leading-relaxed font-light">
+              Rooted In Soul. Driven By Energy. Sitar fusion, heavy classical rock, and high-energy vocals. Bringing the absolute cultural and progressive auditory experience live from Pune to the world stage.
             </p>
           </div>
-        </div>
+
+          {/* Elegant active equalizer representation */}
+          <div className="flex items-center gap-1.5 h-6 opacity-45 hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+            {[1, 2, 3, 4, 5, 4, 3, 2, 1].map((item, idx) => (
+              <motion.div 
+                key={idx}
+                className="w-[3px] bg-gradient-to-t from-[#8B0000] to-[#E32636] rounded-full"
+                animate={{
+                  height: [
+                    `${4 + (idx * 2) % 12}px`, 
+                    `${18 - (idx * 2) % 10}px`, 
+                    `${4 + (idx * 2) % 12}px`
+                  ]
+                }}
+                transition={{
+                  repeat: Infinity,
+                  duration: 0.8 + (idx * 0.15),
+                  ease: "easeInOut"
+                }}
+              />
+            ))}
+          </div>
+
+          {/* Quick legal/copyright note */}
+          <div className="pt-2 border-t border-white/5 w-full max-w-md flex justify-center gap-6 text-[10px] text-zinc-500 font-mono">
+            <span>TERMS OF ENGAGEMENT</span>
+            <span>•</span>
+            <span>SHREYORA CULTURE LICENSE</span>
+          </div>
+        </motion.div>
       </footer>
       {/* MULTI ROLE SECURE EMAIL AND PASSWORD LOGIN POPUP MODAL */}
       {isLoginModalOpen && (

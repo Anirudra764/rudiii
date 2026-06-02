@@ -436,8 +436,19 @@ function loadDatabase() {
     if (fs.existsSync(DB_FILE)) {
       const data = fs.readFileSync(DB_FILE, 'utf8');
       const loaded = JSON.parse(data);
-      db = { ...db, ...loaded };
-      console.log("Database file parsed and loaded successfully.");
+      db = {
+        ...db,
+        ...loaded,
+        settings: {
+          ...db.settings,
+          ...(loaded.settings || {})
+        },
+        passcodes: {
+          ...db.passcodes,
+          ...(loaded.passcodes || {})
+        }
+      };
+      console.log("Database file parsed and loaded successfully with deep merge.");
     } else {
       saveDatabase();
     }
@@ -682,11 +693,7 @@ app.get('/api/media', (req, res) => {
     videos: db.videos,
     gallery: db.gallery,
     members: db.members || [],
-    settings: db.settings || {
-      heroBgUrl: "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=1920&q=85",
-      posterMainSingerUrl: "https://images.unsplash.com/photo-1541604193435-22419f564789?auto=format&fit=crop&w=500&q=80",
-      posterSilhouetteUrl: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=40"
-    }
+    settings: db.settings
   });
 });
 
