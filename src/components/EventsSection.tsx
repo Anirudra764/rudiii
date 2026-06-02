@@ -29,10 +29,13 @@ export default function EventsSection({ events, onSelectEventForBooking, setting
   useEffect(() => {
     if (!nearestEvent) return;
     const interval = setInterval(() => {
-      const targetTime = new Date(`${nearestEvent.date}T${nearestEvent.time}:00`).getTime();
+      // Split strings to parse components manually, guaranteeing compatibility across safari/older engines and timezone alignment
+      const [year, month, day] = nearestEvent.date.split('-').map(Number);
+      const [hours, minutes] = nearestEvent.time.split(':').map(Number);
+      const targetTime = new Date(year, month - 1, day, hours, minutes, 0).getTime();
       const diff = targetTime - Date.now();
 
-      if (diff <= 0) {
+      if (isNaN(diff) || diff <= 0) {
         clearInterval(interval);
       } else {
         const days = Math.floor(diff / (1000 * 60 * 60 * 24));

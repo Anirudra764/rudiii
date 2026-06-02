@@ -123,10 +123,7 @@ export default function Visualizer({ isPlaying, activeTrackId }: VisualizerProps
         ctx.beginPath();
         ctx.arc(itemX, itemY, currentSize, 0, Math.PI * 2);
         ctx.fillStyle = p.color;
-        ctx.shadowBlur = isPlaying ? 8 : 2;
-        ctx.shadowColor = p.color;
         ctx.fill();
-        ctx.shadowBlur = 0; // reset
       });
 
       // Ambient Audio Sinewaves at the bottom

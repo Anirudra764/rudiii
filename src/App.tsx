@@ -34,8 +34,36 @@ import {
 } from './fallbackData.js';
 
 export default function App() {
-  // Page Tabs
-  const [activeTab, setActiveTab] = useState<string>('home');
+  // Authentication State loaded eagerly from localStorage to maintain switches
+  const [currentUser, setCurrentUser] = useState<User>(() => {
+    const saved = localStorage.getItem('currentUser');
+    if (saved) {
+      try {
+        const u = JSON.parse(saved);
+        if (u && u.id && u.role) return u;
+      } catch (e) {}
+    }
+    return {
+      id: "u-4",
+      username: "user",
+      email: "user@rangrez.com",
+      role: "user",
+      fullName: "Rangrez Fan Club",
+      createdAt: new Date().toISOString()
+    };
+  });
+
+  // Page Tabs - dynamically adjusted depending on persistent authentication
+  const [activeTab, setActiveTab] = useState<string>(() => {
+    const saved = localStorage.getItem('currentUser');
+    if (saved) {
+      try {
+        const u = JSON.parse(saved);
+        if (u && u.role !== 'user') return 'admin';
+      } catch (e) {}
+    }
+    return 'home';
+  });
   
   // Real-time backend states - populated instantly with local resilient fallbacks
   const [events, setEvents] = useState<Event[]>(FALLBACK_EVENTS);
@@ -50,16 +78,6 @@ export default function App() {
 
   // Loading/API state
   const [isLoading, setIsLoading] = useState(true);
-
-  // Authentication State
-  const [currentUser, setCurrentUser] = useState<User>({
-    id: "u-4",
-    username: "user",
-    email: "user@rangrez.com",
-    role: "user",
-    fullName: "Rangrez Fan Club",
-    createdAt: new Date().toISOString()
-  });
 
   // Audio player global states - pre-linked to first fallback track
   const [currentTrack, setCurrentTrack] = useState<MusicTrack | null>(FALLBACK_MUSIC[0] || null);
@@ -83,6 +101,19 @@ export default function App() {
   const [roleSwitchPasscode, setRoleSwitchPasscode] = useState('');
   const [roleSwitchEmail, setRoleSwitchEmail] = useState('');
   const [isRoleSwitchModalOpen, setIsRoleSwitchModalOpen] = useState(false);
+
+  // Custom non-blocking global alert system for secure iframe rendering
+  const [globalAlert, setGlobalAlert] = useState<{ isOpen: boolean; message: string }>({ isOpen: false, message: '' });
+
+  useEffect(() => {
+    const originalAlert = window.alert;
+    window.alert = (msg: string) => {
+      setGlobalAlert({ isOpen: true, message: String(msg) });
+    };
+    return () => {
+      window.alert = originalAlert;
+    };
+  }, []);
 
   // Autofill test passwords securely inside the switch simulator
   useEffect(() => {
@@ -789,6 +820,23 @@ export default function App() {
     setActiveTab('booking');
   };
 
+  // --- SIGN OUT / LOGOUT HANDLER ---
+  const handleLogout = () => {
+    localStorage.removeItem('currentUser');
+    const defaultUser: User = {
+      id: "u-4",
+      username: "user",
+      email: "user@rangrez.com",
+      role: "user",
+      fullName: "Rangrez Fan Club",
+      createdAt: new Date().toISOString()
+    };
+    setCurrentUser(defaultUser);
+    refreshBookingsCount(defaultUser);
+    setActiveTab('home');
+    alert("Session signed out successfully. Reverted to Fan Club guest identity.");
+  };
+
   // --- SIMULATED DUAL LOGIN MODAL ---
   const handleSimulatedSubmitLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -811,16 +859,15 @@ export default function App() {
       if (res.ok && contentType && contentType.includes("application/json")) {
         const data = await res.json();
         if (data.success) {
+          localStorage.setItem('currentUser', JSON.stringify(data.user));
           setCurrentUser(data.user);
           setIsLoginModalOpen(false);
           setLoginEmailInput('');
           setLoginPasswordInput('');
           refreshBookingsCount(data.user);
-          if (data.user.role !== 'user') {
-            setActiveTab('admin');
-          } else {
-            setActiveTab('home');
-          }
+          const nextTab = data.user.role !== 'user' ? 'admin' : 'home';
+          setActiveTab(nextTab);
+          alert(`Authentication succeeded! Logged in as: ${data.user.fullName} (${data.user.role.toUpperCase()})`);
           return;
         } else {
           setLoginErrorMsg(data.error || "Login simulation error.");
@@ -872,16 +919,15 @@ export default function App() {
         createdAt: new Date().toISOString()
       };
 
+      localStorage.setItem('currentUser', JSON.stringify(fallbackUser));
       setCurrentUser(fallbackUser);
       setIsLoginModalOpen(false);
       setLoginEmailInput('');
       setLoginPasswordInput('');
       refreshBookingsCount(fallbackUser);
-      if (fallbackUser.role !== 'user') {
-        setActiveTab('admin');
-      } else {
-        setActiveTab('home');
-      }
+      const nextTab = fallbackUser.role !== 'user' ? 'admin' : 'home';
+      setActiveTab(nextTab);
+      alert(`Authentication succeeded! Logged in as: ${fallbackUser.fullName} (${fallbackUser.role.toUpperCase()})`);
     }
   };
 
@@ -898,8 +944,10 @@ export default function App() {
         if (res.ok && contentType && contentType.includes("application/json")) {
           const data = await res.json();
           if (data.success) {
+            localStorage.setItem('currentUser', JSON.stringify(data.user));
             setCurrentUser(data.user);
             refreshBookingsCount(data.user);
+            setActiveTab('home');
             alert(`Session securely reverted to: ${targetRole.toUpperCase()}`);
             return;
           } else {
@@ -913,8 +961,10 @@ export default function App() {
           ...currentUser,
           role: targetRole
         };
+        localStorage.setItem('currentUser', JSON.stringify(updatedUser));
         setCurrentUser(updatedUser);
         refreshBookingsCount(updatedUser);
+        setActiveTab('home');
         alert(`Session reverted successfully to: ${targetRole.toUpperCase()}`);
       }
       return;
@@ -946,16 +996,14 @@ export default function App() {
       if (res.ok && contentType && contentType.includes("application/json")) {
         const data = await res.json();
         if (data.success) {
+          localStorage.setItem('currentUser', JSON.stringify(data.user));
           setCurrentUser(data.user);
           refreshBookingsCount(data.user);
           setIsRoleSwitchModalOpen(false);
           setRoleSwitchTarget(null);
+          const nextTab = data.user.role !== 'user' ? 'admin' : 'home';
+          setActiveTab(nextTab);
           alert(`Session securely upgraded! Switched role to: ${roleSwitchTarget.toUpperCase()}`);
-          if (roleSwitchTarget !== 'user') {
-            setActiveTab('admin');
-          } else {
-            setActiveTab('home');
-          }
           return;
         } else {
           alert(data.error || `Failed to authenticate credentials for switching to ${roleSwitchTarget}`);
@@ -986,16 +1034,14 @@ export default function App() {
         ...currentUser,
         role: roleSwitchTarget
       };
+      localStorage.setItem('currentUser', JSON.stringify(updatedUser));
       setCurrentUser(updatedUser);
       refreshBookingsCount(updatedUser);
       setIsRoleSwitchModalOpen(false);
       setRoleSwitchTarget(null);
+      const nextTab = roleSwitchTarget !== 'user' ? 'admin' : 'home';
+      setActiveTab(nextTab);
       alert(`Session upgraded successfully! Switched role to: ${roleSwitchTarget.toUpperCase()}`);
-      if (roleSwitchTarget !== 'user') {
-        setActiveTab('admin');
-      } else {
-        setActiveTab('home');
-      }
     }
   };
 
@@ -1044,7 +1090,7 @@ export default function App() {
         setActiveTab={setActiveTab}
         currentUser={currentUser}
         onSwitchRole={handleSwitchUserRole}
-        onLogout={() => setIsLoginModalOpen(true)}
+        onLogout={handleLogout}
         onOpenLoginModal={() => setIsLoginModalOpen(true)}
       />
 
@@ -1206,6 +1252,35 @@ export default function App() {
               </div>
             )}
 
+            {/* QUICK SANDBOX PROFILES SELECTOR */}
+            <div className="bg-black/55 border border-white/5 rounded-2xl p-3.5 text-left space-y-2">
+              <span className="text-[10px] uppercase tracking-wider font-mono text-[#D4AF37] block font-bold">
+                🔑 Interactive Sandbox Profiles (Instant Autofill)
+              </span>
+              <div className="grid grid-cols-2 gap-2">
+                {[
+                  { label: "👑 Super Admin", email: "superadmin@rangrez.com", pass: "987654321", desc: "Configuration & full audit logs" },
+                  { label: "🎸 Band Admin", email: "anirudrapaul764@gmail.com", pass: "987654321", desc: "Timeline editor & settings" },
+                  { label: "🤝 Staff Manager", email: "manager@rangrez.com", pass: "987654321", desc: "Refund tickets & gate operations" },
+                  { label: "🧑‍🎤 Fan Club User", email: "user@rangrez.com", pass: "987654321", desc: "General guest ticket purchases" }
+                ].map((item) => (
+                  <button
+                    key={item.label}
+                    type="button"
+                    onClick={() => {
+                      setLoginEmailInput(item.email);
+                      setLoginPasswordInput(item.pass);
+                      setLoginErrorMsg(null);
+                    }}
+                    className={`p-2 rounded-xl text-[10px] text-left transition-all border border-[#8A2BE2]/10 hover:border-[#D4AF37]/50 bg-purple-950/20 hover:bg-[#8A2BE2]/20 group`}
+                  >
+                    <span className="font-bold text-white block group-hover:text-[#D4AF37] transition-all truncate text-[11px]">{item.label}</span>
+                    <span className="text-zinc-400 block text-[9.5px] leading-tight mt-0.5 group-hover:text-zinc-300 transition-all">{item.desc}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
             <form onSubmit={handleSimulatedSubmitLogin} className="space-y-4">
               
               {/* --- MANUAL EMAIL & PASSWORD INPUTS --- */}
@@ -1339,6 +1414,35 @@ export default function App() {
               Cancel
             </button>
 
+          </div>
+        </div>
+      )}
+
+      {/* CUSTOM APPLET DIALOG WINDOW FOR SECURE IFRAME ALERTS */}
+      {globalAlert.isOpen && (
+        <div className="fixed inset-0 bg-[#000]/85 z-[999] flex items-center justify-center p-4 backdrop-blur-md animate-in fade-in duration-200">
+          <div className="bg-[#110f18] border border-[#8A2BE2]/60 p-6 rounded-2xl max-w-sm w-full space-y-5 text-white text-center shadow-2xl relative overflow-hidden">
+            {/* Decors */}
+            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#D4AF37] via-purple-600 to-[#D4AF37]" />
+            <div className="absolute -top-12 left-1/2 -translate-x-1/2 w-24 h-24 bg-purple-500/10 rounded-full blur-xl animate-pulse" />
+
+            <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-full bg-purple-950/40 border border-[#8A2BE2]/40 text-[#D4AF37]">
+              <Sparkles className="h-5 w-5" />
+            </div>
+
+            <div className="space-y-1.5">
+              <span className="text-[9px] uppercase font-mono text-[#D4AF37] tracking-widest block font-bold">Rangrez System Message</span>
+              <p className="text-zinc-200 text-xs font-sans leading-relaxed px-1">
+                {globalAlert.message}
+              </p>
+            </div>
+
+            <button
+              onClick={() => setGlobalAlert({ isOpen: false, message: '' })}
+              className="w-full py-2.5 rounded-xl bg-gradient-to-r from-purple-800 to-purple-600 hover:from-purple-700 hover:to-purple-500 text-[#D4AF37] hover:text-white font-extrabold uppercase text-xs tracking-wider font-mono shadow-md active:scale-[0.97] transition-all"
+            >
+              Dismiss
+            </button>
           </div>
         </div>
       )}

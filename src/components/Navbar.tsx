@@ -104,7 +104,7 @@ export default function Navbar({
         </div>
 
         {/* Role Simulator Options (Essential for reviewing RBAC dynamically without logging out repeatedly) */}
-        <div className="hidden md:flex items-center gap-2">
+        <div className="hidden lg:flex items-center gap-2">
           
           <div className="relative">
             <button
@@ -163,7 +163,7 @@ export default function Navbar({
         {/* Mobile controls */}
         <div className="flex items-center gap-2 lg:hidden">
           {/* Mobile Explicit Role Selector Dropdown */}
-          <div className="relative md:hidden">
+          <div className="relative">
             <button
               onClick={() => setRoleDropdownOpen(!roleDropdownOpen)}
               className="text-[11px] px-2.5 py-1.5 bg-[#181524] rounded-lg border border-[#8A2BE2]/40 text-[#D4AF37] uppercase font-mono font-bold flex items-center gap-1 transition-all"

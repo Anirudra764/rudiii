@@ -523,7 +523,8 @@ app.post('/api/auth/register', (req, res) => {
 });
 
 app.post('/api/auth/login', (req, res) => {
-  const { username, password } = req.body;
+  const username = req.body.username || req.body.email;
+  const password = req.body.password || req.body.passcode;
   if (!username) {
     return res.status(400).json({ error: "Username/Email is required." });
   }
