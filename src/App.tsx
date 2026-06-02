@@ -580,37 +580,95 @@ export default function App() {
   const handleSimulatedSubmitLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoginErrorMsg(null);
+    const usernameToSend = loginWithEmailTab === 'credentials' ? loginEmailInput : loginUsername;
+    const passwordToSend = loginWithEmailTab === 'credentials' ? loginPasswordInput : loginPassword;
+
+    if (!usernameToSend) {
+      setLoginErrorMsg("Please enter your email address.");
+      return;
+    }
+
     try {
-      const usernameToSend = loginWithEmailTab === 'credentials' ? loginEmailInput : loginUsername;
-      const passwordToSend = loginWithEmailTab === 'credentials' ? loginPasswordInput : loginPassword;
-
-      if (!usernameToSend) {
-        setLoginErrorMsg("Please enter your email address.");
-        return;
-      }
-
       const res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: usernameToSend, password: passwordToSend })
       });
-      const data = await res.json();
-      if (res.ok && data.success) {
-        setCurrentUser(data.user);
-        setIsLoginModalOpen(false);
-        setLoginEmailInput('');
-        setLoginPasswordInput('');
-        refreshBookingsCount(data.user);
-        if (data.user.role !== 'user') {
-          setActiveTab('admin');
+      const contentType = res.headers.get("content-type");
+      if (res.ok && contentType && contentType.includes("application/json")) {
+        const data = await res.json();
+        if (data.success) {
+          setCurrentUser(data.user);
+          setIsLoginModalOpen(false);
+          setLoginEmailInput('');
+          setLoginPasswordInput('');
+          refreshBookingsCount(data.user);
+          if (data.user.role !== 'user') {
+            setActiveTab('admin');
+          } else {
+            setActiveTab('home');
+          }
+          return;
         } else {
-          setActiveTab('home');
+          setLoginErrorMsg(data.error || "Login simulation error.");
+          return;
         }
-      } else {
-        setLoginErrorMsg(data.error || "Login simulation error.");
       }
+      throw new Error("FallbackToClient");
     } catch {
-      setLoginErrorMsg("Auth server error. Please retry.");
+      // Fallback to client-side credential verification (e.g. static host Vercel)
+      const emailLower = usernameToSend.toLowerCase().trim();
+      let matchedRole: UserRole = 'user';
+      let fullName = 'Rangrez Fan Club';
+      let matchedUsername = 'user';
+      
+      if (emailLower === 'superadmin' || emailLower === 'superadmin@rangrez.com') {
+        matchedRole = 'superadmin';
+        fullName = 'Super Admin (Rangrez Tech)';
+        matchedUsername = 'superadmin';
+      } else if (emailLower === 'admin' || emailLower === 'admin@rangrez.com' || emailLower === 'anirudrapaul764@gmail.com') {
+        matchedRole = 'admin';
+        fullName = 'Band Manager (Admin)';
+        matchedUsername = 'admin';
+      } else if (emailLower === 'manager' || emailLower === 'manager@rangrez.com') {
+        matchedRole = 'manager';
+        fullName = 'Backstage Operations Manager';
+        matchedUsername = 'manager';
+      }
+
+      // Verify passcodes locally
+      if (matchedRole === 'superadmin' && passwordToSend !== '987654321') {
+        setLoginErrorMsg("Access Denied: Invalid Superadmin passcode. Try: 987654321");
+        return;
+      }
+      if (matchedRole === 'admin' && passwordToSend !== '987654321') {
+        setLoginErrorMsg("Access Denied: Invalid Admin password. Try: 987654321");
+        return;
+      }
+      if (matchedRole === 'manager' && passwordToSend !== '987654321') {
+        setLoginErrorMsg("Access Denied: Invalid Manager operational PIN. Try: 987654321");
+        return;
+      }
+
+      const fallbackUser: User = {
+        id: `u-${matchedRole === 'superadmin' ? '1' : matchedRole === 'admin' ? '2' : matchedRole === 'manager' ? '3' : '4'}`,
+        username: matchedUsername,
+        email: matchedRole === 'admin' ? 'anirudrapaul764@gmail.com' : `${matchedUsername}@rangrez.com`,
+        role: matchedRole,
+        fullName: fullName,
+        createdAt: new Date().toISOString()
+      };
+
+      setCurrentUser(fallbackUser);
+      setIsLoginModalOpen(false);
+      setLoginEmailInput('');
+      setLoginPasswordInput('');
+      refreshBookingsCount(fallbackUser);
+      if (fallbackUser.role !== 'user') {
+        setActiveTab('admin');
+      } else {
+        setActiveTab('home');
+      }
     }
   };
 
@@ -623,16 +681,28 @@ export default function App() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ userId: currentUser.id, role: targetRole, passcode: "" })
         });
-        const data = await res.json();
-        if (res.ok && data.success) {
-          setCurrentUser(data.user);
-          refreshBookingsCount(data.user);
-          alert(`Session securely reverted to: ${targetRole.toUpperCase()}`);
-        } else {
-          alert(data.error || `Failed to authenticate credentials for switching to ${targetRole}`);
+        const contentType = res.headers.get("content-type");
+        if (res.ok && contentType && contentType.includes("application/json")) {
+          const data = await res.json();
+          if (data.success) {
+            setCurrentUser(data.user);
+            refreshBookingsCount(data.user);
+            alert(`Session securely reverted to: ${targetRole.toUpperCase()}`);
+            return;
+          } else {
+            alert(data.error || `Failed to authenticate credentials for switching to ${targetRole}`);
+            return;
+          }
         }
+        throw new Error("FallbackToClient");
       } catch {
-        alert("Role Switch Auth Server error.");
+        const updatedUser = {
+          ...currentUser,
+          role: targetRole
+        };
+        setCurrentUser(updatedUser);
+        refreshBookingsCount(updatedUser);
+        alert(`Session reverted successfully to: ${targetRole.toUpperCase()}`);
       }
       return;
     }
@@ -659,23 +729,60 @@ export default function App() {
           usernameOrEmail: roleSwitchEmail
         })
       });
-      const data = await res.json();
-      if (res.ok && data.success) {
-        setCurrentUser(data.user);
-        refreshBookingsCount(data.user);
-        setIsRoleSwitchModalOpen(false);
-        setRoleSwitchTarget(null);
-        alert(`Session securely upgraded! Switched role to: ${roleSwitchTarget.toUpperCase()}`);
-        if (roleSwitchTarget !== 'user') {
-          setActiveTab('admin');
+      const contentType = res.headers.get("content-type");
+      if (res.ok && contentType && contentType.includes("application/json")) {
+        const data = await res.json();
+        if (data.success) {
+          setCurrentUser(data.user);
+          refreshBookingsCount(data.user);
+          setIsRoleSwitchModalOpen(false);
+          setRoleSwitchTarget(null);
+          alert(`Session securely upgraded! Switched role to: ${roleSwitchTarget.toUpperCase()}`);
+          if (roleSwitchTarget !== 'user') {
+            setActiveTab('admin');
+          } else {
+            setActiveTab('home');
+          }
+          return;
         } else {
-          setActiveTab('home');
+          alert(data.error || `Failed to authenticate credentials for switching to ${roleSwitchTarget}`);
+          return;
         }
-      } else {
-        alert(data.error || `Failed to authenticate credentials for switching to ${roleSwitchTarget}`);
       }
+      throw new Error("FallbackToClient");
     } catch {
-      alert("Role Switch Auth Server error.");
+      // Offline / Serverless static fallback (e.g. Vercel deployment)
+      if (roleSwitchTarget !== 'user') {
+        if (!roleSwitchEmail) {
+          alert("Access Denied: Email or Username is required.");
+          return;
+        }
+        const emailLower = roleSwitchEmail.toLowerCase().trim();
+        if (emailLower !== 'anirudrapaul764@gmail.com') {
+          alert(`Access Denied: '${roleSwitchEmail}' is not the authorized email. Please use: anirudrapaul764@gmail.com`);
+          return;
+        }
+        if (roleSwitchPasscode !== '987654321') {
+          alert("Access Denied: Invalid passcode. Please use: 987654321");
+          return;
+        }
+      }
+
+      // Upgrade local state
+      const updatedUser = {
+        ...currentUser,
+        role: roleSwitchTarget
+      };
+      setCurrentUser(updatedUser);
+      refreshBookingsCount(updatedUser);
+      setIsRoleSwitchModalOpen(false);
+      setRoleSwitchTarget(null);
+      alert(`Session upgraded successfully! Switched role to: ${roleSwitchTarget.toUpperCase()}`);
+      if (roleSwitchTarget !== 'user') {
+        setActiveTab('admin');
+      } else {
+        setActiveTab('home');
+      }
     }
   };
 
