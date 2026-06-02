@@ -23,25 +23,30 @@ import GallerySection from './components/GallerySection.js';
 import ContactSection from './components/ContactSection.js';
 import { BRAND_COLORS, LOGO_ITEMS } from './lib/brand.js';
 import { User, Event, Booking, Coupon, MusicTrack, VideoClip, GalleryImage, AuditLog, UserRole, BandMember, SystemSettings } from './types.js';
+import { 
+  FALLBACK_EVENTS,
+  FALLBACK_COUPONS,
+  FALLBACK_MUSIC,
+  FALLBACK_VIDEOS,
+  FALLBACK_GALLERY,
+  FALLBACK_MEMBERS,
+  FALLBACK_SETTINGS
+} from './fallbackData.js';
 
 export default function App() {
   // Page Tabs
   const [activeTab, setActiveTab] = useState<string>('home');
   
-  // Real-time backend states
-  const [events, setEvents] = useState<Event[]>([]);
-  const [music, setMusic] = useState<MusicTrack[]>([]);
-  const [videos, setVideos] = useState<VideoClip[]>([]);
-  const [gallery, setGallery] = useState<GalleryImage[]>([]);
+  // Real-time backend states - populated instantly with local resilient fallbacks
+  const [events, setEvents] = useState<Event[]>(FALLBACK_EVENTS);
+  const [music, setMusic] = useState<MusicTrack[]>(FALLBACK_MUSIC);
+  const [videos, setVideos] = useState<VideoClip[]>(FALLBACK_VIDEOS);
+  const [gallery, setGallery] = useState<GalleryImage[]>(FALLBACK_GALLERY);
   const [bookings, setBookings] = useState<Booking[]>([]);
-  const [coupons, setCoupons] = useState<Coupon[]>([]);
+  const [coupons, setCoupons] = useState<Coupon[]>(FALLBACK_COUPONS);
   const [auditLogs, setAuditLogs] = useState<AuditLog[]>([]);
-  const [members, setMembers] = useState<BandMember[]>([]);
-  const [settings, setSettings] = useState<SystemSettings>({
-    heroBgUrl: "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=1920&q=85",
-    posterMainSingerUrl: "https://images.unsplash.com/photo-1541604193435-22419f564789?auto=format&fit=crop&w=500&q=80",
-    posterSilhouetteUrl: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=40"
-  });
+  const [members, setMembers] = useState<BandMember[]>(FALLBACK_MEMBERS);
+  const [settings, setSettings] = useState<SystemSettings>(FALLBACK_SETTINGS);
 
   // Loading/API state
   const [isLoading, setIsLoading] = useState(true);
@@ -56,8 +61,8 @@ export default function App() {
     createdAt: new Date().toISOString()
   });
 
-  // Audio player global states
-  const [currentTrack, setCurrentTrack] = useState<MusicTrack | null>(null);
+  // Audio player global states - pre-linked to first fallback track
+  const [currentTrack, setCurrentTrack] = useState<MusicTrack | null>(FALLBACK_MUSIC[0] || null);
   const [isPlayingSound, setIsPlayingSound] = useState(false);
 
   // Booking selections
@@ -92,53 +97,91 @@ export default function App() {
     }
   }, [loginUsername]);
 
-  // --- API STATE HYDRATION ---
+  // --- API STATE HYDRATION WITH GRACEFUL OFFLINE FALLBACKS ---
   const fetchAllData = async () => {
     try {
       setIsLoading(true);
       
       // Events
-      const eveRes = await fetch('/api/events');
-      if (eveRes.ok) {
-        const eveData = await eveRes.json();
-        setEvents(eveData);
-      }
-
-      // Media
-      const medRes = await fetch('/api/media');
-      if (medRes.ok) {
-        const medData = await medRes.json();
-        setMusic(medData.music);
-        setVideos(medData.videos);
-        setGallery(medData.gallery);
-        if (medData.members) setMembers(medData.members);
-        if (medData.settings) setSettings(medData.settings);
-        
-        // Setup initial default track for footer player
-        if (medData.music && medData.music.length > 0) {
-          setCurrentTrack(medData.music[0]);
+      try {
+        const eveRes = await fetch('/api/events');
+        const ct = eveRes.headers.get("content-type");
+        if (eveRes.ok && ct && ct.includes("application/json")) {
+          const eveData = await eveRes.json();
+          if (Array.isArray(eveData) && eveData.length > 0) {
+            setEvents(eveData);
+          }
         }
+      } catch (e) {
+        console.warn("Backend `/api/events` unreachable, keeping static fallback events list.", e);
       }
 
-      // Bookings based on user role (Simulating RBAC filtering via controller fetches)
-      await refreshBookingsCount(currentUser);
+      // Media (Music, Videos, Gallery, Members, Settings)
+      try {
+        const medRes = await fetch('/api/media');
+        const ct = medRes.headers.get("content-type");
+        if (medRes.ok && ct && ct.includes("application/json")) {
+          const medData = await medRes.json();
+          if (medData) {
+            if (Array.isArray(medData.music) && medData.music.length > 0) {
+              setMusic(medData.music);
+              setCurrentTrack(prev => prev || medData.music[0]);
+            }
+            if (Array.isArray(medData.videos) && medData.videos.length > 0) {
+              setVideos(medData.videos);
+            }
+            if (Array.isArray(medData.gallery) && medData.gallery.length > 0) {
+              setGallery(medData.gallery);
+            }
+            if (Array.isArray(medData.members) && medData.members.length > 0) {
+              setMembers(medData.members);
+            }
+            if (medData.settings) {
+              setSettings(medData.settings);
+            }
+          }
+        }
+      } catch (e) {
+        console.warn("Backend `/api/media` unreachable, keeping static fallback media assets.", e);
+      }
 
-      // Coupons list (for admins)
-      const coupRes = await fetch('/api/coupons');
-      if (coupRes.ok) {
-        const coupData = await coupRes.json();
-        setCoupons(coupData);
+      // Bookings based on user role
+      try {
+        await refreshBookingsCount(currentUser);
+      } catch (e) {
+        console.warn("Failed to synchronize user bookings with backend.", e);
+      }
+
+      // Coupons list
+      try {
+        const coupRes = await fetch('/api/coupons');
+        const ct = coupRes.headers.get("content-type");
+        if (coupRes.ok && ct && ct.includes("application/json")) {
+          const coupData = await coupRes.json();
+          if (Array.isArray(coupData) && coupData.length > 0) {
+            setCoupons(coupData);
+          }
+        }
+      } catch (e) {
+        console.warn("Backend `/api/coupons` unreachable, keeping static fallback coupons.", e);
       }
 
       // Analytics & Audit logs
-      const anaRes = await fetch('/api/analytics');
-      if (anaRes.ok) {
-        const anaData = await anaRes.json();
-        setAuditLogs(anaData.logs);
+      try {
+        const anaRes = await fetch('/api/analytics');
+        const ct = anaRes.headers.get("content-type");
+        if (anaRes.ok && ct && ct.includes("application/json")) {
+          const anaData = await anaRes.json();
+          if (anaData && Array.isArray(anaData.logs)) {
+            setAuditLogs(anaData.logs);
+          }
+        }
+      } catch (e) {
+        console.warn("Backend `/api/analytics` unreachable.", e);
       }
 
     } catch (err) {
-      console.error("Failed to connect with custom express API endpoints.", err);
+      console.error("General error in fetchAllData wrapper:", err);
     } finally {
       setIsLoading(false);
     }
@@ -150,7 +193,8 @@ export default function App() {
       const isPrivileged = usr.role !== 'user';
       const endpoint = isPrivileged ? '/api/bookings' : `/api/bookings?userId=${usr.id}`;
       const res = await fetch(endpoint);
-      if (res.ok) {
+      const ct = res.headers.get("content-type");
+      if (res.ok && ct && ct.includes("application/json")) {
         const data = await res.json();
         setBookings(data);
       }
@@ -162,7 +206,8 @@ export default function App() {
   const refreshAuditTrace = async () => {
     try {
       const res = await fetch('/api/analytics');
-      if (res.ok) {
+      const ct = res.headers.get("content-type");
+      if (res.ok && ct && ct.includes("application/json")) {
         const data = await res.json();
         setAuditLogs(data.logs);
       }
