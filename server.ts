@@ -1,6 +1,7 @@
 import express from 'express';
 import path from 'path';
 import fs from 'fs';
+import https from 'https';
 import { createServer as createViteServer } from 'vite';
 import { 
   User, 
@@ -24,6 +25,67 @@ const UPLOADS_DIR = path.join(process.cwd(), 'uploads');
 if (!fs.existsSync(UPLOADS_DIR)) {
   fs.mkdirSync(UPLOADS_DIR, { recursive: true });
 }
+
+const ASSETS_DIR = path.join(process.cwd(), 'assets');
+if (!fs.existsSync(ASSETS_DIR)) {
+  fs.mkdirSync(ASSETS_DIR, { recursive: true });
+}
+
+function downloadFile(url: string, destPath: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    https.get(url, (res) => {
+      if (res.statusCode !== 200) {
+        reject(new Error(`Failed to download: status ${res.statusCode}`));
+        return;
+      }
+      const fileStream = fs.createWriteStream(destPath);
+      res.pipe(fileStream);
+      fileStream.on('finish', () => {
+        fileStream.close();
+        resolve();
+      });
+    }).on('error', (err) => {
+      reject(err);
+    });
+  });
+}
+
+function ensureDefaultAssetsOnDisk() {
+  const assetsToPreload = [
+    { name: 'fist_bump_wristbands.jpg', url: 'https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=1200&q=80' },
+    { name: 'lead_singer_microphone.jpg', url: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=1200&q=80' },
+    { name: 'team_group_photo.jpg', url: 'https://images.unsplash.com/photo-1527529482837-4698179dc6ce?auto=format&fit=crop&w=1200&q=80' },
+    { name: 'poster_live_experience.jpg', url: 'https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?auto=format&fit=crop&w=1200&q=80' },
+    { name: 'poster_v_anand_tabla.jpg', url: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?auto=format&fit=crop&w=1200&q=80' },
+    { name: 'poster_complete_band.jpg', url: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=1200&q=80' },
+    { name: 'poster_yash_flutist.jpg', url: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=1200&q=80' },
+    { name: 'poster_dhawal_drummer.jpg', url: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=1200&q=80' },
+    { name: 'poster_vishnu_guitarist.jpg', url: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=1200&q=80' }
+  ];
+
+  setTimeout(async () => {
+    console.log('[Assets System] Synchronizing high-quality physical image assets on startup...');
+    for (const item of assetsToPreload) {
+      const uploadPath = path.join(UPLOADS_DIR, item.name);
+      const assetPath = path.join(ASSETS_DIR, item.name);
+      
+      try {
+        if (!fs.existsSync(uploadPath)) {
+          console.log(`[Assets System] Fetching standard source image: ${item.name}`);
+          await downloadFile(item.url, uploadPath);
+        }
+        if (!fs.existsSync(assetPath)) {
+          fs.copyFileSync(uploadPath, assetPath);
+        }
+      } catch (err: any) {
+        console.error(`[Assets System] Failed synchronizing image ${item.name}:`, err.message);
+      }
+    }
+    console.log('[Assets System] Asset synchronization completed successfully!');
+  }, 1000);
+}
+
+ensureDefaultAssetsOnDisk();
 
 app.use(express.json({ limit: '200mb' }));
 app.use(express.urlencoded({ limit: '200mb', extended: true }));

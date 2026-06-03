@@ -182,7 +182,7 @@ export default function AboutSection({ members: propMembers = [], settings: prop
                 {/* Vocalist artwork containing the real uploaded concert poster image */}
                 <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
                   <img
-                    src="/uploads/1780386988939-IMG_6956.jpg"
+                    src={activeSettings.posterMainSingerUrl}
                     alt="Rangrez Live Experience Poster"
                     referrerPolicy="no-referrer"
                     className="w-full h-full object-cover select-none pointer-events-none"

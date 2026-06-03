@@ -649,7 +649,7 @@
       "artist": "Aadarsh",
       "role": "Vocalist & Sitarist",
       "quote": "Sufi rock is not just an aesthetic; it is our breathing frequency, transporting listeners to higher dimensions.",
-      "imageUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=500&q=80",
+      "imageUrl": "/uploads/lead_singer_microphone.jpg",
       "skills": [
         "Spiritual Vocals",
         "Classical Sitar",
@@ -662,7 +662,7 @@
       "artist": "V. Aanand",
       "role": "Traditional Percussions",
       "quote": "His hands tell stories. His energy moves souls. Breathes soul and lives in every beat.",
-      "imageUrl": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=500&q=80",
+      "imageUrl": "/uploads/poster_v_anand_tabla.jpg",
       "skills": [
         "Double-struck Tabla",
         "Mridangam",
@@ -675,7 +675,7 @@
       "artist": "Yash",
       "role": "Traditional Woodwinds",
       "quote": "Breathes soul and lives in every vibe. His melodies move souls, from tradition to tomorrow.",
-      "imageUrl": "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=500&q=80",
+      "imageUrl": "/uploads/poster_yash_flutist.jpg",
       "skills": [
         "Bansuri Bamboo Flute",
         "Recorder",
@@ -688,7 +688,7 @@
       "artist": "Vishnu",
       "role": "Solos & Soundscapes",
       "quote": "Tells stories without words. His strings carry pure emotion, and his heavy guitar solos ignite the stage.",
-      "imageUrl": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=500&q=80",
+      "imageUrl": "/uploads/poster_vishnu_guitarist.jpg",
       "skills": [
         "Heavy Distortion",
         "Ambient Reverbs",
@@ -701,7 +701,7 @@
       "artist": "Dhawal",
       "role": "Hybrid Rhythm Station",
       "quote": "Doesn't just play the drums, he builds the moment. Every single beat creates endless feel.",
-      "imageUrl": "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=500&q=80",
+      "imageUrl": "/uploads/poster_dhawal_drummer.jpg",
       "skills": [
         "Double Bass Drumming",
         "Electronic Drum Pad Triggering"
@@ -713,7 +713,7 @@
       "artist": "Anubhav",
       "role": "Sub-harmonic Grooves",
       "quote": "Anchor of the Rangrez sound. Fuses low-end power with high speed classical patterns.",
-      "imageUrl": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=500&q=80",
+      "imageUrl": "/uploads/fist_bump_wristbands.jpg",
       "skills": [
         "5-String Bass slap",
         "Fretless Glide",
@@ -722,9 +722,9 @@
     }
   ],
   "settings": {
-    "heroBgUrl": "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=1920&q=85",
-    "posterMainSingerUrl": "https://images.unsplash.com/photo-1541604193435-22419f564789?auto=format&fit=crop&w=500&q=80",
-    "posterSilhouetteUrl": "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=40",
+    "heroBgUrl": "/uploads/poster_complete_band.jpg",
+    "posterMainSingerUrl": "/uploads/poster_live_experience.jpg",
+    "posterSilhouetteUrl": "/uploads/team_group_photo.jpg",
     "bandName": "RANGREZ",
     "tagline": "★ SANSKRIT ROOTED SUFI FUSION ROCK ★",
     "creedTitle": "Rangrez Creed",

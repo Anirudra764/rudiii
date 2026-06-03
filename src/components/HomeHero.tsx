@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { Calendar, ArrowRight } from 'lucide-react';
+import { Calendar, ArrowRight, Ticket, Compass, Sparkles, ChevronRight } from 'lucide-react';
 import { motion } from 'motion/react';
 import { Event, SystemSettings } from '../types.js';
 
@@ -81,34 +81,127 @@ export default function HomeHero({
             {activeSettings.creedBody}
           </p>
 
-          <div className="flex flex-wrap items-center justify-center gap-4 pt-6">
-            <button
-              onClick={onExploreTourEvents}
-              className="px-8 py-3.5 rounded-xl bg-[#D4AF37] hover:scale-104 text-black text-xs uppercase tracking-widest font-extrabold transition-all shadow-xl shadow-[#D4AF37]/10"
+          {/* Enhanced Premium Motion CTA Segment */}
+          <motion.div 
+            className="flex flex-wrap items-center justify-center gap-6 pt-10 relative z-30"
+            initial="hidden"
+            animate="visible"
+            variants={{
+              hidden: { opacity: 0 },
+              visible: {
+                opacity: 1,
+                transition: {
+                  delayChildren: 0.15,
+                  staggerChildren: 0.12
+                }
+              }
+            }}
+          >
+            {/* Primary Action Button: Booking Options */}
+            <motion.div
+              variants={{
+                hidden: { opacity: 0, y: 25, scale: 0.95 },
+                visible: { 
+                  opacity: 1, 
+                  y: 0, 
+                  scale: 1,
+                  transition: { type: "spring", stiffness: 100, damping: 15 }
+                }
+              }}
+              whileHover={{ scale: 1.05, y: -4 }}
+              whileTap={{ scale: 0.97 }}
+              className="relative group"
             >
-              {activeSettings.homeHeroButton1}
-            </button>
-            <button
-              onClick={onViewLivePoster}
-              className="px-8 py-3.5 rounded-xl bg-[#E32636]/15 hover:bg-[#E32636]/25 border border-[#E32636]/40 text-[#f5f5f7] text-xs uppercase tracking-widest font-extrabold transition-all shadow-lg"
+              {/* Pulsing colored glow aura inside the theme's core colors */}
+              <div className="absolute -inset-1.5 bg-gradient-to-r from-[#D4AF37] via-[#E32636] to-[#8A2BE2] rounded-xl blur-lg opacity-40 group-hover:opacity-85 transition duration-500 group-hover:duration-200 animate-pulse" />
+              
+              <button
+                onClick={onExploreTourEvents}
+                className="relative px-8 py-4 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#C59B27] hover:from-[#E3BC43] hover:to-[#B68C1C] text-black font-mono text-xs uppercase tracking-[0.25em] font-extrabold flex items-center gap-3.5 transition-all duration-300 shadow-2xl group/btn cursor-pointer"
+              >
+                <Ticket className="w-4 h-4 text-black group-hover/btn:rotate-12 transition-transform duration-300" />
+                <span className="relative z-10">{activeSettings.homeHeroButton1}</span>
+                <ChevronRight className="w-4 h-4 text-black group-hover/btn:translate-x-1.5 transition-transform duration-300" />
+              </button>
+            </motion.div>
+
+            {/* Secondary Action/Exploration Button */}
+            <motion.div
+              variants={{
+                hidden: { opacity: 0, y: 25, scale: 0.95 },
+                visible: { 
+                  opacity: 1, 
+                  y: 0, 
+                  scale: 1,
+                  transition: { type: "spring", stiffness: 100, damping: 15 }
+                }
+              }}
+              whileHover={{ scale: 1.05, y: -4 }}
+              whileTap={{ scale: 0.97 }}
+              className="relative group"
             >
-              {activeSettings.homeHeroButton2}
-            </button>
-            <button
-              onClick={onLearnMoreAboutBand}
-              className="px-8 py-3.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-[11px] text-zinc-350 uppercase tracking-widest font-semibold transition-all"
-            >
-              {activeSettings.homeHeroButton3}
-            </button>
-          </div>
+              <button
+                onClick={onLearnMoreAboutBand}
+                className="relative px-8 py-4 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 hover:border-white/30 text-white font-mono text-xs uppercase tracking-[0.25em] font-semibold flex items-center gap-3.5 transition-all duration-300 group/btn2 backdrop-blur-md cursor-pointer"
+              >
+                <Compass className="w-4 h-4 text-[#D4AF37] group-hover/btn2:rotate-45 transition-transform duration-500" />
+                <span>{activeSettings.homeHeroButton3}</span>
+                <Sparkles className="w-3.5 h-3.5 text-[#8A2BE2] opacity-0 group-hover/btn2:opacity-100 group-hover/btn2:scale-110 transition-all duration-300" />
+              </button>
+            </motion.div>
+          </motion.div>
 
         </div>
 
         {/* Bottom floating scroll guide */}
-        <div className="absolute bottom-10 inset-x-0 mx-auto text-center z-20 animate-bounce select-none">
-          <span className="text-[10px] text-zinc-500 tracking-widest uppercase font-mono">STRETCH DOWNWARD</span>
-          <div className="w-[1px] h-8 bg-[#D4AF37] mx-auto mt-2" />
-        </div>
+        <motion.div 
+          className="absolute bottom-4 inset-x-0 mx-auto flex flex-col items-center justify-center z-20 select-none cursor-pointer"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1, duration: 1.2, ease: "easeOut" }}
+          whileHover={{ scale: 1.05 }}
+        >
+          {/* Shimmering Text - Ultra Clean and Tiny */}
+          <motion.span 
+            className="text-[8px] tracking-[0.4em] font-mono font-medium text-zinc-500 uppercase relative"
+            animate={{ opacity: [0.35, 0.85, 0.35] }}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+          >
+            SCROLL TO DISCOVER
+          </motion.span>
+          
+          {/* Premium Mouse Scroll Wheel Pill Indicator - Sleeker, thinner borders */}
+          <div className="mt-2.5 relative w-[18px] h-[30px] rounded-full border border-zinc-500/20 flex justify-center p-1 bg-black/40 backdrop-blur-md shadow-[0_0_12px_rgba(255,255,255,0.02)]">
+            {/* Smoothly moving indicator bar or dot */}
+            <motion.div 
+              className="w-1 h-2 rounded-full bg-[#D4AF37] shadow-[0_0_6px_rgba(212,175,55,0.8)]"
+              animate={{ 
+                y: [0, 10, 0],
+                opacity: [1, 0.3, 1]
+              }}
+              transition={{ 
+                duration: 2.2, 
+                repeat: Infinity, 
+                ease: "easeInOut" 
+              }}
+            />
+          </div>
+
+          {/* Minimalist laser indicator line */}
+          <motion.div 
+            className="w-[1px] bg-gradient-to-b from-[#D4AF37]/80 to-transparent mt-2.5"
+            animate={{ 
+              height: [0, 16, 0],
+              opacity: [0, 0.8, 0]
+            }}
+            transition={{
+              duration: 2.2,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 0.4
+            }}
+          />
+        </motion.div>
       </div>
 
       {/* 2. LIVE UPCOMING CONCERT CALL TO ACTION */}

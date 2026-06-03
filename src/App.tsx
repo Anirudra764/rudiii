@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'motion/react';
 import { 
   Instagram, Mail, Phone, MapPin, Youtube, ExternalLink, Send, 
@@ -137,6 +137,23 @@ export default function App() {
   // Audio player global states - pre-linked to first fallback track
   const [currentTrack, setCurrentTrack] = useState<MusicTrack | null>(FALLBACK_MUSIC[0] || null);
   const [isPlayingSound, setIsPlayingSound] = useState(false);
+  
+  // Real programmatic HTMLAudioElement controller to play/pause actual streams
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    if (!audioRef.current) return;
+    
+    if (isPlayingSound) {
+      audioRef.current.play().catch(err => {
+        console.warn("Audio playback interrupted or blocked by browser autoplay settings:", err);
+        // Fallback to paused state if browser blocks playback
+        setIsPlayingSound(false);
+      });
+    } else {
+      audioRef.current.pause();
+    }
+  }, [isPlayingSound, currentTrack]);
 
   // Booking selections
   const [selectedEventForBooking, setSelectedEventForBooking] = useState<Event | null>(null);
@@ -1161,6 +1178,13 @@ export default function App() {
   return (
     <div className={`min-h-screen ${BRAND_COLORS.primaryBg} font-sans flex flex-col justify-between overflow-x-hidden relative`}>
       
+      {/* Invisible actual HTML5 Audio player managed programmatically */}
+      <audio 
+        ref={audioRef} 
+        src={currentTrack?.audioUrl || ""} 
+        onEnded={handleNextTrack}
+      />
+
       {/* 3D Motion Particle Canvas Ambient Sound Environment */}
       <Visualizer isPlaying={isPlayingSound} activeTrackId={currentTrack?.id} />
 
