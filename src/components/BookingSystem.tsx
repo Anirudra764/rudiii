@@ -87,8 +87,8 @@ export default function BookingSystem({
   // Handle seat map reservation grid
   // Precompile seat status: rows A, B, C corresponding to Vip, Pit, Gen
   const rows = [
-    { name: 'Row A (Couple Entry + 25% Food Coupon)', prefix: 'VIP', class: 'vip' as TicketClass, color: 'bg-[#D4AF37]', border: 'border-[#D4AF37]' },
-    { name: 'Row B (Solo Entry + 20% Food Coupon)', prefix: 'PIT', class: 'fanpit' as TicketClass, color: 'bg-purple-600', border: 'border-purple-600' },
+    { name: 'Row A (Couple Entry + 25% Food Coupon)', prefix: 'VIP', class: 'vip' as TicketClass, color: 'bg-[#E32636]', border: 'border-[#E32636]' },
+    { name: 'Row B (Solo Entry + 20% Food Coupon)', prefix: 'PIT', class: 'fanpit' as TicketClass, color: 'bg-red-500', border: 'border-red-500' },
     { name: 'Row C (Solo Only)', prefix: 'GEN', class: 'general' as TicketClass, color: 'bg-zinc-500', border: 'border-zinc-500' }
   ];
 
@@ -241,12 +241,12 @@ export default function BookingSystem({
       {step < 4 && (
         <div className="flex items-center justify-between mb-10 max-w-sm mx-auto select-none bg-black/40 backdrop-blur-md p-4 rounded-2xl border border-white/5">
           <div className="flex items-center gap-2">
-            <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${step === 1 ? 'bg-[#D4AF37] text-black font-black' : 'bg-green-500 text-white font-black'}`}>{step === 1 ? '1' : '✓'}</span>
+            <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${step === 1 ? 'bg-[#E32636] text-white font-black' : 'bg-green-500 text-white font-black'}`}>{step === 1 ? '1' : '✓'}</span>
             <span className="text-xs text-zinc-300">Admission</span>
           </div>
           <div className="h-[1.5px] bg-zinc-700 flex-1 mx-4" />
           <div className="flex items-center gap-2">
-            <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${step === 3 ? 'bg-[#D4AF37] text-black font-black' : 'bg-zinc-800 text-zinc-400'}`}>2</span>
+            <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${step === 3 ? 'bg-[#E32636] text-white font-black' : 'bg-zinc-800 text-zinc-400'}`}>2</span>
             <span className="text-xs text-zinc-300">Checkout</span>
           </div>
         </div>
@@ -256,7 +256,7 @@ export default function BookingSystem({
       {step === 1 && (
         <div className="space-y-8 animate-in fade-in duration-300">
           <div className="text-center">
-            <span className="text-[#D4AF37] text-xs uppercase font-mono tracking-widest block mb-2 font-bold font-black">Step 01 • Experiences Tiers</span>
+            <span className="text-[#E32636] text-xs uppercase font-mono tracking-widest block mb-2 font-bold font-black">Step 01 • Experiences Tiers</span>
             <h2 className="text-3xl font-black text-white">Select Admissions categories</h2>
             <p className="text-zinc-400 text-xs mt-1">Configure your counts. Choose standard entries or value bundles with complimentary food coupons.</p>
           </div>
@@ -338,14 +338,12 @@ export default function BookingSystem({
                   </button>
                 </div>
               </div>
-            </div>
-
-            {/* Couple plus Food Coupon Column Card */}
-            <div className={`p-6 bg-gradient-to-b from-[#1c182d] to-[#0f0e13]/90 border rounded-2xl flex flex-col justify-between h-full hover:scale-101 transition-all ${quantities.vip > 0 ? 'border-[#D4AF37] shadow-lg shadow-[#D4AF37]/10' : 'border-white/5 shadow-md'}`}>
+                        {/* Couple plus Food Coupon Column Card */}
+            <div className={`p-6 bg-gradient-to-b from-[#1c182d] to-[#0f0e13]/90 border rounded-2xl flex flex-col justify-between h-full hover:scale-101 transition-all ${quantities.vip > 0 ? 'border-[#E32636] shadow-lg shadow-[#E32636]/10' : 'border-white/5 shadow-md'}`}>
               <div>
-                <span className="text-[10px] bg-[#D4AF37]/10 text-[#D4AF37] border border-[#D4AF37]/40 px-2 py-0.5 rounded font-mono uppercase font-bold tracking-widest block w-fit mb-3">Couple + Food Discount</span>
+                <span className="text-[10px] bg-[#E32636]/10 text-[#E32636] border border-[#E32636]/40 px-2 py-0.5 rounded font-mono uppercase font-bold tracking-widest block w-fit mb-3">Couple + Food Discount</span>
                 <h3 className="text-lg font-black text-zinc-100 font-bold">250 with 25% off Food Coupon plus Couple Entry</h3>
-                <p className="text-3xl font-extrabold text-[#D4AF37] mt-2 mb-4">₹{vipPrice}</p>
+                <p className="text-3xl font-extrabold text-[#E32636] mt-2 mb-4">₹{vipPrice}</p>
                 <div className="w-full h-px bg-white/5 mb-4" />
                 <ul className="space-y-2 text-xs text-zinc-300 mb-6 text-left">
                   {vipCategory?.benefits.map((b, bi) => (
@@ -383,7 +381,7 @@ export default function BookingSystem({
 
           <div className="bg-[#181524]/40 p-5 rounded-2xl border border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4 mt-8">
             <div className="text-xs text-zinc-300 font-mono">
-              Total Admission Tickets Requested: <span className="text-[#D4AF37] font-bold text-sm pl-1">{totalTicketsSelected} seats</span>
+              Total Admission Tickets Requested: <span className="text-[#E32636] font-bold text-sm pl-1">{totalTicketsSelected} seats</span>
             </div>
             
             <div className="flex gap-3 w-full sm:w-auto">
@@ -404,13 +402,13 @@ export default function BookingSystem({
                   setStep(3);
                 }}
                 disabled={totalTicketsSelected <= 0}
-                className="flex-1 sm:flex-none px-8 py-2.5 rounded-xl bg-[#D4AF37] disabled:bg-zinc-800 disabled:text-zinc-600 text-black font-extrabold text-xs uppercase hover:scale-103 transition-transform flex items-center justify-center gap-1.5"
+                className="flex-1 sm:flex-none px-8 py-2.5 rounded-xl bg-[#E32636] disabled:bg-zinc-800 disabled:text-zinc-650 text-white font-extrabold text-xs uppercase hover:scale-103 transition-transform flex items-center justify-center gap-1.5"
               >
                 Proceed to Checkout
-                <ChevronRight className="w-4 h-4 text-black" />
+                <ChevronRight className="w-4 h-4 text-white" />
               </button>
             </div>
-          </div>
+          </div>    </div>
         </div>
       )}
 
@@ -418,16 +416,16 @@ export default function BookingSystem({
       {step === 2 && (
         <div className="space-y-8 animate-in fade-in duration-300">
           <div className="text-center">
-            <span className="text-[#D4AF37] text-xs uppercase font-mono tracking-widest block mb-2 font-bold">Step 02 • Arena seating layout</span>
+            <span className="text-[#E32636] text-xs uppercase font-mono tracking-widest block mb-2 font-bold">Step 02 • Arena seating layout</span>
             <h2 className="text-3xl font-black text-white">Choose reserved seats</h2>
-            <p className="text-zinc-400 text-xs mt-1">Tap seats corresponding to your selected tiers below. VIP (Gold), Pit (Purple), Field (Silver).</p>
+            <p className="text-zinc-400 text-xs mt-1">Tap seats corresponding to your selected tiers below. VIP (Crimson Red), Pit (Vibrant Red), Field (Silver).</p>
           </div>
 
-          <div className="bg-[#181524]/60 border border-[#8A2BE2]/20 backdrop-blur-md rounded-3xl p-6 md:p-8 space-y-10">
+          <div className="bg-[#181524]/60 border border-red-900/20 backdrop-blur-md rounded-3xl p-6 md:p-8 space-y-10">
             
             {/* Stage illustration representation */}
-            <div className="relative w-full max-w-md mx-auto h-12 bg-gradient-to-r from-[#D4AF37] via-[#8A2BE2] to-[#E32636] rounded-b-3xl shadow-lg border-b-2 border-white/20 flex items-center justify-center select-none mb-10">
-              <span className="text-xs font-black text-black tracking-[0.4em] uppercase">RANGREZ LIVE SOUND STAGE</span>
+            <div className="relative w-full max-w-md mx-auto h-12 bg-gradient-to-r from-[#E32636] to-[#FF4D4D] rounded-b-3xl shadow-lg border-b-2 border-white/20 flex items-center justify-center select-none mb-10">
+              <span className="text-xs font-black text-white tracking-[0.4em] uppercase">RANGREZ LIVE SOUND STAGE</span>
               <div className="absolute top-10 w-24 h-[1px] bg-white/20" />
             </div>
 
@@ -440,7 +438,7 @@ export default function BookingSystem({
                 return (
                   <div key={r.prefix} className="space-y-2">
                     <div className="flex items-center justify-between text-xs font-mono font-bold px-2">
-                      <span className="text-[#D4AF37]">{r.name}</span>
+                      <span className="text-[#E32636]">{r.name}</span>
                       <span className="text-zinc-400">{selectedSeats.filter(s => s.startsWith(r.prefix)).length} of {limit} selected</span>
                     </div>
 
@@ -453,19 +451,19 @@ export default function BookingSystem({
                         const isChosen = selectedSeats.includes(seatCode);
 
                         return (
-                          <button
-                            key={seatCode}
-                            onClick={() => !isPreBookedConflict && handleSeatClick(seatCode, r.class)}
-                            disabled={isPreBookedConflict}
-                            className={`w-7 h-7 rounded-lg text-[9px] font-mono font-bold flex items-center justify-center transition-all border ${
-                              isPreBookedConflict 
-                                ? 'bg-red-900/10 border-red-500/20 text-red-500/40 cursor-not-allowed' 
-                                : isChosen
-                                  ? 'bg-[#D4AF37] border-[#D4AF37] text-black shadow-lg scale-105'
-                                  : 'bg-white/5 border-white/10 text-zinc-300 hover:border-[#D4AF37]/50'
-                            }`}
-                            title={isPreBookedConflict ? "Occupied" : `Seat ${seatCode}`}
-                          >
+                           <button
+                             key={seatCode}
+                             onClick={() => !isPreBookedConflict && handleSeatClick(seatCode, r.class)}
+                             disabled={isPreBookedConflict}
+                             className={`w-7 h-7 rounded-lg text-[9px] font-mono font-bold flex items-center justify-center transition-all border ${
+                               isPreBookedConflict 
+                                 ? 'bg-red-900/10 border-red-500/20 text-red-500/40 cursor-not-allowed' 
+                                 : isChosen
+                                   ? 'bg-[#E32636] border-[#E32636] text-white shadow-lg scale-105'
+                                   : 'bg-white/5 border-white/10 text-zinc-300 hover:border-[#E32636]/50'
+                             }`}
+                             title={isPreBookedConflict ? "Occupied" : `Seat ${seatCode}`}
+                           >
                             {seatIndex}
                           </button>
                         );
@@ -483,7 +481,7 @@ export default function BookingSystem({
                 <span className="text-zinc-400">Available</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="w-3.5 h-3.5 rounded bg-[#D4AF37]" stroke="#D4AF37" />
+                <span className="w-3.5 h-3.5 rounded bg-[#E32636]" stroke="#E32636" />
                 <span className="text-zinc-400">Your Selection</span>
               </div>
               <div className="flex items-center gap-2">
@@ -492,7 +490,7 @@ export default function BookingSystem({
               </div>
               <button
                 onClick={handleAutoAssignSeats}
-                className="text-xs text-purple-400 hover:text-purple-300 border-l border-white/10 pl-6 flex items-center gap-1.5"
+                className="text-xs text-red-400 hover:text-red-300 border-l border-white/10 pl-6 flex items-center gap-1.5 cursor-pointer"
                 title="Bypass seat selections by autofilling sequential spots"
               >
                 <Grid className="w-3.5 h-3.5" /> Auto-allocate Remaining Seats
@@ -516,10 +514,10 @@ export default function BookingSystem({
                 }
                 setStep(3);
               }}
-              className="px-8 py-2.5 rounded-xl bg-[#D4AF37] text-black font-extrabold text-xs uppercase hover:scale-103 transition-transform flex items-center gap-1.5"
+              className="px-8 py-2.5 rounded-xl bg-[#E32636] text-white font-extrabold text-xs uppercase hover:scale-103 transition-transform flex items-center gap-1.5"
             >
               Set Payment Checkout
-              <ChevronRight className="w-4 h-4 text-black" />
+              <ChevronRight className="w-4 h-4 text-white" />
             </button>
           </div>
         </div>
@@ -529,15 +527,13 @@ export default function BookingSystem({
       {step === 3 && (
         <div className="space-y-8 animate-in fade-in duration-300">
           <div className="text-center">
-            <span className="text-[#D4AF37] text-xs uppercase font-mono tracking-widest block mb-2 font-bold">Step 03 • Payments Gateway Check</span>
+            <span className="text-[#E32636] text-xs uppercase font-mono tracking-widest block mb-2 font-bold">Step 03 • Payments Gateway Check</span>
             <h2 className="text-3xl font-black text-white">Finalize secure checkout</h2>
             <p className="text-zinc-400 text-xs mt-1">Provide coupons or complete simulated transactions instantly.</p>
           </div>
 
-          <div className="grid md:grid-cols-12 gap-8 items-start">
-            
-            {/* Left Column: Form inputs Card */}
-            <form onSubmit={handlePaymentCheckout} className="col-span-12 md:col-span-7 bg-[#181524]/60 border border-[#8A2BE2]/10 p-6 rounded-3xl space-y-6 animate-in fade-in">
+          <div className="grid md:grid-cols-12 gap-8 items-start">            {/* Left Column: Form inputs Card */}
+            <form onSubmit={handlePaymentCheckout} className="col-span-12 md:col-span-7 bg-[#181524]/60 border border-red-900/10 p-6 rounded-3xl space-y-6 animate-in fade-in">
               
               <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-white/5 pb-4 mb-2 gap-2">
                 <span className="text-xs font-bold text-zinc-100 uppercase tracking-widest font-mono">Select Payment Interface</span>
@@ -549,7 +545,7 @@ export default function BookingSystem({
                       onClick={() => setPaymentGateway(gateway)}
                       className={`text-[10px] uppercase font-mono px-2.5 py-1.5 rounded transition-colors cursor-pointer ${
                         paymentGateway === gateway 
-                          ? 'bg-[#8A2BE2] text-white font-bold' 
+                          ? 'bg-[#E32636] text-white font-bold' 
                           : 'bg-white/5 hover:bg-white/10 text-zinc-300'
                       }`}
                     >
@@ -569,16 +565,16 @@ export default function BookingSystem({
                     placeholder="Enter candidate's full name"
                     value={cardHolder}
                     onChange={(e) => setCardHolder(e.target.value)}
-                    className="w-full bg-black/40 border border-[#8A2BE2]/20 rounded-xl px-4 py-2.5 text-xs text-zinc-200 focus:outline-none focus:border-[#D4AF37]"
+                    className="w-full bg-black/40 border border-red-900/20 rounded-xl px-4 py-2.5 text-xs text-zinc-200 focus:outline-none focus:border-[#E32636]"
                   />
                 </div>
 
                 {paymentGateway === 'upi_qr' ? (
-                  <div className="bg-[#100d1a] border border-[#8A2BE2]/25 p-5 rounded-2xl space-y-5 animate-in fade-in duration-300">
+                  <div className="bg-[#100d1a] border border-red-900/25 p-5 rounded-2xl space-y-5 animate-in fade-in duration-300">
                     <div className="flex items-center gap-2 pb-2.5 border-b border-white/5">
-                      <QrCode className="w-5 h-5 text-[#D4AF37]" />
+                      <QrCode className="w-5 h-5 text-[#E32636]" />
                       <div>
-                        <span className="text-xs font-bold text-[#D4AF37] block font-mono">BAND UPI ACQUISITION TERMINAL</span>
+                        <span className="text-xs font-bold text-[#E32636] block font-mono">BAND UPI ACQUISITION TERMINAL</span>
                         <span className="text-[10px] text-zinc-400 block">Scan to transfer ticket value securely</span>
                       </div>
                     </div>
@@ -606,20 +602,20 @@ export default function BookingSystem({
 
                       <div className="col-span-12 sm:col-span-7 space-y-3 font-mono text-[11px]">
                         <div className="space-y-1 text-zinc-300">
-                          <p><span className="text-zinc-500">Merchant Payee ID:</span> <span className="text-zinc-100 font-bold select-all underline text-[#a855f7]">{upiId}</span></p>
+                          <p><span className="text-zinc-500">Merchant Payee ID:</span> <span className="text-zinc-100 font-bold select-all underline text-[#E32636]">{upiId}</span></p>
                           <p><span className="text-zinc-500">Account:</span> <span className="text-zinc-100">Rangrez Fusion Band Ltd</span></p>
                           <p><span className="text-zinc-500">Secure Billing Value:</span> <span className="text-[#E32636] font-extrabold text-xs">₹{finalTotalAmount}</span></p>
                         </div>
 
                         {/* QR Image customization upload button for testing */}
                         <div className="pt-2 border-t border-white/5">
-                          <label className="text-[9px] uppercase tracking-wider text-purple-400 font-bold block mb-1">Testing: Customize your personal QR</label>
+                          <label className="text-[9px] uppercase tracking-wider text-red-400 font-bold block mb-1">Testing: Customize your personal QR</label>
                           <input 
                             type="file" 
                             accept="image/*"
                             id="custom-qr-uploader"
                             onChange={handleQrUpload}
-                            className="text-[9px] text-zinc-400 cursor-pointer file:cursor-pointer file:mr-2 file:py-1 file:px-2 file:rounded-md file:border-0 file:text-[9px] file:font-bold file:bg-[#8A2BE2]/20 file:text-purple-300 hover:file:bg-[#8A2BE2]/30 w-full"
+                            className="text-[9px] text-zinc-400 cursor-pointer file:cursor-pointer file:mr-2 file:py-1 file:px-2 file:rounded-md file:border-0 file:text-[9px] file:font-bold file:bg-[#E32636]/20 file:text-red-350 hover:file:bg-[#E32636]/30 w-full"
                           />
                           <span className="text-[8px] text-zinc-500 block mt-1 leading-normal">
                             Upload your personal Google Pay QR/PhonePe QR image to substitute the payment screen. Excellent for testing live UPI gateways.
@@ -640,7 +636,7 @@ export default function BookingSystem({
                         maxLength={20}
                         value={upiUtr}
                         onChange={(e) => setUpiUtr(e.target.value.replace(/[^0-9a-zA-Z]/g, ''))}
-                        className="w-full bg-black/60 border border-[#8A2BE2]/40 focus:border-[#E32636] focus:outline-none rounded-xl px-4 py-2.5 text-xs text-white tracking-widest font-mono text-center"
+                        className="w-full bg-black/60 border border-red-900/40 focus:border-[#E32636] focus:outline-none rounded-xl px-4 py-2.5 text-xs text-white tracking-widest font-mono text-center"
                       />
                       <p className="text-[9px] text-zinc-400 leading-normal font-sans">
                         Execute the UPI transfer using Google Pay/Paytm, scan, then enter the UTR / Ref reference string above to finalize authentication.
@@ -694,12 +690,12 @@ const options = {
                     </div>
                   </div>
                 ) : paymentGateway === 'stripe' ? (
-                  <div className="bg-[#110d21] border border-violet-500/20 p-5 rounded-2xl space-y-4 animate-in fade-in duration-300">
+                  <div className="bg-[#110d21] border border-red-900/20 p-5 rounded-2xl space-y-4 animate-in fade-in duration-300">
                     <div className="flex items-center justify-between pb-3 border-b border-white/5">
                       <div className="flex items-center gap-2">
                         <span className="text-xs font-black text-white tracking-widest font-sans uppercase">Stripe Elements Payment</span>
                       </div>
-                      <span className="text-[8px] bg-purple-500/10 text-purple-400 border border-purple-500/20 px-1.5 py-0.5 id-tag rounded font-mono uppercase font-bold">Secure SSL</span>
+                      <span className="text-[8px] bg-[#E32636]/10 text-red-400 border border-[#E32636]/20 px-1.5 py-0.5 id-tag rounded font-mono uppercase font-bold">Secure SSL</span>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -775,7 +771,7 @@ const options = {
               <div className="bg-amber-600/5 rounded-xl border border-amber-500/20 p-4 flex gap-3 items-start">
                 <CreditCard className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5 animate-pulse" />
                 <div className="text-[10px] leading-relaxed text-zinc-300">
-                  <span className="font-bold text-[#D4AF37] block mb-0.5">Sandbox Testing Protection Active</span>
+                  <span className="font-bold text-[#E32636] block mb-0.5">Sandbox Testing Protection Active</span>
                   Stripe, PayPal, and UPI QR verification simulations are secure. Real transfers require testing audit logs. Submitting creates a real reservation trace inside the database logs instantly.
                 </div>
               </div>
@@ -784,16 +780,16 @@ const options = {
               <button
                 type="submit"
                 disabled={isProcessingPayment}
-                className="w-full py-3 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#8A2BE2] hover:scale-102 transition-transform text-black uppercase tracking-wider font-extrabold text-xs flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full py-3 rounded-xl bg-gradient-to-r from-[#E32636] to-red-800 hover:scale-102 transition-transform text-white uppercase tracking-wider font-extrabold text-xs flex items-center justify-center gap-2 cursor-pointer"
               >
                 {isProcessingPayment ? (
                   <>
-                    <Loader2 className="w-4 h-4 animate-spin text-black" />
+                    <Loader2 className="w-4 h-4 animate-spin text-white" />
                     Completing secure {paymentGateway.toUpperCase()} payment handshakes...
                   </>
                 ) : (
                   <>
-                    <Check className="w-4 h-4 text-black fill-current" />
+                    <Check className="w-4 h-4 text-white fill-current" />
                     Verify &amp; Generate Interactive Ticket (₹{finalTotalAmount})
                   </>
                 )}
@@ -804,7 +800,7 @@ const options = {
             {/* Right Column: Dynamic Price Summary Calculator card */}
             <div className="col-span-12 md:col-span-5 space-y-6">
               <div className="bg-[#181524]/40 border border-white/5 p-6 rounded-3xl space-y-4">
-                <h3 className="text-sm font-bold tracking-widest text-[#D4AF37] uppercase font-mono mb-2">Order Price Details</h3>
+                <h3 className="text-sm font-bold tracking-widest text-[#E32636] uppercase font-mono mb-2">Order Price Details</h3>
                 
                 {/* Bookings rows summary detail */}
                 <div className="space-y-2 text-xs text-zinc-300">
@@ -820,14 +816,14 @@ const options = {
                   <label className="text-[9px] text-zinc-400 font-mono uppercase tracking-widest block font-bold">Promo Coupon discount</label>
                   <div className="flex gap-2">
                     <div className="relative flex-1">
-                      <Percent className="w-3.5 h-3.5 text-purple-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                      <Percent className="w-3.5 h-3.5 text-red-500 absolute left-3 top-1/2 -translate-y-1/2" />
                       <input
                         type="text"
-                        placeholder="e.g. RANGREZ20/GOLDVIP"
+                        placeholder="e.g. RANGREZ20/REDVIP"
                         value={couponCode}
                         onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
                         disabled={isCouponApplied}
-                        className="w-full bg-black/40 border border-white/10 rounded-lg pl-9 pr-3 py-2 text-xs placeholder-zinc-400 focus:outline-none focus:border-[#D4AF37]"
+                        className="w-full bg-black/40 border border-white/10 rounded-lg pl-9 pr-3 py-2 text-xs placeholder-zinc-400 focus:outline-none focus:border-[#E32636]"
                       />
                     </div>
                     {isCouponApplied ? (
@@ -847,7 +843,7 @@ const options = {
                         type="button"
                         onClick={handleApplyCoupon}
                         disabled={isCouponValidating || !couponCode}
-                        className="px-4 py-2 text-xs bg-purple-900 hover:bg-purple-800 rounded-lg font-mono text-zinc-100 disabled:bg-zinc-850"
+                        className="px-4 py-2 text-xs bg-red-900 hover:bg-red-800 rounded-lg font-mono text-zinc-100 disabled:bg-zinc-850"
                       >
                         {isCouponValidating ? '...' : 'Apply'}
                       </button>
@@ -872,7 +868,7 @@ const options = {
                     </div>
                   )}
                   <div className="flex justify-between text-sm font-black text-white pt-2 border-t border-white/5">
-                    <span>Total Bill:</span> <span className="text-[#D4AF37]">₹{finalTotalAmount}</span>
+                    <span>Total Bill:</span> <span className="text-[#E32636]">₹{finalTotalAmount}</span>
                   </div>
                 </div>
 
@@ -909,7 +905,7 @@ const options = {
             <div className="w-16 h-16 rounded-full bg-green-500/20 border border-green-500/50 flex items-center justify-center animate-bounce mb-3">
               <Check className="w-8 h-8 text-green-400" />
             </div>
-            <h2 className="text-3xl font-black text-[#D4AF37]">Sufi Rock spots secured!</h2>
+            <h2 className="text-3xl font-black text-[#E32636]">Sufi Rock spots secured!</h2>
             <p className="text-zinc-400 text-xs mt-1">
               Check confirmation inbox or manage booked passes inside your dashboard anytime.
             </p>
@@ -918,7 +914,7 @@ const options = {
           {/* Core premium visual ticket pass card */}
           <div 
             id="printable-ticket-slip"
-            className="bg-[#181524] border-2 border-double border-[#D4AF37]/50 rounded-3xl p-6 relative overflow-hidden text-left shadow-2xl space-y-6"
+            className="bg-[#181524] border-2 border-double border-[#E32636]/50 rounded-3xl p-6 relative overflow-hidden text-left shadow-2xl space-y-6"
           >
             
             {/* Background decorative vector circle */}
@@ -927,10 +923,10 @@ const options = {
             {/* Header portion */}
             <div className="flex items-center justify-between border-b border-white/10 pb-4 relative z-10">
               <div className="flex items-center gap-2">
-                <Ticket className="text-[#D4AF37] w-5 h-5" />
+                <Ticket className="text-[#E32636] w-5 h-5" />
                 <span className="text-xs uppercase font-mono tracking-widest text-zinc-100 font-bold">RANGREZ CONCERT ADMISSION</span>
               </div>
-              <span className="text-xs font-mono font-bold text-[#D4AF37] bg-[#D4AF37]/10 border border-[#D4AF37]/20 px-2 py-0.5 rounded">
+              <span className="text-xs font-mono font-bold text-[#E32636] bg-[#E32636]/10 border border-[#E32636]/20 px-2 py-0.5 rounded">
                 SIMULATED SECURE CARD
               </span>
             </div>
@@ -940,7 +936,7 @@ const options = {
               <div>
                 <span className="block text-[9px] text-zinc-400 uppercase">Concert tour Date</span>
                 <span className="text-white font-bold block mt-0.5">{selectedEvent.title}</span>
-                <span className="text-purple-400 text-[10px] block mt-0.5">{selectedEvent.date} @ {selectedEvent.time} hrs</span>
+                <span className="text-red-400 text-[10px] block mt-0.5">{selectedEvent.date} @ {selectedEvent.time} hrs</span>
               </div>
               
               <div>
@@ -984,7 +980,7 @@ const options = {
             <div className="border-t-2 border-dashed border-white/10 pt-6 flex flex-col sm:flex-row gap-6 items-center justify-between relative z-10">
               <div className="text-xs text-zinc-400 space-y-1 w-full sm:w-auto">
                 <span className="block text-[9px] uppercase font-mono">Payment total:</span>
-                <span className="text-[#D4AF37] font-black text-xl font-mono">₹{finalTotalAmount}</span>
+                <span className="text-[#E32636] font-black text-xl font-mono">₹{finalTotalAmount}</span>
                 <span className="block text-[8px] italic text-[#a1a1aa] font-mono">Includes 18% GST surcharges</span>
               </div>
 
@@ -1013,9 +1009,9 @@ const options = {
           <div className="flex flex-wrap items-center justify-center gap-3 pt-4">
             <button
               onClick={handleDownloadTicket}
-              className="px-6 py-2.5 bg-gradient-to-r from-[#D4AF37] to-amber-500 hover:scale-103 transition-transform text-black uppercase font-bold text-xs rounded-xl flex items-center justify-center gap-2 shadow-lg"
+              className="px-6 py-2.5 bg-gradient-to-r from-[#E32636] to-[#FF4D4D] hover:scale-103 transition-transform text-white uppercase font-bold text-xs rounded-xl flex items-center justify-center gap-2 shadow-lg"
             >
-              <Download className="w-4 h-4 text-black" />
+              <Download className="w-4 h-4 text-white" />
               Download PDF / Print Ticket
             </button>
 

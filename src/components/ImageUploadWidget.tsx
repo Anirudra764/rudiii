@@ -209,8 +209,8 @@ export function ImageUploadWidget({
         onClick={handleZoneClick}
         className={`relative border-2 border-dashed rounded-2xl p-4 transition-all flex flex-col md:flex-row gap-4 items-center justify-between cursor-pointer group/zone ${
           isDragActive 
-            ? 'border-[#D4AF37] bg-yellow-500/5 shadow-[0_0_15px_rgba(212,175,55,0.15)]' 
-            : 'border-white/10 bg-black/30 hover:border-[#8A2BE2]/40 hover:bg-[#8A2BE2]/5'
+            ? 'border-[#E32636] bg-red-500/5 shadow-[0_0_15px_rgba(227,38,54,0.15)]' 
+            : 'border-white/10 bg-black/30 hover:border-red-500/40 hover:bg-red-500/5'
         }`}
       >
         <input 
@@ -250,8 +250,8 @@ export function ImageUploadWidget({
 
           <div className="text-left">
             {isUploading ? (
-              <div className="flex items-center gap-2 text-xs font-semibold text-[#D4AF37]">
-                <Loader2 size={14} className="animate-spin text-[#D4AF37]" />
+              <div className="flex items-center gap-2 text-xs font-semibold text-red-500">
+                <Loader2 size={14} className="animate-spin text-red-500" />
                 <span>Uploading image file...</span>
               </div>
             ) : uploadSuccess ? (
@@ -279,7 +279,7 @@ export function ImageUploadWidget({
             id={`${id}-select-btn`}
             onClick={triggerFileSelect}
             disabled={isUploading}
-            className="px-3.5 py-1.5 bg-[#8A2BE2]/10 hover:bg-[#8A2BE2]/20 border border-[#8A2BE2]/40 rounded-xl text-xs text-purple-300 font-mono font-bold flex items-center gap-1.5 transition-all active:scale-95 disabled:opacity-50 cursor-pointer"
+            className="px-3.5 py-1.5 bg-red-950/10 hover:bg-red-950/20 border border-red-500/40 rounded-xl text-xs text-red-300 font-mono font-bold flex items-center gap-1.5 transition-all active:scale-95 disabled:opacity-50 cursor-pointer"
           >
             <Upload size={13} />
             Browse Image
@@ -300,7 +300,7 @@ export function ImageUploadWidget({
         <input
           type="text"
           id={`${id}-url-input`}
-          className="w-full bg-black/50 border border-white/5 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D4AF37]/50 font-mono"
+          className="w-full bg-black/50 border border-white/5 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-red-500/50 font-mono"
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}

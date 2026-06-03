@@ -1230,8 +1230,8 @@ export default function App() {
       <Visualizer isPlaying={isPlayingSound} activeTrackId={currentTrack?.id} />
 
       {/* Decorative Widescreen ambient lights */}
-      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[#8A2BE2]/5 rounded-full blur-[120px] pointer-events-none z-0" />
-      <div className="absolute bottom-1/3 right-10 w-[400px] h-[400px] bg-[#D4AF37]/5 rounded-full blur-[110px] pointer-events-none z-0" />
+      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[#E32636]/5 rounded-full blur-[120px] pointer-events-none z-0" />
+      <div className="absolute bottom-1/3 right-10 w-[400px] h-[400px] bg-red-600/5 rounded-full blur-[110px] pointer-events-none z-0" />
 
       {/* Navigation Header bar */}
       <Navbar
@@ -1247,7 +1247,7 @@ export default function App() {
       <main className="flex-1 w-full pb-32">
         {isLoading ? (
           <div className="h-96 flex flex-col items-center justify-center gap-4 text-white">
-            <RefreshCw className="w-8 h-8 text-[#D4AF37] animate-spin" />
+            <RefreshCw className="w-8 h-8 text-[#E32636] animate-spin" />
             <span className="text-xs font-mono text-zinc-400">Loading Rangrez digital catalog assets...</span>
           </div>
         ) : (
@@ -1356,7 +1356,7 @@ export default function App() {
       {/* FOOTER AREA */}
       <footer className="bg-black/90 border-t border-white/5 py-12 px-6 relative z-10 text-center text-zinc-400 text-xs overflow-hidden">
         {/* Decorative background glow */}
-        <div className="absolute inset-x-0 -top-24 h-48 bg-gradient-to-b from-[#8A2BE2]/10 to-transparent pointer-events-none blur-3xl opacity-60" />
+        <div className="absolute inset-x-0 -top-24 h-48 bg-gradient-to-b from-[#E32636]/10 to-transparent pointer-events-none blur-3xl opacity-60" />
 
         <motion.div 
           id="system-footer-container"
@@ -1368,7 +1368,7 @@ export default function App() {
         >
           {/* Logo container with radial pulse animation */}
           <div className="relative group cursor-pointer">
-            <div className="absolute -inset-4 bg-gradient-to-r from-[#E32636]/30 to-[#8A2BE2]/30 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+            <div className="absolute -inset-4 bg-gradient-to-r from-[#E32636]/30 to-red-800/30 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
             <motion.div
               whileHover={{ scale: 1.08, rotate: 360 }}
               transition={{ duration: 0.6, ease: "easeInOut" }}
@@ -1380,7 +1380,7 @@ export default function App() {
 
           <div className="space-y-4 max-w-xl">
             <motion.span 
-              className="text-xs tracking-[0.3em] font-mono text-transparent bg-clip-text bg-gradient-to-r from-[#FF4D4D] via-[#D4AF37] to-[#8A2BE2] uppercase font-extrabold block"
+              className="text-xs tracking-[0.3em] font-mono text-transparent bg-clip-text bg-gradient-to-r from-[#FF4D4D] via-[#E32636] to-red-800 uppercase font-extrabold block"
               animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
               transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
               style={{ backgroundSize: "200% 200%" }}
@@ -1426,10 +1426,10 @@ export default function App() {
       {/* MULTI ROLE SECURE EMAIL AND PASSWORD LOGIN POPUP MODAL */}
       {isLoginModalOpen && (
         <div className="fixed inset-0 bg-[#000]/95 z-50 flex items-center justify-center p-4 backdrop-blur-md animate-in fade-in">
-          <div className="bg-[#181524] border border-[#8A2BE2]/40 p-6 rounded-3xl max-w-md w-full space-y-6 text-white text-center shadow-2xl relative">
+          <div className="bg-[#181524] border border-[#E32636]/40 p-6 rounded-3xl max-w-md w-full space-y-6 text-white text-center shadow-2xl relative">
             
             <div className="space-y-1">
-              <span className="text-[9px] uppercase font-mono text-[#D4AF37] tracking-widest block font-bold">Secure Access System</span>
+              <span className="text-[9px] uppercase font-mono text-[#E32636] tracking-widest block font-bold">Secure Access System</span>
               <h3 className="text-lg font-bold text-white">Rangrez Identity Portal</h3>
               <p className="text-zinc-400 text-[11px]">
                 Sign in using your authorization email/username and secure passcode.
@@ -1446,7 +1446,7 @@ export default function App() {
 
             {/* QUICK SANDBOX PROFILES SELECTOR */}
             <div className="bg-black/55 border border-white/5 rounded-2xl p-3.5 text-left space-y-2">
-              <span className="text-[10px] uppercase tracking-wider font-mono text-[#D4AF37] block font-bold">
+              <span className="text-[10px] uppercase tracking-wider font-mono text-[#E32636] block font-bold">
                 🔑 Interactive Sandbox Profiles (Instant Autofill)
               </span>
               <div className="grid grid-cols-2 gap-2">
@@ -1464,9 +1464,9 @@ export default function App() {
                       setLoginPasswordInput(item.pass);
                       setLoginErrorMsg(null);
                     }}
-                    className={`p-2 rounded-xl text-[10px] text-left transition-all border border-[#8A2BE2]/10 hover:border-[#D4AF37]/50 bg-purple-950/20 hover:bg-[#8A2BE2]/20 group`}
+                    className="p-2 rounded-xl text-[10px] text-left transition-all border border-[#E32636]/10 hover:border-[#E32636]/50 bg-red-950/20 hover:bg-red-500/10 group cursor-pointer"
                   >
-                    <span className="font-bold text-white block group-hover:text-[#D4AF37] transition-all truncate text-[11px]">{item.label}</span>
+                    <span className="font-bold text-white block group-hover:text-[#E32636] transition-all truncate text-[11px]">{item.label}</span>
                     <span className="text-zinc-400 block text-[9.5px] leading-tight mt-0.5 group-hover:text-zinc-300 transition-all">{item.desc}</span>
                   </button>
                 ))}
@@ -1479,7 +1479,7 @@ export default function App() {
               <div className="space-y-3.5 text-left">
                 <div className="space-y-1">
                   <label className="text-[10px] text-zinc-400 uppercase font-mono font-bold flex items-center gap-1">
-                    <Mail className="w-3 h-3 text-[#D4AF37]" />
+                    <Mail className="w-3 h-3 text-[#E32636]" />
                     Email/Username
                   </label>
                   <input
@@ -1491,14 +1491,14 @@ export default function App() {
                       setLoginEmailInput(e.target.value);
                       setLoginErrorMsg(null);
                     }}
-                    className="w-full bg-[#100c1e] border border-white/10 focus:border-[#D4AF37] focus:outline-none rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-zinc-500"
+                    className="w-full bg-[#100c1e] border border-white/10 focus:border-[#E32636] focus:outline-none rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-zinc-500"
                   />
                 </div>
 
                 <div className="space-y-1">
                   <label className="text-[10px] text-zinc-400 uppercase font-mono font-bold flex items-center justify-between">
                     <span className="flex items-center gap-1">
-                      <Lock className="w-3 h-3 text-[#D4AF37]" />
+                      <Lock className="w-3 h-3 text-[#E32636]" />
                       Secure Passcode
                     </span>
                   </label>
@@ -1512,7 +1512,7 @@ export default function App() {
                         setLoginPasswordInput(e.target.value);
                         setLoginErrorMsg(null);
                       }}
-                      className="w-full bg-[#100c1e] border border-white/10 focus:border-[#D4AF37] focus:outline-none rounded-xl pl-3.5 pr-10 py-2.5 text-xs text-white font-mono placeholder-zinc-500"
+                      className="w-full bg-[#100c1e] border border-white/10 focus:border-[#E32636] focus:outline-none rounded-xl pl-3.5 pr-10 py-2.5 text-xs text-white font-mono placeholder-zinc-500"
                     />
                     <button
                       type="button"
@@ -1527,7 +1527,7 @@ export default function App() {
 
               <button
                 type="submit"
-                className="w-full py-2.5 mt-2 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#8A2BE2] text-black font-extrabold uppercase text-xs tracking-wider font-mono flex items-center justify-center gap-1.5 cursor-pointer hover:opacity-90 active:scale-[0.98] transition-all"
+                className="w-full py-2.5 mt-2 rounded-xl bg-gradient-to-r from-[#E32636] to-[#FF4D4D] text-white font-bold uppercase text-xs tracking-wider font-mono flex items-center justify-center gap-1.5 cursor-pointer hover:opacity-90 active:scale-[0.98] transition-all"
               >
                 Authenticate Credentials
               </button>
@@ -1549,20 +1549,20 @@ export default function App() {
       {/* ROLE SWITCH OVERLAY DIALOG */}
       {isRoleSwitchModalOpen && roleSwitchTarget && (
         <div className="fixed inset-0 bg-[#000]/90 z-50 flex items-center justify-center p-4 backdrop-blur-md animate-in fade-in">
-          <div className="bg-[#181524] border border-[#8A2BE2]/40 p-6 rounded-3xl max-w-sm w-full space-y-6 text-white text-center">
+          <div className="bg-[#181524] border border-[#E32636]/35 p-6 rounded-3xl max-w-sm w-full space-y-6 text-white text-center">
             
             <div className="space-y-1">
-              <span className="text-[9px] uppercase font-mono text-[#D4AF37] tracking-widest block font-bold">RBAC Escalation Shield</span>
+              <span className="text-[9px] uppercase font-mono text-[#E32636] tracking-widest block font-bold">RBAC Escalation Shield</span>
               <h3 className="text-lg font-bold text-white">Enter Security Token</h3>
               <p className="text-zinc-400 text-[11px]">
-                You are requesting escalation to <span className="text-[#D4AF37] uppercase font-bold">{roleSwitchTarget === 'manager' ? 'Staff Manager' : roleSwitchTarget}</span>.
+                You are requesting escalation to <span className="text-[#E32636] uppercase font-bold">{roleSwitchTarget === 'manager' ? 'Staff Manager' : roleSwitchTarget}</span>.
               </p>
             </div>
 
             <form onSubmit={handleCustomRoleSwitchSubmit} className="space-y-4">
               <div className="space-y-1.5 text-left">
                 <label className="text-[9px] text-zinc-400 uppercase font-mono font-bold flex items-center gap-1">
-                  <Mail className="w-3 h-3 text-[#D4AF37]" />
+                  <Mail className="w-3 h-3 text-[#E32636]" />
                   Email/Username Required
                 </label>
                 <input
@@ -1571,26 +1571,26 @@ export default function App() {
                   placeholder="Enter email or username"
                   value={roleSwitchEmail}
                   onChange={(e) => setRoleSwitchEmail(e.target.value)}
-                  className="w-full bg-[#100c1e] border border-white/10 focus:border-[#D4AF37] focus:outline-none rounded-xl px-3 py-2.5 text-xs text-white placeholder-zinc-500 shadow-inner"
+                  className="w-full bg-[#100c1e] border border-white/10 focus:border-[#E32636] focus:outline-none rounded-xl px-3 py-2.5 text-xs text-white placeholder-zinc-500 shadow-inner"
                   autoFocus
                 />
               </div>
 
               <div className="space-y-1.5 text-left">
-                <label className="text-[9px] text-[#D4AF37] uppercase font-mono font-bold block">Security Passcode Required</label>
+                <label className="text-[9px] text-[#E32636] uppercase font-mono font-bold block">Security Passcode Required</label>
                 <input
                   type="password"
                   required
                   placeholder="Security passcode key"
                   value={roleSwitchPasscode}
                   onChange={(e) => setRoleSwitchPasscode(e.target.value)}
-                  className="w-full bg-[#100c1e] border border-white/10 focus:border-[#D4AF37] focus:outline-none rounded-xl px-3 py-2.5 text-xs text-white shadow-inner"
+                  className="w-full bg-[#100c1e] border border-white/10 focus:border-[#E32636] focus:outline-none rounded-xl px-3 py-2.5 text-xs text-white shadow-inner"
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full py-2.5 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#8A2BE2] text-black font-extrabold uppercase text-xs tracking-wider font-mono flex items-center justify-center gap-1.5 cursor-pointer hover:brightness-110 active:scale-[0.98] transition-all"
+                className="w-full py-2.5 rounded-xl bg-gradient-to-r from-[#E32636] to-[#FF4D4D] text-white font-bold uppercase text-xs tracking-wider font-mono flex items-center justify-center gap-1.5 cursor-pointer hover:brightness-110 active:scale-[0.98] transition-all"
               >
                 Confirm Escalation
               </button>
@@ -1613,17 +1613,17 @@ export default function App() {
       {/* CUSTOM APPLET DIALOG WINDOW FOR SECURE IFRAME ALERTS */}
       {globalAlert.isOpen && (
         <div className="fixed inset-0 bg-[#000]/85 z-[999] flex items-center justify-center p-4 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="bg-[#110f18] border border-[#8A2BE2]/60 p-6 rounded-2xl max-w-sm w-full space-y-5 text-white text-center shadow-2xl relative overflow-hidden">
+          <div className="bg-[#110f18] border border-[#E32636]/60 p-6 rounded-2xl max-w-sm w-full space-y-5 text-white text-center shadow-2xl relative overflow-hidden">
             {/* Decors */}
-            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#D4AF37] via-purple-600 to-[#D4AF37]" />
-            <div className="absolute -top-12 left-1/2 -translate-x-1/2 w-24 h-24 bg-purple-500/10 rounded-full blur-xl animate-pulse" />
+            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#E32636] via-red-650 to-[#E32636]" />
+            <div className="absolute -top-12 left-1/2 -translate-x-1/2 w-24 h-24 bg-red-500/10 rounded-full blur-xl animate-pulse" />
 
-            <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-full bg-purple-950/40 border border-[#8A2BE2]/40 text-[#D4AF37]">
+            <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-full bg-red-950/40 border border-[#E32636]/40 text-[#E32636]">
               <Sparkles className="h-5 w-5" />
             </div>
 
             <div className="space-y-1.5">
-              <span className="text-[9px] uppercase font-mono text-[#D4AF37] tracking-widest block font-bold">Rangrez System Message</span>
+              <span className="text-[9px] uppercase font-mono text-[#E32636] tracking-widest block font-bold">Rangrez System Message</span>
               <p className="text-zinc-200 text-xs font-sans leading-relaxed px-1">
                 {globalAlert.message}
               </p>
@@ -1631,7 +1631,7 @@ export default function App() {
 
             <button
               onClick={() => setGlobalAlert({ isOpen: false, message: '' })}
-              className="w-full py-2.5 rounded-xl bg-gradient-to-r from-purple-800 to-purple-600 hover:from-purple-700 hover:to-purple-500 text-[#D4AF37] hover:text-white font-extrabold uppercase text-xs tracking-wider font-mono shadow-md active:scale-[0.97] transition-all"
+              className="w-full py-2.5 rounded-xl bg-gradient-to-r from-red-850 to-red-650 hover:from-red-750 hover:to-red-550 text-white font-extrabold uppercase text-xs tracking-wider font-mono shadow-md active:scale-[0.97] transition-all"
             >
               Dismiss
             </button>

@@ -10,7 +10,7 @@ export default function UpiQrIllustration() {
     >
       {/* Outer rounded dark container card (visual style matches your uploaded image) */}
       <rect width="340" height="380" rx="20" fill="#181524" filter="drop-shadow(0 10px 25px rgba(0,0,0,0.5))" />
-      <rect width="340" height="380" rx="20" stroke="#8A2BE2" strokeWidth="1.5" strokeOpacity="0.25" />
+      <rect width="340" height="380" rx="20" stroke="#E32636" strokeWidth="1.5" strokeOpacity="0.25" />
 
       {/* Main white QR code boundary rectangle */}
       <rect x="30" y="30" width="280" height="280" rx="16" fill="#F4F4F5" />

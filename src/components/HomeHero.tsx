@@ -447,7 +447,7 @@ export default function HomeHero({
                         transition={{ delay: 0.2 }}
                         className="bg-black/60 backdrop-blur-md border border-red-500/30 rounded-xl px-4 py-2 text-left hidden md:block"
                       >
-                        <span className="text-[9px] font-mono tracking-widest text-[#D4AF37] uppercase block">ORIGINAL FUSION</span>
+                        <span className="text-[9px] font-mono tracking-widest text-red-500 uppercase block">ORIGINAL FUSION</span>
                         <h4 className="text-sm font-black text-white uppercase mt-0.5 tracking-tight">SOUL</h4>
                       </motion.div>
 
