@@ -29,8 +29,8 @@ export const LOGO_ITEMS = {
           <div className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-[#E32636] animate-pulse" />
         </div>
         <div className="flex flex-col">
-          <span className="text-xl font-black tracking-widest text-[#f5f5f7] font-sans">
-            RANG<span className="text-[#E32636]">R</span>EZ
+          <span className="text-xl font-black tracking-[0.08em] text-white font-display uppercase drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
+            RANG<span className="text-[#E32636] font-black drop-shadow-[0_0_8px_rgba(227,38,54,0.5)]">R</span>EZ
           </span>
           <span className="text-[7px] tracking-[0.35em] text-[#E32636] uppercase font-mono font-bold">
             SOUL • VIBE • ENERGY

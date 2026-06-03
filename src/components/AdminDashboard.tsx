@@ -157,6 +157,8 @@ export default function AdminDashboard({
   const [superadminPasscode, setSuperadminPasscode] = useState('');
   const [adminPasscode, setAdminPasscode] = useState('');
   const [managerPasscode, setManagerPasscode] = useState('');
+  const [gmailInput, setGmailInput] = useState('');
+  const [gmailAppPasswordInput, setGmailAppPasswordInput] = useState('');
   const [isPasscodesLoading, setIsPasscodesLoading] = useState(false);
   const [passcodeSuccessMsg, setPasscodeSuccessMsg] = useState('');
   const [passcodeErrorMsg, setPasscodeErrorMsg] = useState('');
@@ -335,6 +337,8 @@ export default function AdminDashboard({
           setSuperadminPasscode(data.superadmin || '');
           setAdminPasscode(data.admin || '');
           setManagerPasscode(data.manager || '');
+          setGmailInput(data.gmail || 'anirudrapaul764@gmail.com');
+          setGmailAppPasswordInput(data.gmailAppPassword || '');
         }
       })
       .catch(err => console.error("Could not fetch system security passcodes:", err));
@@ -3075,13 +3079,13 @@ export default function AdminDashboard({
       {activeAdminSubTab === 'passcodes' && (
         <div className="space-y-6 animate-in fade-in duration-300">
           <div className="border-b border-white/5 pb-4">
-            <h3 className="text-sm font-bold tracking-widest text-[#D4AF37] uppercase font-mono">Administrative Role Passcodes</h3>
+            <h3 className="text-sm font-bold tracking-widest text-[#D4AF37] uppercase font-mono">Administrative Role Passcodes & Gmail Settings</h3>
             <p className="text-[11px] text-zinc-400 mt-1 font-sans">
-              Update the active passcodes required to switch between administrative privileges. Saving will update the global security system immediately.
+              Update the active role passwords and customized contact/SMTP credentials. Saving will update the global security system immediately.
             </p>
           </div>
 
-          <div className="bg-[#120f1d]/40 rounded-2xl border border-white/5 p-6 max-w-xl mx-auto space-y-6">
+          <div className="bg-[#120f1d]/40 rounded-2xl border border-white/5 p-4 sm:p-6 max-w-xl mx-auto space-y-6">
             {passcodeSuccessMsg && (
               <div className="bg-green-950/40 border border-green-500/20 p-4 rounded-xl text-xs text-green-300 text-center">
                 {passcodeSuccessMsg}
@@ -3093,41 +3097,80 @@ export default function AdminDashboard({
               </div>
             )}
 
-            <div className="space-y-4">
-              <div className="space-y-1">
-                <label className="text-[10px] text-zinc-400 font-mono uppercase block mb-1">Superadmin Role Password</label>
-                <input
-                  type="password"
-                  className="w-full bg-black/50 border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white uppercase tracking-widest font-mono focus:border-[#D4AF37] focus:outline-none"
-                  value={superadminPasscode}
-                  onChange={(e) => setSuperadminPasscode(e.target.value)}
-                  placeholder="SUPERADMIN PASSCODE"
-                  required
-                />
+            <div className="space-y-6">
+              {/* SECTION 1: PASSWORDS */}
+              <div className="space-y-4">
+                <div className="border-b border-white/5 pb-2">
+                  <h4 className="text-[11px] text-[#D4AF37] font-bold font-mono uppercase tracking-wider">🔐 System Access Passcodes</h4>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-[10px] text-zinc-400 font-mono uppercase block mb-1">Superadmin Role Password</label>
+                  <input
+                    type="password"
+                    className="w-full bg-black/50 border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white uppercase tracking-widest font-mono focus:border-[#D4AF37] focus:outline-none"
+                    value={superadminPasscode}
+                    onChange={(e) => setSuperadminPasscode(e.target.value)}
+                    placeholder="SUPERADMIN PASSCODE"
+                    required
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-[10px] text-zinc-400 font-mono uppercase block mb-1">Admin Role Password</label>
+                  <input
+                    type="password"
+                    className="w-full bg-black/50 border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white uppercase tracking-widest font-mono focus:border-[#D4AF37] focus:outline-none"
+                    value={adminPasscode}
+                    onChange={(e) => setAdminPasscode(e.target.value)}
+                    placeholder="ADMIN PASSCODE"
+                    required
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-[10px] text-zinc-400 font-mono uppercase block mb-1">Manager Role Password</label>
+                  <input
+                    type="password"
+                    className="w-full bg-black/50 border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white uppercase tracking-widest font-mono focus:border-[#D4AF37] focus:outline-none"
+                    value={managerPasscode}
+                    onChange={(e) => setManagerPasscode(e.target.value)}
+                    placeholder="MANAGER PASSCODE"
+                    required
+                  />
+                </div>
               </div>
 
-              <div className="space-y-1">
-                <label className="text-[10px] text-zinc-400 font-mono uppercase block mb-1">Admin Role Password</label>
-                <input
-                  type="password"
-                  className="w-full bg-black/50 border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white uppercase tracking-widest font-mono focus:border-[#D4AF37] focus:outline-none"
-                  value={adminPasscode}
-                  onChange={(e) => setAdminPasscode(e.target.value)}
-                  placeholder="ADMIN PASSCODE"
-                  required
-                />
-              </div>
+              {/* SECTION 2: GMAIL & CONTACT SECURE PATH */}
+              <div className="space-y-4 pt-2">
+                <div className="border-b border-white/5 pb-2">
+                  <h4 className="text-[11px] text-[#D4AF37] font-bold font-mono uppercase tracking-wider">📧 Authorized System Gmail Credentials</h4>
+                </div>
 
-              <div className="space-y-1">
-                <label className="text-[10px] text-[#D4AF37] font-mono uppercase block mb-1">Manager Role Password</label>
-                <input
-                  type="password"
-                  className="w-full bg-black/50 border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white uppercase tracking-widest font-mono focus:border-[#D4AF37] focus:outline-none"
-                  value={managerPasscode}
-                  onChange={(e) => setManagerPasscode(e.target.value)}
-                  placeholder="MANAGER PASSCODE"
-                  required
-                />
+                <div className="space-y-1">
+                  <label className="text-[10px] text-zinc-400 font-mono uppercase block mb-1">Authorized Gmail Account</label>
+                  <input
+                    type="email"
+                    className="w-full bg-black/50 border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white font-sans focus:border-[#D4AF37] focus:outline-none"
+                    value={gmailInput}
+                    onChange={(e) => setGmailInput(e.target.value)}
+                    placeholder="e.g. bandadmin@gmail.com"
+                    required
+                  />
+                  <p className="text-[9px] text-zinc-500 font-sans mt-0.5">Used for admin role switching and central notifications. Authorized emails can securely elevate privileges.</p>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-[10px] text-zinc-400 font-mono uppercase block mb-1">Gmail SMTP App Password</label>
+                  <input
+                    type="password"
+                    className="w-full bg-black/50 border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white tracking-widest font-mono focus:border-[#D4AF37] focus:outline-none"
+                    value={gmailAppPasswordInput}
+                    onChange={(e) => setGmailAppPasswordInput(e.target.value)}
+                    placeholder="ENTER 16-CHARACTER SECURE KEY"
+                  />
+                  <p className="text-[9px] text-zinc-500 font-sans mt-0.5">Your Google Account's 16-character App Password (not your primary password) for transaction mailings.</p>
+                </div>
               </div>
             </div>
 
@@ -3148,14 +3191,16 @@ export default function AdminDashboard({
                       body: JSON.stringify({
                         superadmin: superadminPasscode,
                         admin: adminPasscode,
-                        manager: managerPasscode
+                        manager: managerPasscode,
+                        gmail: gmailInput,
+                        gmailAppPassword: gmailAppPasswordInput
                       })
                     });
                     const r = await res.json();
                     if (res.ok) {
-                      setPasscodeSuccessMsg('✓ System security credentials and role passcodes rewritten successfully.');
+                      setPasscodeSuccessMsg('✓ System security credentials, role passcodes, and Gmail parameters rewritten successfully.');
                       if (onAddAuditLog) {
-                        onAddAuditLog('CHANGE_ROLE_PASSWORDS', 'Superadmin modified administrative access passcodes and cryptographic key roles.');
+                        onAddAuditLog('CHANGE_ROLE_PASSWORDS', 'Superadmin modified administrative access passcodes, contact email and SMTP auth secrets.');
                       }
                     } else {
                       setPasscodeErrorMsg(r.error || 'Failed to rewrite passcodes.');
@@ -3166,9 +3211,9 @@ export default function AdminDashboard({
                     setIsPasscodesLoading(false);
                   }
                 }}
-                className="px-6 py-2.5 bg-gradient-to-r from-purple-700 to-indigo-700 hover:brightness-110 text-white font-extrabold rounded-xl text-xs transition-transform active:scale-[0.98] disabled:opacity-50"
+                className="w-full sm:w-auto px-6 py-2.5 bg-gradient-to-r from-purple-700 to-indigo-700 hover:brightness-110 text-white font-extrabold rounded-xl text-xs transition-transform active:scale-[0.98] disabled:opacity-50 cursor-pointer"
               >
-                {isPasscodesLoading ? 'Rewriting passwords...' : 'Rewrite System Passwords'}
+                {isPasscodesLoading ? 'Rewriting security parameters...' : 'Rewrite System Passwords & Gmail'}
               </button>
             </div>
           </div>

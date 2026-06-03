@@ -65,6 +65,64 @@ export default function LiveSpotlight({
         scale: 2.5, // Enhances text crispness and image fidelity in generated PDF
         backgroundColor: '#000000',
         logging: false,
+        onclone: (clonedDoc) => {
+          // Remove/sanitize modern oklch and oklab color formats that cause html2canvas parser to crash in Tailwind v4.
+          try {
+            // 1. Sanitize standard style tags
+            const styleTags = Array.from(clonedDoc.getElementsByTagName('style'));
+            for (const tag of styleTags) {
+              if (tag.textContent) {
+                tag.textContent = tag.textContent
+                  .replace(/oklch\([^)]+\)/gi, 'transparent')
+                  .replace(/oklab\([^)]+\)/gi, 'transparent');
+              }
+            }
+
+            // 2. Inline, sanitize, and override external link stylesheets
+            const linkTags = Array.from(clonedDoc.querySelectorAll('link[rel="stylesheet"]')) as HTMLLinkElement[];
+            for (const linkTag of linkTags) {
+              const href = linkTag.href;
+              if (href) {
+                try {
+                  const xhr = new XMLHttpRequest();
+                  xhr.open('GET', href, false); // Synchronous request to block execution safely within onclone
+                  xhr.send(null);
+                  if (xhr.status === 200) {
+                    const sanitizedCss = xhr.responseText
+                      .replace(/oklch\([^)]+\)/gi, 'transparent')
+                      .replace(/oklab\([^)]+\)/gi, 'transparent');
+                    
+                    const newStyle = clonedDoc.createElement('style');
+                    newStyle.textContent = sanitizedCss;
+                    if (linkTag.parentNode) {
+                      linkTag.parentNode.insertBefore(newStyle, linkTag);
+                      linkTag.parentNode.removeChild(linkTag);
+                    }
+                  }
+                } catch (linkErr) {
+                  // If synchronous fetch fails (e.g. cross-origin restriction), skip inlining
+                  console.warn('Skipped inlining external stylesheet:', href, linkErr);
+                }
+              }
+            }
+
+            // 3. Inline style attributes of all cloned elements
+            const allElements = Array.from(clonedDoc.getElementsByTagName('*')) as HTMLElement[];
+            for (const el of allElements) {
+              if (el.getAttribute && el.getAttribute('style')) {
+                const oldStyle = el.getAttribute('style') || '';
+                if (oldStyle.includes('oklch') || oldStyle.includes('oklab')) {
+                  const newStyle = oldStyle
+                    .replace(/oklch\([^)]+\)/gi, 'transparent')
+                    .replace(/oklab\([^)]+\)/gi, 'transparent');
+                  el.setAttribute('style', newStyle);
+                }
+              }
+            }
+          } catch (e) {
+            console.error('Error during styles sanitization in html2canvas clone:', e);
+          }
+        },
       });
 
       const imgData = canvas.toDataURL('image/jpeg', 0.95);
@@ -355,6 +413,7 @@ export default function LiveSpotlight({
                   src={settings?.posterSilhouetteUrl || "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=40"}
                   alt="Backdrop singer silhouette"
                   referrerPolicy="no-referrer"
+                  crossOrigin="anonymous"
                   className="w-48 md:w-60 h-auto object-contain select-none absolute bottom-4 opacity-25 filter grayscale contrast-150 brightness-[0.2] transform -translate-x-12 scale-110 pointer-events-none"
                 />
 
@@ -363,6 +422,7 @@ export default function LiveSpotlight({
                   src={settings?.posterMainSingerUrl || "https://images.unsplash.com/photo-1541604193435-22419f564789?auto=format&fit=crop&w=500&q=80"}
                   alt="Lead fusion vocalist singing with microphone copy"
                   referrerPolicy="no-referrer"
+                  crossOrigin="anonymous"
                   className="w-56 md:w-72 h-auto object-contain select-none absolute bottom-0 z-10 transform scale-102 hover:scale-104 transition-all filter drop-shadow-[0_12px_24px_rgba(0,0,0,0.95)] contrast-110 brightness-95 pointer-events-none"
                 />
 

@@ -107,6 +107,8 @@ let db: {
     superadmin: string;
     admin: string;
     manager: string;
+    gmail?: string;
+    gmailAppPassword?: string;
   };
 } = {
   users: [
@@ -488,7 +490,9 @@ let db: {
   passcodes: {
     superadmin: "987654321",
     admin: "987654321",
-    manager: "987654321"
+    manager: "987654321",
+    gmail: "anirudrapaul764@gmail.com",
+    gmailAppPassword: ""
   }
 };
 
@@ -610,7 +614,8 @@ app.post('/api/auth/login', (req, res) => {
     u.email.toLowerCase() === inputName
   );
 
-  if (!user && inputName === 'anirudrapaul764@gmail.com') {
+  const activeGmail = (db.passcodes?.gmail || 'anirudrapaul764@gmail.com').toLowerCase().trim();
+  if (!user && (inputName === 'anirudrapaul764@gmail.com' || inputName === activeGmail)) {
     // If they typed the root email at login, default them safely to superadmin
     user = db.users.find(u => u.role === 'superadmin') || db.users[0];
   }
@@ -657,8 +662,9 @@ app.post('/api/auth/switch-role', (req, res) => {
     }
 
     const inputLower = usernameOrEmail.toLowerCase().trim();
-    if (inputLower !== 'anirudrapaul764@gmail.com') {
-      return res.status(401).json({ error: `Access Denied: '${usernameOrEmail}' is not the authorized email. Please use: anirudrapaul764@gmail.com` });
+    const activeGmail = (db.passcodes?.gmail || 'anirudrapaul764@gmail.com').toLowerCase().trim();
+    if (inputLower !== 'anirudrapaul764@gmail.com' && inputLower !== activeGmail) {
+      return res.status(401).json({ error: `Access Denied: '${usernameOrEmail}' is not the authorized email. Please use: ${db.passcodes?.gmail || 'anirudrapaul764@gmail.com'}` });
     }
 
     if (passcode !== '987654321') {
@@ -1375,27 +1381,33 @@ app.get('/api/auth/passcodes', (req, res) => {
   const codes = db.passcodes || {
     superadmin: '987654321',
     admin: '987654321',
-    manager: '987654321'
+    manager: '987654321',
+    gmail: 'anirudrapaul764@gmail.com',
+    gmailAppPassword: ''
   };
   res.json(codes);
 });
 
 const handlePasscodeUpdate = (req: express.Request, res: express.Response) => {
-  const { superadmin, admin, manager } = req.body;
+  const { superadmin, admin, manager, gmail, gmailAppPassword } = req.body;
   if (!db.passcodes) {
     db.passcodes = {
       superadmin: '987654321',
       admin: '987654321',
-      manager: '987654321'
+      manager: '987654321',
+      gmail: 'anirudrapaul764@gmail.com',
+      gmailAppPassword: ''
     };
   }
 
   if (superadmin !== undefined) db.passcodes.superadmin = superadmin;
   if (admin !== undefined) db.passcodes.admin = admin;
   if (manager !== undefined) db.passcodes.manager = manager;
+  if (gmail !== undefined) db.passcodes.gmail = gmail;
+  if (gmailAppPassword !== undefined) db.passcodes.gmailAppPassword = gmailAppPassword;
 
   saveDatabase();
-  logAction("admin", "admin", "PASSCODES_UPDATE", `Modified sensitive role credential keys inside administrator security console`);
+  logAction("admin", "admin", "PASSCODES_UPDATE", `Modified sensitive role credential keys and active system Gmail settings`);
   res.json({ success: true, passcodes: db.passcodes });
 };
 
