@@ -19,7 +19,6 @@ import BookingSystem from './components/BookingSystem.js';
 import UserDashboard from './components/UserDashboard.js';
 import AdminDashboard from './components/AdminDashboard.js';
 import HomeHero from './components/HomeHero.js';
-import LiveSpotlight from './components/LiveSpotlight.js';
 import GallerySection from './components/GallerySection.js';
 import ContactSection from './components/ContactSection.js';
 import { BRAND_COLORS, LOGO_ITEMS } from './lib/brand.js';
@@ -35,23 +34,15 @@ import {
 } from './fallbackData.js';
 
 export default function App() {
-  // Authentication State loaded eagerly from localStorage to maintain switches
-  const [currentUser, setCurrentUser] = useState<User>(() => {
-    const saved = localStorage.getItem('currentUser');
-    if (saved) {
-      try {
-        const u = JSON.parse(saved);
-        if (u && u.id && u.role) return u;
-      } catch (e) {}
-    }
-    return {
-      id: "u-4",
-      username: "user",
-      email: "user@rangrez.com",
-      role: "user",
-      fullName: "Rangrez Fan Club",
-      createdAt: new Date().toISOString()
-    };
+  // Always initialize as a standard guest user at startup or reload.
+  // Admin/Super Admin privileges require entering their ID & Password.
+  const [currentUser, setCurrentUser] = useState<User>({
+    id: "u-4",
+    username: "user",
+    email: "user@rangrez.com",
+    role: "user",
+    fullName: "Rangrez Fan Club",
+    createdAt: new Date().toISOString()
   });
 
   // Page Tabs - dynamically adjusted depending on persistent authentication
@@ -1266,7 +1257,6 @@ export default function App() {
               <HomeHero
                 onLearnMoreAboutBand={() => setActiveTab('about')}
                 onExploreTourEvents={() => setActiveTab('events')}
-                onViewLivePoster={() => setActiveTab('spotlight')}
                 upcomingEvent={getNearestUpcomingConcert()}
                 settings={settings}
               />
@@ -1277,18 +1267,6 @@ export default function App() {
 
             {/* 4. VIDEOS GRID VIEWS */}
             {activeTab === 'videos' && <VideosSection videos={videos} settings={settings} />}
-
-            {/* 4.5 LIVE EXPERIENCE SPOTLIGHT ARCHIVE */}
-            {activeTab === 'spotlight' && (
-              <LiveSpotlight
-                currentTrack={currentTrack}
-                isPlayingSound={isPlayingSound}
-                onPlayPauseToggle={handlePlayPauseToggle}
-                onSelectTrackToPlay={handleSelectTrackToPlay}
-                musicList={music}
-                settings={settings}
-              />
-            )}
 
             {/* 5. TOUR TOUR LIST */}
             {activeTab === 'events' && (

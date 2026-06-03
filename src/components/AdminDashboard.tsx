@@ -310,7 +310,7 @@ export default function AdminDashboard({
       setStat3LabelInput(settings.stat3Label || 'Soul & Energy');
       setContactEmailInput(settings.contactEmail || 'rangrezencore@gmail.com');
       setContactPhoneInput(settings.contactPhone || '+91 98765 43210');
-      setContactOfficeInput(settings.contactOffice || 'Koregaon Park Road, Pune, Maharashtra');
+      setContactOfficeInput(settings.contactOffice || 'JAMSHEDPURE JHARKHAND');
       setContactInstagramInput(settings.contactInstagram || 'https://www.instagram.com/rangrezencore?igsh=MWNpZThta3A3aDc3cQ==');
       setGallerySectionTitleInput(settings.gallerySectionTitle || 'Visual Symphony');
       setGallerySectionSubtitleInput(settings.gallerySectionSubtitle || 'Stage Graphics');

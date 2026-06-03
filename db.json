@@ -498,6 +498,70 @@
   ],
   "auditLogs": [
     {
+      "id": "log-1780502786256",
+      "timestamp": "2026-06-03T16:06:26.256Z",
+      "userId": "u-4",
+      "username": "user",
+      "action": "SUPER_ROLE_SWITCH",
+      "details": "Upgraded/downgraded role from user to superadmin via secure token handshakes"
+    },
+    {
+      "id": "log-1780502773753",
+      "timestamp": "2026-06-03T16:06:13.753Z",
+      "userId": "u-4",
+      "username": "user",
+      "action": "SUPER_ROLE_SWITCH",
+      "details": "Upgraded/downgraded role from superadmin to user via secure token handshakes"
+    },
+    {
+      "id": "l-1780501956236",
+      "timestamp": "2026-06-03T15:52:36.236Z",
+      "userId": "u-4",
+      "username": "user",
+      "action": "CHANGE_ROLE_PASSWORDS",
+      "details": "Superadmin modified administrative access passcodes and cryptographic key roles."
+    },
+    {
+      "id": "log-1780501956146",
+      "timestamp": "2026-06-03T15:52:36.146Z",
+      "userId": "admin",
+      "username": "admin",
+      "action": "PASSCODES_UPDATE",
+      "details": "Modified sensitive role credential keys inside administrator security console"
+    },
+    {
+      "id": "l-1780501929909",
+      "timestamp": "2026-06-03T15:52:09.909Z",
+      "userId": "u-4",
+      "username": "user",
+      "action": "CHANGE_ROLE_PASSWORDS",
+      "details": "Superadmin modified administrative access passcodes and cryptographic key roles."
+    },
+    {
+      "id": "log-1780501929821",
+      "timestamp": "2026-06-03T15:52:09.821Z",
+      "userId": "admin",
+      "username": "admin",
+      "action": "PASSCODES_UPDATE",
+      "details": "Modified sensitive role credential keys inside administrator security console"
+    },
+    {
+      "id": "log-1780501924820",
+      "timestamp": "2026-06-03T15:52:04.820Z",
+      "userId": "u-4",
+      "username": "user",
+      "action": "SUPER_ROLE_SWITCH",
+      "details": "Upgraded/downgraded role from user to superadmin via secure token handshakes"
+    },
+    {
+      "id": "log-1780499722962",
+      "timestamp": "2026-06-03T15:15:22.962Z",
+      "userId": "u-4",
+      "username": "user",
+      "action": "SUPER_ROLE_SWITCH",
+      "details": "Upgraded/downgraded role from superadmin to user via secure token handshakes"
+    },
+    {
       "id": "log-1780386334209",
       "timestamp": "2026-06-02T07:45:34.209Z",
       "userId": "u-4",
@@ -746,12 +810,26 @@
     "stat3Label": "Soul & Energy",
     "contactEmail": "rangrezencore@gmail.com",
     "contactPhone": "+91 98765 43210",
-    "contactOffice": "Koregaon Park Road, Pune, Maharashtra",
-    "contactInstagram": "https://www.instagram.com/rangrezencore?igsh=MWNpZThta3A3aDc3cQ=="
+    "contactOffice": "Jamshedpure jharkhand",
+    "contactInstagram": "https://www.instagram.com/rangrezencore?igsh=MWNpZThta3A3aDc3cQ==",
+    "gallerySectionTitle": "Visual Symphony",
+    "gallerySectionSubtitle": "Stage Graphics",
+    "videoSectionTitle": "RANGREZ ON FILM",
+    "videoSectionSubtitle": "Cinematic Screen",
+    "homeHeroButton1": "Secure Tour Spots",
+    "homeHeroButton2": "★ Live Experience Poster",
+    "homeHeroButton3": "Discover The Souls",
+    "eventsSectionTitle": "Closest Upcoming Concert Date",
+    "eventsSectionBannerSubtitle": "Countdown to Live Stage",
+    "spotlightSectionTitle": "Live Experience Poster Sandbox",
+    "spotlightSectionSubtitle": "Marquee Feature Spotlight",
+    "spotlightSectionBody": "We have integrated the official Rangrez Live Experience concert design from Sunday 24th May 2026. Use our interactive suite to customize your dynamic concert badge, enable theatrical fx, and trigger live background sessions."
   },
   "passcodes": {
     "superadmin": "987654321",
-    "admin": "987654321",
-    "manager": "987654321"
+    "admin": "123456789",
+    "manager": "987654321",
+    "gmail": "anirudrapaul764@gmail.com",
+    "gmailAppPassword": ""
   }
 }

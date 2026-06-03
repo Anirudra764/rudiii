@@ -438,7 +438,7 @@ export const FALLBACK_SETTINGS: SystemSettings = {
   "stat3Label": "Soul & Energy",
   "contactEmail": "rangrezencore@gmail.com",
   "contactPhone": "+91 98765 43210",
-  "contactOffice": "Koregaon Park Road, Pune, Maharashtra",
+  "contactOffice": "JAMSHEDPURE JHARKHAND",
   "contactInstagram": "https://www.instagram.com/rangrezencore?igsh=MWNpZThta3A3aDc3cQ==",
   "areTicketsReleased": false
 };

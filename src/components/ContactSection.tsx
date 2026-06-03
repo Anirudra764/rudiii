@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, Phone, MapPin, Instagram, Youtube, Send } from 'lucide-react';
+import { Mail, MapPin, Instagram, Send } from 'lucide-react';
 import { SystemSettings } from '../types.js';
 
 interface ContactSectionProps {
@@ -16,8 +16,7 @@ export default function ContactSection({ settings }: ContactSectionProps) {
 
   // Admin settings fields
   const adminEmail = settings?.contactEmail || "rangrezencore@gmail.com";
-  const adminPhone = settings?.contactPhone || "+91 98765 43210";
-  const adminOffice = settings?.contactOffice || "Koregaon Park Road, Pune, Maharashtra";
+  const adminOffice = settings?.contactOffice || "JAMSHEDPURE JHARKHAND";
   const adminInstagram = settings?.contactInstagram || "https://www.instagram.com/rangrezencore?igsh=MWNpZThta3A3aDc3cQ==";
 
   const handleInquirySubmit = (e: React.FormEvent) => {
@@ -57,23 +56,20 @@ export default function ContactSection({ settings }: ContactSectionProps) {
               <span>{adminEmail}</span>
             </div>
             <div className="flex items-center gap-3.5 text-xs text-zinc-300">
-              <Phone className="w-5 h-5 text-[#D4AF37]" />
-              <span>{adminPhone}</span>
-            </div>
-            <div className="flex items-center gap-3.5 text-xs text-zinc-300">
               <MapPin className="w-5 h-5 text-[#D4AF37]" />
               <span>{adminOffice}</span>
             </div>
-          </div>
-
-          {/* Quick Social icons */}
-          <div className="flex items-center gap-3 pt-6 border-t border-white/5 text-zinc-300">
-            <a href={adminInstagram.startsWith('http') ? adminInstagram : `https://instagram.com/${adminInstagram}`} target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-white/5 border border-white/5 hover:text-[#D4AF37] hover:bg-white/10 transition-colors">
-              <Instagram className="w-4 h-4" />
-            </a>
-            <a href="#" className="p-2 rounded-full bg-white/5 border border-white/5 hover:text-[#D4AF37] hover:bg-white/10 transition-colors">
-              <Youtube className="w-4 h-4" />
-            </a>
+            <div className="flex items-center gap-3.5 text-xs text-zinc-300">
+              <Instagram className="w-5 h-5 text-[#D4AF37]" />
+              <a 
+                href={adminInstagram.startsWith('http') ? adminInstagram : `https://instagram.com/${adminInstagram}`} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="hover:text-[#D4AF37] transition-colors"
+              >
+                @{adminInstagram.includes('instagram.com/') ? adminInstagram.split('instagram.com/')[1].split('?')[0].replace('/', '') : 'rangrezencore'}
+              </a>
+            </div>
           </div>
         </div>
 

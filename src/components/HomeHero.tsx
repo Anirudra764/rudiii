@@ -11,7 +11,6 @@ import { Event, SystemSettings } from '../types.js';
 interface HomeHeroProps {
   onLearnMoreAboutBand: () => void;
   onExploreTourEvents: () => void;
-  onViewLivePoster: () => void;
   upcomingEvent: Event | null;
   settings?: SystemSettings;
 }
@@ -19,7 +18,6 @@ interface HomeHeroProps {
 export default function HomeHero({
   onLearnMoreAboutBand,
   onExploreTourEvents,
-  onViewLivePoster,
   upcomingEvent,
   settings
 }: HomeHeroProps) {

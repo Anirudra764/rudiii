@@ -239,20 +239,15 @@ export default function BookingSystem({
 
       {/* Progress Wizard Status Header steps bar */}
       {step < 4 && (
-        <div className="flex items-center justify-between mb-10 max-w-lg mx-auto select-none bg-black/40 backdrop-blur-md p-4 rounded-2xl border border-white/5">
+        <div className="flex items-center justify-between mb-10 max-w-sm mx-auto select-none bg-black/40 backdrop-blur-md p-4 rounded-2xl border border-white/5">
           <div className="flex items-center gap-2">
-            <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${step >= 1 ? 'bg-[#D4AF37] text-black font-black' : 'bg-zinc-805 text-zinc-400'}`}>1</span>
-            <span className="text-xs text-zinc-300 hidden sm:inline">Classes</span>
+            <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${step === 1 ? 'bg-[#D4AF37] text-black font-black' : 'bg-green-500 text-white font-black'}`}>{step === 1 ? '1' : '✓'}</span>
+            <span className="text-xs text-zinc-300">Admission</span>
           </div>
-          <div className="h-[1.5px] bg-zinc-700 flex-1 mx-2" />
+          <div className="h-[1.5px] bg-zinc-700 flex-1 mx-4" />
           <div className="flex items-center gap-2">
-            <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${step >= 2 ? 'bg-[#D4AF37] text-black font-black' : 'bg-zinc-800 text-zinc-400'}`}>2</span>
-            <span className="text-xs text-zinc-300 hidden sm:inline">Seats</span>
-          </div>
-          <div className="h-[1.5px] bg-zinc-700 flex-1 mx-2" />
-          <div className="flex items-center gap-2">
-            <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${step >= 3 ? 'bg-[#D4AF37] text-black font-black' : 'bg-zinc-800 text-zinc-400'}`}>3</span>
-            <span className="text-xs text-zinc-300 hidden sm:inline">Checkout</span>
+            <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${step === 3 ? 'bg-[#D4AF37] text-black font-black' : 'bg-zinc-800 text-zinc-400'}`}>2</span>
+            <span className="text-xs text-zinc-300">Checkout</span>
           </div>
         </div>
       )}
@@ -405,12 +400,13 @@ export default function BookingSystem({
                     alert("Please select at least one ticket before proceeding.");
                     return;
                   }
-                  setStep(2);
+                  handleAutoAssignSeats();
+                  setStep(3);
                 }}
                 disabled={totalTicketsSelected <= 0}
                 className="flex-1 sm:flex-none px-8 py-2.5 rounded-xl bg-[#D4AF37] disabled:bg-zinc-800 disabled:text-zinc-600 text-black font-extrabold text-xs uppercase hover:scale-103 transition-transform flex items-center justify-center gap-1.5"
               >
-                Choose Exact Seats
+                Proceed to Checkout
                 <ChevronRight className="w-4 h-4 text-black" />
               </button>
             </div>
@@ -802,10 +798,10 @@ export default function BookingSystem({
 
           <div className="flex justify-between gap-4 mt-8 pt-4">
             <button
-              onClick={() => setStep(2)}
+              onClick={() => setStep(1)}
               className="px-6 py-2.5 rounded-xl border border-white/10 hover:bg-white/5 text-xs uppercase flex items-center gap-1.5"
             >
-              <ChevronLeft className="w-4 h-4" /> Retap Seats
+              <ChevronLeft className="w-4 h-4" /> Change Tiers
             </button>
           </div>
         </div>

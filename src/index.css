@@ -27,15 +27,17 @@ html, body, #root, .min-h-screen, [class*="bg-[#0f0e13]"] {
   background-color: rgba(18, 15, 15, 0.95) !important;
 }
 
-/* 3. Global Text Overrides: Replace Gold [#D4AF37] with Alizarin Red [#E32636] */
+/* 3. Global Text Overrides: Map Gold [#D4AF37] and Purple [#8A2BE2] to rich, high-contrast gold/amber and crimson */
 [class*="text-[#D4AF37]"],
-.text-\[\#D4AF37\],
+.text-\[\#D4AF37\] {
+  color: #F5C53B !important; /* Radiant luxury gold for perfect readability */
+}
 [class*="text-[#8A2BE2]"],
 .text-\[\#8A2BE2\] {
-  color: #E32636 !important;
+  color: #FF5E5B !important; /* Vivid coral red to stand out */
 }
 
-/* 4. Global Background Overrides: Gold to Red */
+/* 4. Global Background Overrides: Keep buttons & indicators distinct with correct color-depth */
 [class*="bg-[#D4AF37]"],
 .bg-\[\#D4AF37\] {
   background-color: #E32636 !important;
@@ -46,7 +48,7 @@ html, body, #root, .min-h-screen, [class*="bg-[#0f0e13]"] {
   background-color: #8B0000 !important;
 }
 
-/* Hover triggers for Gold bg-colored buttons to Red Hover */
+/* Hover states */
 [class*="hover:bg-[#D4AF37]"]:hover,
 [class*="hover:bg-opacity-80"]:hover {
   background-color: #FF4D4D !important;
@@ -55,7 +57,7 @@ html, body, #root, .min-h-screen, [class*="bg-[#0f0e13]"] {
 /* 5. Border Overrides */
 [class*="border-[#D4AF37]"],
 .border-\[\#D4AF37\] {
-  border-color: #E32636 !important;
+  border-color: #F5C53B !important;
 }
 [class*="border-[#8A2BE2]"],
 .border-\[\#8A2BE2\] {
@@ -65,29 +67,29 @@ html, body, #root, .min-h-screen, [class*="bg-[#0f0e13]"] {
   border-color: #FF4D4D !important;
 }
 
-/* 6. Gradients & Glows (Glow-lights, Dust effects, Particle shaders) */
+/* 6. Gradients & Glows: Dynamic color-graded blends instead of mono-red mud */
 [class*="from-[#8A2BE2]"] {
-  --tw-gradient-from: #500000 !important;
+  --tw-gradient-from: #8B0000 !important; /* Deep Crimson */
 }
 [class*="to-[#D4AF37]"] {
-  --tw-gradient-to: #E32636 !important;
+  --tw-gradient-to: #F5C53B !important; /* Radiant Gold for outstanding color grading */
 }
 [class*="to-[#8A2BE2]"] {
   --tw-gradient-to: #8B0000 !important;
 }
 [class*="from-[#D4AF37]"] {
-  --tw-gradient-from: #E32636 !important;
+  --tw-gradient-from: #F5C53B !important; /* Radiant Gold starting point */
 }
 
-/* Custom shadow halos to match the pure Red theme */
+/* Custom shadow halos to match the pure Red & Gold theme */
 [class*="shadow-[#D4AF37]"] {
   --tw-shadow-color: rgba(227, 38, 54, 0.4) !important;
   box-shadow: 0 10px 25px -5px rgba(227, 38, 54, 0.3), 0 8px 10px -6px rgba(227, 38, 54, 0.3) !important;
 }
 
-/* Make icons match red */
+/* Make icons match gold/red accents */
 svg.text-\[\#D4AF37\],
 svg[class*="text-[#D4AF37]"] {
-  stroke: #E32636 !important;
+  stroke: #F5C53B !important;
 }
 

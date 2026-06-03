@@ -33,7 +33,6 @@ export default function Navbar({
     { id: 'home', label: 'Home' },
     { id: 'about', label: 'Band' },
     { id: 'videos', label: 'Videos' },
-    { id: 'spotlight', label: 'Live Poster' },
     { id: 'events', label: 'Tour' },
     { id: 'gallery', label: 'Gallery' },
     { id: 'contact', label: 'Contact' }
