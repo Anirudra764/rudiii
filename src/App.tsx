@@ -204,10 +204,11 @@ export default function App() {
   const fetchAllData = async () => {
     try {
       setIsLoading(true);
+      const cacheBust = `?_t=${Date.now()}`;
       
       // Events
       try {
-        const eveRes = await fetch('/api/events');
+        const eveRes = await fetch(`/api/events${cacheBust}`);
         const ct = eveRes.headers.get("content-type");
         if (eveRes.ok && ct && ct.includes("application/json")) {
           const eveData = await eveRes.json();
@@ -221,7 +222,7 @@ export default function App() {
 
       // Media (Music, Videos, Gallery, Members, Settings)
       try {
-        const medRes = await fetch('/api/media');
+        const medRes = await fetch(`/api/media${cacheBust}`);
         const ct = medRes.headers.get("content-type");
         if (medRes.ok && ct && ct.includes("application/json")) {
           const medData = await medRes.json();
@@ -257,7 +258,7 @@ export default function App() {
 
       // Coupons list
       try {
-        const coupRes = await fetch('/api/coupons');
+        const coupRes = await fetch(`/api/coupons${cacheBust}`);
         const ct = coupRes.headers.get("content-type");
         if (coupRes.ok && ct && ct.includes("application/json")) {
           const coupData = await coupRes.json();
@@ -271,7 +272,7 @@ export default function App() {
 
       // Analytics & Audit logs
       try {
-        const anaRes = await fetch('/api/analytics');
+        const anaRes = await fetch(`/api/analytics${cacheBust}`);
         const ct = anaRes.headers.get("content-type");
         if (anaRes.ok && ct && ct.includes("application/json")) {
           const anaData = await anaRes.json();
@@ -292,9 +293,10 @@ export default function App() {
 
   const refreshBookingsCount = async (usr: User) => {
     try {
+      const cacheBust = `?_t=${Date.now()}`;
       // If user is superadmin/admin, fetch all bookings. Otherwise fetch target user details.
       const isPrivileged = usr.role !== 'user';
-      const endpoint = isPrivileged ? '/api/bookings' : `/api/bookings?userId=${usr.id}`;
+      const endpoint = isPrivileged ? `/api/bookings${cacheBust}` : `/api/bookings${cacheBust}&userId=${usr.id}`;
       const res = await fetch(endpoint);
       const ct = res.headers.get("content-type");
       if (res.ok && ct && ct.includes("application/json")) {
@@ -308,7 +310,8 @@ export default function App() {
 
   const refreshAuditTrace = async () => {
     try {
-      const res = await fetch('/api/analytics');
+      const cacheBust = `?_t=${Date.now()}`;
+      const res = await fetch(`/api/analytics${cacheBust}`);
       const ct = res.headers.get("content-type");
       if (res.ok && ct && ct.includes("application/json")) {
         const data = await res.json();
@@ -319,6 +322,53 @@ export default function App() {
 
   useEffect(() => {
     fetchAllData();
+
+    // Setup quiet automatic background sync polling interval (syncs database updates every 12 seconds)
+    // This allows image updates, videos, scheduling modifications, and settings made by one admin to be 
+    // seamlessly and immediately propagated to other visitors' screens without manual refresh.
+    const syncInterval = setInterval(async () => {
+      try {
+        const cacheBust = `?_t=${Date.now()}`;
+        
+        // 1. Fetch updated general media & custom branding settings
+        const medRes = await fetch(`/api/media${cacheBust}`);
+        const mct = medRes.headers.get("content-type");
+        if (medRes.ok && mct && mct.includes("application/json")) {
+          const medData = await medRes.json();
+          if (medData) {
+            if (Array.isArray(medData.music) && medData.music.length > 0) {
+              setMusic(medData.music);
+            }
+            if (Array.isArray(medData.videos) && medData.videos.length > 0) {
+              setVideos(medData.videos);
+            }
+            if (Array.isArray(medData.gallery) && medData.gallery.length > 0) {
+              setGallery(medData.gallery);
+            }
+            if (Array.isArray(medData.members) && medData.members.length > 0) {
+              setMembers(medData.members);
+            }
+            if (medData.settings) {
+              setSettings(medData.settings);
+            }
+          }
+        }
+
+        // 2. Fetch updated scheduled live timeline tour events
+        const eveRes = await fetch(`/api/events${cacheBust}`);
+        const ect = eveRes.headers.get("content-type");
+        if (eveRes.ok && ect && ect.includes("application/json")) {
+          const eveData = await eveRes.json();
+          if (Array.isArray(eveData) && eveData.length > 0) {
+            setEvents(eveData);
+          }
+        }
+      } catch (quietSyncErr) {
+        console.warn("Quiet background sync auto-polling loop idle:", quietSyncErr);
+      }
+    }, 12000);
+
+    return () => clearInterval(syncInterval);
   }, []);
 
   // Sync state loops on identity change

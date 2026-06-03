@@ -214,6 +214,103 @@ export default function HomeHero({
         </motion.div>
       </div>
 
+      {/* 1.5 MESMERIZING BRAND IMMERSION BOARD */}
+      <div className="relative py-24 bg-gradient-to-b from-[#0b0a11] via-[#100c1d] to-[#05040a] z-20 border-t border-white/[0.03] overflow-hidden">
+        {/* Subtle glowing fluid gradients in the background */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-tr from-[#E32636]/10 via-[#8A2BE2]/10 to-transparent rounded-full filter blur-[120px] pointer-events-none" />
+        <div className="absolute -top-10 left-10 w-96 h-96 bg-[#D4AF37]/5 rounded-full filter blur-[90px] pointer-events-none" />
+        
+        <div className="max-w-7xl mx-auto px-6 relative z-10 text-center">
+          {/* Subtle line decoration */}
+          <div className="flex items-center justify-center gap-3 mb-6">
+            <div className="h-[1px] w-12 bg-gradient-to-r from-transparent to-[#D4AF37]/50" />
+            <Sparkles className="w-4 h-4 text-[#D4AF37]" />
+            <div className="h-[1px] w-12 bg-gradient-to-l from-transparent to-[#D4AF37]/50" />
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 1, ease: "easeOut" }}
+            className="space-y-4"
+          >
+            {/* Elegant glowing Sanskrit slogan */}
+            <span className="text-[10px] tracking-[0.45em] font-mono font-black text-[#D4AF37] uppercase block">
+              ★ THE DYER OF SOULS ★
+            </span>
+            <h2 className="text-4xl md:text-6xl font-black tracking-tight text-white mb-6 uppercase">
+              REVOLUTIONIZING <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] to-[#E32636]">SUFI FUSION ROCK</span>
+            </h2>
+          </motion.div>
+
+          {/* Interactive animated marquee list looping RANGREZ and tagline and mantras */}
+          <div className="relative py-8 my-10 overflow-hidden bg-black/40 border-y border-white/[0.05] flex select-none">
+            <motion.div 
+              className="flex whitespace-nowrap text-3xl md:text-5xl font-black font-display text-white/5 uppercase gap-12"
+              animate={{ x: [0, -1000] }}
+              transition={{
+                ease: "linear",
+                duration: 25,
+                repeat: Infinity
+              }}
+            >
+              <span>★ RANGREZ ★ THE DYER OF SOULS ★ SANSKRIT ROOTED SUFI ROCK ★ RAGAS MEETS DISTORTION ★ SHREYORA SUNDAY EXPERIENCE ★ RANGREZ ★ THE DYER OF SOULS ★ SANSKRIT ROOTED SUFI ROCK ★ RAGAS MEETS DISTORTION ★ SHREYORA SUNDAY EXPERIENCE ★</span>
+            </motion.div>
+          </div>
+
+          {/* Core values block columns */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12 text-left">
+            {[
+              {
+                title: "Traditional Roots",
+                subtitle: "Sanskrit Frameworks",
+                desc: "Every frequency stems from pristine Hindustani classical ragas and centuries-old folk lore, treated with raw, uncompromising acoustic authenticity.",
+                color: "#D4AF37"
+              },
+              {
+                title: "Sonic Fire",
+                subtitle: "Heavy Amplification",
+                desc: "Where the calming resonance of Bansuri flutes collides with massive high-gain guitar amplifiers and double-kick hybrid rhythm rigs.",
+                color: "#E32636"
+              },
+              {
+                title: "Deep Devotion",
+                subtitle: "The Dyer of Souls",
+                desc: "Rangrez translates to dyeing the inner self, transferring raw passion, sonic weight, and transcendental energy directly to the audience.",
+                color: "#8A2BE2"
+              }
+            ].map((item, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, delay: idx * 0.15, ease: "easeOut" }}
+                whileHover={{ y: -6, borderColor: `${item.color}40` }}
+                className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-[#D4AF37]/50 transition-all duration-300 relative group overflow-hidden"
+              >
+                {/* Glowing corner indicator */}
+                <div 
+                  className="absolute top-0 right-0 w-16 h-16 opacity-10 group-hover:opacity-30 transition-opacity pointer-events-none rounded-bl-full"
+                  style={{ background: `radial-gradient(circle at top right, ${item.color}, transparent)` }}
+                />
+                
+                <span className="text-[9px] font-mono tracking-widest text-[#D4AF37] uppercase block mb-1">
+                  {item.subtitle}
+                </span>
+                <h3 className="text-lg font-bold text-white mb-2 group-hover:text-[#D4AF37] transition-colors">
+                  {item.title}
+                </h3>
+                <p className="text-zinc-400 text-xs leading-relaxed">
+                  {item.desc}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </div>
+
       {/* 2. LIVE UPCOMING CONCERT CALL TO ACTION */}
       {upcomingEvent && activeSettings.areTicketsReleased && (
         <div className="py-12 bg-gradient-to-r from-[#181524] to-[#0f0e13] border-y border-[#8A2BE2]/20 px-6">
