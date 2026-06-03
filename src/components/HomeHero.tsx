@@ -24,7 +24,7 @@ export default function HomeHero({
   settings
 }: HomeHeroProps) {
   const activeSettings = {
-    heroBgUrl: "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=1920&q=85",
+    heroBgUrl: "/uploads/lead_singer_microphone.jpg",
     bandName: "RANGREZ",
     tagline: "★ SANSKRIT ROOTED SUFI FUSION ROCK ★",
     creedBody: "We don't just play music, we create feelings. Driven by energy, connected by rhythm, we turn every single performance into a highly memorable shared experience.",
@@ -43,12 +43,22 @@ export default function HomeHero({
         {/* Layer background shade mask */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/85 to-[#0b0a11] z-10" />
         
-        {/* Cinematic background illustration image */}
-        <img
+        {/* Cinematic background illustration image animates with a slow, ambient Ken Burns zoom and pan */}
+        <motion.img
           src={activeSettings.heroBgUrl}
           alt={`${activeSettings.bandName} live concert background atmosphere`}
           referrerPolicy="no-referrer"
-          className="w-full h-full object-cover absolute inset-0 transform scale-102 filter brightness-[0.7] scroll-parallax"
+          className="w-full h-full object-cover absolute inset-0 filter brightness-[0.7] select-none"
+          animate={{
+            scale: [1.02, 1.10, 1.02],
+            x: [0, 8, -4, 0],
+            y: [0, -4, 4, 0]
+          }}
+          transition={{
+            duration: 25,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
         />
 
         {/* Cinematic Golden dust overlay */}

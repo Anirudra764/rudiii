@@ -414,7 +414,7 @@ export const FALLBACK_MEMBERS: BandMember[] = [
 ];
 
 export const FALLBACK_SETTINGS: SystemSettings = {
-  "heroBgUrl": "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=1920&q=85",
+  "heroBgUrl": "/uploads/lead_singer_microphone.jpg",
   "posterMainSingerUrl": "https://images.unsplash.com/photo-1541604193435-22419f564789?auto=format&fit=crop&w=500&q=80",
   "posterSilhouetteUrl": "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=40",
   "bandName": "RANGREZ",
