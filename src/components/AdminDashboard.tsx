@@ -108,6 +108,8 @@ export default function AdminDashboard({
   const [heroBgInput, setHeroBgInput] = useState(settings?.heroBgUrl || '');
   const [mainSingerInput, setMainSingerInput] = useState(settings?.posterMainSingerUrl || '');
   const [silhouetteInput, setSilhouetteInput] = useState(settings?.posterSilhouetteUrl || '');
+  const [cinematicIntroVideoInput, setCinematicIntroVideoInput] = useState(settings?.cinematicIntroVideoUrl || '');
+  const [cinematicIntroPosterInput, setCinematicIntroPosterInput] = useState(settings?.cinematicIntroPosterUrl || '');
 
   const [bandNameInput, setBandNameInput] = useState(settings?.bandName || '');
   const [taglineInput, setTaglineInput] = useState(settings?.tagline || '');
@@ -283,6 +285,8 @@ export default function AdminDashboard({
       setHeroBgInput(settings.heroBgUrl || '');
       setMainSingerInput(settings.posterMainSingerUrl || '');
       setSilhouetteInput(settings.posterSilhouetteUrl || '');
+      setCinematicIntroVideoInput(settings.cinematicIntroVideoUrl || '');
+      setCinematicIntroPosterInput(settings.cinematicIntroPosterUrl || '');
       setBandNameInput(settings.bandName || 'RANGREZ');
       setTaglineInput(settings.tagline || '★ SANSKRIT ROOTED SUFI FUSION ROCK ★');
       setCreedTitleInput(settings.creedTitle || 'Rangrez Creed');
@@ -2537,6 +2541,61 @@ export default function AdminDashboard({
 
             </div>
 
+            {/* Cinematic Video & Poster customizer configurations */}
+            <div className="border-t border-white/5 pt-6 space-y-4">
+              <div>
+                <h4 className="text-xs font-bold text-[#D4AF37] font-mono uppercase">🎬 Cinematic Intro Video Customizer</h4>
+                <p className="text-[10px] text-zinc-400 font-sans mt-0.5">Customize the gorgeous 21:9 cinematic banner at the top of the home page. Upload your band's video file or choose a custom high-visibility poster background.</p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-black/30 border border-white/5 rounded-2xl p-6">
+                
+                {/* Intro Video Element */}
+                <div className="space-y-3 flex flex-col justify-between">
+                  <div>
+                    <h4 className="text-xs font-bold text-white font-mono flex items-center gap-2 border-b border-white/5 pb-2">
+                      📹 Intro Cinematic Video File / Stream
+                    </h4>
+                    <p className="text-[10px] text-zinc-450 mt-1 font-sans">Upload your custom band introductory video. This plays automatically as the background video overlay inside the home section.</p>
+                    <div className="my-3 aspect-[21/9] rounded-xl overflow-hidden bg-zinc-900 border border-white/10 flex items-center justify-center text-xs text-zinc-500 font-mono">
+                      {cinematicIntroVideoInput ? "Video Source Registered ✓" : "Default Live Simulation Loop Loaded"}
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <VideoUploadWidget
+                      id="cinematic-vid-config"
+                      value={cinematicIntroVideoInput}
+                      onChange={(url) => setCinematicIntroVideoInput(url)}
+                      onDurationLoaded={() => {}}
+                      label="Upload Video or URL (.mp4)"
+                    />
+                  </div>
+                </div>
+
+                {/* Intro Poster Element */}
+                <div className="space-y-3 flex flex-col justify-between">
+                  <div>
+                    <h4 className="text-xs font-bold text-white font-mono flex items-center gap-2 border-b border-white/5 pb-2">
+                      🖼️ Cinematic Posterior / Sequence Background
+                    </h4>
+                    <p className="text-[10px] text-zinc-455 mt-1 font-sans">Upload the primary image used as Ken-Burns transition backdrop when the video starts, or if a physical video isn't uploaded.</p>
+                    <div className="my-3 aspect-[21/9] rounded-xl overflow-hidden bg-zinc-900 border border-white/10 relative">
+                      <img src={cinematicIntroPosterInput || "/uploads/poster_complete_band.jpg"} alt="Cinematic Poster backing" className="w-full h-full object-cover" onError={(e) => { (e.target as any).src = "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7"; }} />
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <ImageUploadWidget
+                      id="cinematic-poster-config"
+                      value={cinematicIntroPosterInput}
+                      onChange={(url) => setCinematicIntroPosterInput(url)}
+                      label="Poster Source / URL"
+                    />
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
             {/* NEW EXTENDED BRAND TEXT EDITORS */}
             <div className="border-t border-white/5 pt-6 space-y-6">
               
@@ -2957,6 +3016,8 @@ export default function AdminDashboard({
                       heroBgUrl: heroBgInput || "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3",
                       posterMainSingerUrl: mainSingerInput || "https://images.unsplash.com/photo-1541604193435-22419f564789",
                       posterSilhouetteUrl: silhouetteInput || "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7",
+                      cinematicIntroVideoUrl: cinematicIntroVideoInput || "/uploads/rangrez_cinematic_intro.mp4",
+                      cinematicIntroPosterUrl: cinematicIntroPosterInput || "/uploads/poster_complete_band.jpg",
                       bandName: bandNameInput,
                       tagline: taglineInput,
                       creedTitle: creedTitleInput,

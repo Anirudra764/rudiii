@@ -178,6 +178,8 @@ export interface SystemSettings {
   spotlightSectionSubtitle?: string;
   spotlightSectionBody?: string;
   areTicketsReleased?: boolean;
+  cinematicIntroVideoUrl?: string;
+  cinematicIntroPosterUrl?: string;
 }
 
 export interface SalesStat {
