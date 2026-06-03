@@ -109,7 +109,7 @@ export default function BookingSystem({
       if (currentlySelectedInClassCount < allowedLimit) {
         setSelectedSeats([...selectedSeats, seatCode]);
       } else {
-        alert(`You requested only ${allowedLimit} ${seatClass.toUpperCase()} tickets. Increase quantity in step 1 to choose more!`);
+        alert(`Admission Limit: You requested only ${allowedLimit} ${seatClass.toUpperCase()} ticket(s). 🎫 To reserve more seats in this category, simply navigate to Step 1 and increase your ticket count!`);
       }
     }
   };
@@ -191,7 +191,7 @@ export default function BookingSystem({
     try {
       const isUpi = paymentGateway === 'upi_qr';
       if (isUpi && (!upiUtr || upiUtr.trim().length < 8)) {
-        alert("Please enter a valid Transaction ID / UPI Ref UTR number (minimum 8 characters) to authenticate scanning test.");
+        alert("🔒 Verification Needed: Please enter a valid Transaction hash or UPI Ref UTR number (minimum 8 characters) to authenticate and verify your simulated QR payment transfer.");
         setIsProcessingPayment(false);
         return;
       }
@@ -509,7 +509,7 @@ export default function BookingSystem({
             <button
               onClick={() => {
                 if (selectedSeats.length < totalTicketsSelected) {
-                  alert(`Please select exactly ${totalTicketsSelected} seats matching your ticket quantities!`);
+                  alert(`🎟️ Seats Pending Selection: Please finalize choosing all your ${totalTicketsSelected} reserved seats on the visual grid before jumping to the final secure billing step!`);
                   return;
                 }
                 setStep(3);
@@ -749,7 +749,7 @@ const options = {
                     <div className="space-y-2">
                       <button 
                         type="button"
-                        onClick={() => alert("Simulating PayPal Express Sandbox Popup overlay. Secure handshake was successful!")}
+                        onClick={() => alert("Simulating PayPal Express Sandbox Secure Handshake... Succeeded! 🥳 The API has verified active parameters, authorized test credentials, and updated your booking gateway tokens.")}
                         className="w-full py-3 bg-[#FFC439] hover:bg-[#F2B92E] text-[#003087] font-black italic text-xs rounded-xl transition-all cursor-pointer flex items-center justify-center gap-2"
                       >
                         <span className="font-extrabold not-italic font-sans">Pay with</span>
@@ -757,7 +757,7 @@ const options = {
                       </button>
                       <button 
                         type="button"
-                        onClick={() => alert("Simulating PayPal Debit or Credit Card popup checkout.")}
+                        onClick={() => alert("Simulating PayPal Debit & Credit cards modal overlay... Completed! 💳 Validated secure secure payment sandbox parameters successfully. You are ready to generate your admission passes!")}
                         className="w-full py-3 bg-[#2C2E2F] hover:bg-[#202122] text-white font-bold text-xs rounded-xl transition-all cursor-pointer flex items-center justify-center gap-2"
                       >
                         <span className="tracking-tight">Debit or Credit Card</span>

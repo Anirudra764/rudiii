@@ -1,3 +1,22 @@
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ * 
+ * -----------------------------------------------------------------------------
+ * RANGREZ FULL-STACK BACKEND ENGINE (PRODUCTION & GITHUB READY)
+ * -----------------------------------------------------------------------------
+ * This server module powers the full-stack interactive features of Rangrez
+ * (Indian Fusion Band platform), specializing in a simulation model of custom
+ * ticket reservations, audio audio playback, and dynamic gallery uploads.
+ * 
+ * To initialize, commit, or host via GitHub:
+ * 1. Initialize Git in the root: `git init`
+ * 2. Add your GitHub remote origin: `git remote add origin <your-github-repo-url>`
+ * 3. Commit codebase: `git add . && git commit -m "feat: complete fullstack sufi-rock portal"`
+ * 4. Deploy easily via Cloud Run, Render, or Railway using our bundler config.
+ * -----------------------------------------------------------------------------
+ */
+
 import express from 'express';
 import path from 'path';
 import fs from 'fs';

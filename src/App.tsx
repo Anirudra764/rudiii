@@ -1,6 +1,17 @@
 /**
  * @license
  * SPDX-License-Identifier: Apache-2.0
+ * 
+ * -----------------------------------------------------------------------------
+ * RANGREZ REVOLUTION FRONTEND ENGINE (GITHUB COMPATIBLE)
+ * -----------------------------------------------------------------------------
+ * The primary entrance orchestrating view switching, local state holding,
+ * responsive design sheets, real-time visualizers, and sandbox credentials.
+ * 
+ * Designed cleanly to deploy asynchronously in standard git environments.
+ * Refer to GITHUB_GUIDE.md and README.md in the root directory for instructions
+ * on compiling, customizing, and hosting assets directly on GitHub Pages or VPS.
+ * -----------------------------------------------------------------------------
  */
 
 import React, { useState, useEffect, useRef } from 'react';
@@ -32,6 +43,11 @@ import {
   FALLBACK_MEMBERS,
   FALLBACK_SETTINGS
 } from './fallbackData.js';
+
+const getCelebrateUpgradeMessage = (role: string | null): string => {
+  if (!role) return "Session elevated successfully!";
+  return `Session securely upgraded! Switched role to: ${role.toUpperCase()}`;
+};
 
 export default function App() {
   // Always initialize as a standard guest user at startup or reload.
@@ -925,13 +941,13 @@ export default function App() {
           const eveData = await eveRes.json();
           setEvents(eveData);
         }
-        alert("Simulated transaction approved. Funds reversed & seats restored.");
+        alert("Refund Processed Successfully! ✨ The simulated transaction has been fully reversed and the seats have been restored to the active inventory.");
         return;
       }
       throw new Error("FallbackToClient");
     } catch {
       setBookings(prev => prev.map(b => b.id === bookingId ? { ...b, status: 'refunded' } : b));
-      alert("Local session action: Simulated transaction approved. Funds reversed & seats restored.");
+      alert("Local session action: Simulated transaction approved. Funds reversed & seats restored successfully! ✨");
     }
   };
 
@@ -947,13 +963,13 @@ export default function App() {
           const eveData = await eveRes.json();
           setEvents(eveData);
         }
-        alert("Booking voided directly.");
+        alert("Booking voided directly. The seat allocation has been cancelled successfully, and records updated! 🗑️");
         return;
       }
       throw new Error("FallbackToClient");
     } catch {
       setBookings(prev => prev.map(b => b.id === bookingId ? { ...b, status: 'cancelled' } : b));
-      alert("Local session action: Booking voided directly.");
+      alert("Local session action: Booking voided directly. The seat allocation has been cancelled successfully, and records updated! 🗑️");
     }
   };
 
@@ -976,7 +992,7 @@ export default function App() {
     setCurrentUser(defaultUser);
     refreshBookingsCount(defaultUser);
     setActiveTab('home');
-    alert("Session signed out successfully. Reverted to Fan Club guest identity.");
+    alert("Signed out successfully! 👋 Saved your session and safely returned you to our guest Fan Club layout. See you backstage again soon!");
   };
 
   // --- SIMULATED DUAL LOGIN MODAL ---
@@ -1145,7 +1161,7 @@ export default function App() {
           setRoleSwitchTarget(null);
           const nextTab = data.user.role !== 'user' ? 'admin' : 'home';
           setActiveTab(nextTab);
-          alert(`Session securely upgraded! Switched role to: ${roleSwitchTarget.toUpperCase()}`);
+          alert(getCelebrateUpgradeMessage(roleSwitchTarget));
           return;
         } else {
           alert(data.error || `Failed to authenticate credentials for switching to ${roleSwitchTarget}`);
@@ -1183,7 +1199,7 @@ export default function App() {
       setRoleSwitchTarget(null);
       const nextTab = roleSwitchTarget !== 'user' ? 'admin' : 'home';
       setActiveTab(nextTab);
-      alert(`Session upgraded successfully! Switched role to: ${roleSwitchTarget.toUpperCase()}`);
+      alert(getCelebrateUpgradeMessage(roleSwitchTarget));
     }
   };
 
@@ -1611,33 +1627,82 @@ export default function App() {
       )}
 
       {/* CUSTOM APPLET DIALOG WINDOW FOR SECURE IFRAME ALERTS */}
-      {globalAlert.isOpen && (
-        <div className="fixed inset-0 bg-[#000]/85 z-[999] flex items-center justify-center p-4 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="bg-[#110f18] border border-[#E32636]/60 p-6 rounded-2xl max-w-sm w-full space-y-5 text-white text-center shadow-2xl relative overflow-hidden">
-            {/* Decors */}
-            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#E32636] via-red-650 to-[#E32636]" />
-            <div className="absolute -top-12 left-1/2 -translate-x-1/2 w-24 h-24 bg-red-500/10 rounded-full blur-xl animate-pulse" />
+      {globalAlert.isOpen && (() => {
+        const isSuccess = globalAlert.message.toLowerCase().includes('success') || 
+                          globalAlert.message.toLowerCase().includes('welcome') || 
+                          globalAlert.message.toLowerCase().includes('upgraded') ||
+                          globalAlert.message.toLowerCase().includes('secured') ||
+                          globalAlert.message.toLowerCase().includes('completed') ||
+                          globalAlert.message.toLowerCase().includes('approved') ||
+                          globalAlert.message.toLowerCase().includes('active') ||
+                          globalAlert.message.toLowerCase().includes('succeeded');
+        const isError = globalAlert.message.toLowerCase().includes('error') || 
+                        globalAlert.message.toLowerCase().includes('failed') || 
+                        globalAlert.message.toLowerCase().includes('invalid') || 
+                        globalAlert.message.toLowerCase().includes('denied') ||
+                        globalAlert.message.toLowerCase().includes('denial');
 
-            <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-full bg-red-950/40 border border-[#E32636]/40 text-[#E32636]">
-              <Sparkles className="h-5 w-5" />
-            </div>
+        const themeColor = isSuccess ? '#22c55e' : isError ? '#ef4444' : '#E32636';
+        const shadowColor = isSuccess ? 'rgba(34,197,94,0.15)' : isError ? 'rgba(239,68,68,0.15)' : 'rgba(227,38,54,0.15)';
 
-            <div className="space-y-1.5">
-              <span className="text-[9px] uppercase font-mono text-[#E32636] tracking-widest block font-bold">Rangrez System Message</span>
-              <p className="text-zinc-200 text-xs font-sans leading-relaxed px-1">
-                {globalAlert.message}
-              </p>
-            </div>
-
-            <button
-              onClick={() => setGlobalAlert({ isOpen: false, message: '' })}
-              className="w-full py-2.5 rounded-xl bg-gradient-to-r from-red-850 to-red-650 hover:from-red-750 hover:to-red-550 text-white font-extrabold uppercase text-xs tracking-wider font-mono shadow-md active:scale-[0.97] transition-all"
+        return (
+          <div className="fixed inset-0 bg-[#000]/85 z-[999] flex items-center justify-center p-4 backdrop-blur-md animate-in fade-in duration-200">
+            <div 
+              style={{ borderColor: themeColor }}
+              className="bg-[#110f18] border p-6 rounded-2xl max-w-sm w-full space-y-5 text-white text-center shadow-2xl relative overflow-hidden"
             >
-              Dismiss
-            </button>
+              {/* Decors */}
+              <div 
+                style={{ backgroundImage: `linear-gradient(to right, ${themeColor}, rgba(255,255,255,0.4), ${themeColor})` }}
+                className="absolute top-0 left-0 right-0 h-[2.5px]" 
+              />
+              <div 
+                style={{ backgroundColor: isSuccess ? 'rgba(34,197,94,0.1)' : 'rgba(227,38,54,0.1)' }}
+                className="absolute -top-12 left-1/2 -translate-x-1/2 w-24 h-24 rounded-full blur-xl animate-pulse" 
+              />
+
+              <div 
+                style={{ 
+                  borderColor: `${themeColor}40`, 
+                  backgroundColor: isSuccess ? 'rgba(34,197,94,0.1)' : isError ? 'rgba(239,68,68,0.1)' : 'rgba(227,38,54,0.1)'
+                }}
+                className="mx-auto flex h-11 w-11 items-center justify-center rounded-full border text-white"
+              >
+                {isSuccess ? (
+                  <Sparkles className="h-5 w-5 text-green-400" />
+                ) : isError ? (
+                  <Shield className="h-5 w-5 text-red-400" />
+                ) : (
+                  <Sparkles className="h-5 w-5 text-[#E32636]" />
+                )}
+              </div>
+
+              <div className="space-y-1.5">
+                <span 
+                  style={{ color: themeColor }}
+                  className="text-[9px] uppercase font-mono tracking-widest block font-extrabold"
+                >
+                  {isSuccess ? '🏆 Success Confirmation' : isError ? '⚠️ Security System' : 'Rangrez System Message'}
+                </span>
+                <p className="text-zinc-100 text-xs font-sans leading-relaxed px-1">
+                  {globalAlert.message}
+                </p>
+              </div>
+
+              <button
+                onClick={() => setGlobalAlert({ isOpen: false, message: '' })}
+                style={{ 
+                  backgroundColor: themeColor,
+                  boxShadow: `0 4px 14px ${shadowColor}`
+                }}
+                className="w-full py-2.5 rounded-xl text-white font-extrabold uppercase text-xs tracking-wider font-mono shadow-md active:scale-[0.97] transition-all hover:brightness-110 cursor-pointer"
+              >
+                Dismiss
+              </button>
+            </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
 
     </div>
   );
