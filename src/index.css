@@ -27,10 +27,10 @@ html, body, #root, .min-h-screen, [class*="bg-[#0f0e13]"] {
   background-color: rgba(18, 15, 15, 0.95) !important;
 }
 
-/* 3. Global Text Overrides: Map Gold [#D4AF37] and Purple [#8A2BE2] to rich, high-contrast gold/amber and crimson */
+/* 3. Global Text Overrides: Map Gold [#D4AF37] and Purple [#8A2BE2] to rich, high-contrast crimson and deep red */
 [class*="text-[#D4AF37]"],
 .text-\[\#D4AF37\] {
-  color: #F5C53B !important; /* Radiant luxury gold for perfect readability */
+  color: #FF4D4D !important; /* Radiant vivid red for perfect readability */
 }
 [class*="text-[#8A2BE2]"],
 .text-\[\#8A2BE2\] {
@@ -50,20 +50,43 @@ html, body, #root, .min-h-screen, [class*="bg-[#0f0e13]"] {
 
 /* Hover states */
 [class*="hover:bg-[#D4AF37]"]:hover,
-[class*="hover:bg-opacity-80"]:hover {
+[class*="hover:bg-opacity-80"]:hover,
+[class*="hover:bg-[#8A2BE2]"]:hover,
+[class*="hover:bg-[#8A2BE2]/20"]:hover,
+[class*="group"]:hover [class*="group-hover:bg-[#8A2BE2]/20"] {
   background-color: #FF4D4D !important;
+}
+
+[class*="hover:bg-[#8A2BE2]/20"]:hover,
+[class*="group"]:hover [class*="group-hover:bg-[#8A2BE2]/20"] {
+  background-color: rgba(227, 38, 54, 0.25) !important;
+}
+
+/* Text Hover Overrides to restore satisfying red highlights */
+[class*="hover:text-[#D4AF37]"]:hover,
+[class*="group-hover:text-[#D4AF37]"]:hover,
+[class*="group"]:hover [class*="group-hover:text-[#D4AF37]"],
+[class*="hover:text-[#8A2BE2]"]:hover,
+[class*="group-hover:text-[#8A2BE2]"]:hover,
+[class*="group"]:hover [class*="group-hover:text-[#8A2BE2]"] {
+  color: #FF4D4D !important; /* Premium red response when hovered */
 }
 
 /* 5. Border Overrides */
 [class*="border-[#D4AF37]"],
 .border-\[\#D4AF37\] {
-  border-color: #F5C53B !important;
+  border-color: #E32636 !important;
 }
 [class*="border-[#8A2BE2]"],
 .border-\[\#8A2BE2\] {
   border-color: #8B0000 !important;
 }
-[class*="hover:border-[#D4AF37]"]:hover {
+[class*="hover:border-[#D4AF37]"]:hover,
+[class*="hover:border-[#D4AF37]/50"]:hover,
+[class*="group"]:hover [class*="group-hover:border-[#D4AF37]/50"],
+[class*="hover:border-[#8A2BE2]"]:hover,
+[class*="hover:border-[#8A2BE2]/50"]:hover,
+[class*="group"]:hover [class*="group-hover:border-[#8A2BE2]/50"] {
   border-color: #FF4D4D !important;
 }
 
@@ -72,13 +95,13 @@ html, body, #root, .min-h-screen, [class*="bg-[#0f0e13]"] {
   --tw-gradient-from: #8B0000 !important; /* Deep Crimson */
 }
 [class*="to-[#D4AF37]"] {
-  --tw-gradient-to: #F5C53B !important; /* Radiant Gold for outstanding color grading */
+  --tw-gradient-to: #FF4D4D !important; /* Radiant vivid red for outstanding color grading */
 }
 [class*="to-[#8A2BE2]"] {
   --tw-gradient-to: #8B0000 !important;
 }
 [class*="from-[#D4AF37]"] {
-  --tw-gradient-from: #F5C53B !important; /* Radiant Gold starting point */
+  --tw-gradient-from: #E32636 !important; /* Vibrant Red starting point */
 }
 
 /* Custom shadow halos to match the pure Red & Gold theme */
@@ -87,9 +110,9 @@ html, body, #root, .min-h-screen, [class*="bg-[#0f0e13]"] {
   box-shadow: 0 10px 25px -5px rgba(227, 38, 54, 0.3), 0 8px 10px -6px rgba(227, 38, 54, 0.3) !important;
 }
 
-/* Make icons match gold/red accents */
+/* Make icons match red accents */
 svg.text-\[\#D4AF37\],
 svg[class*="text-[#D4AF37]"] {
-  stroke: #F5C53B !important;
+  stroke: #FF4D4D !important;
 }
 

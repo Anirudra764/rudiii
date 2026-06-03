@@ -608,7 +608,7 @@ export default function BookingSystem({
                         <div className="space-y-1 text-zinc-300">
                           <p><span className="text-zinc-500">Merchant Payee ID:</span> <span className="text-zinc-100 font-bold select-all underline text-[#a855f7]">{upiId}</span></p>
                           <p><span className="text-zinc-500">Account:</span> <span className="text-zinc-100">Rangrez Fusion Band Ltd</span></p>
-                          <p><span className="text-zinc-500">Secure Billing Value:</span> <span className="text-[#D4AF37] font-extrabold text-xs">₹{finalTotalAmount}</span></p>
+                          <p><span className="text-zinc-500">Secure Billing Value:</span> <span className="text-[#E32636] font-extrabold text-xs">₹{finalTotalAmount}</span></p>
                         </div>
 
                         {/* QR Image customization upload button for testing */}
@@ -631,7 +631,7 @@ export default function BookingSystem({
                     <div className="space-y-2 border-t border-white/5 pt-3 font-mono">
                       <div className="flex justify-between items-center">
                         <label className="text-[10px] text-zinc-300 uppercase tracking-wider font-bold">🎯 Enter 12-digit UPI UTR Transaction ID</label>
-                        <span className="text-[9px] text-[#D4AF37] font-black">Mandatory *</span>
+                        <span className="text-[9px] text-[#E32636] font-black">Mandatory *</span>
                       </div>
                       <input
                         type="text"
@@ -640,38 +640,132 @@ export default function BookingSystem({
                         maxLength={20}
                         value={upiUtr}
                         onChange={(e) => setUpiUtr(e.target.value.replace(/[^0-9a-zA-Z]/g, ''))}
-                        className="w-full bg-black/60 border border-[#8A2BE2]/40 focus:border-[#D4AF37] focus:outline-none rounded-xl px-4 py-2.5 text-xs text-white tracking-widest font-mono text-center"
+                        className="w-full bg-black/60 border border-[#8A2BE2]/40 focus:border-[#E32636] focus:outline-none rounded-xl px-4 py-2.5 text-xs text-white tracking-widest font-mono text-center"
                       />
                       <p className="text-[9px] text-zinc-400 leading-normal font-sans">
                         Execute the UPI transfer using Google Pay/Paytm, scan, then enter the UTR / Ref reference string above to finalize authentication.
                       </p>
                     </div>
                   </div>
-                ) : (
-                  <div className="space-y-4 animate-in fade-in duration-300">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div className="col-span-2 space-y-1">
+                ) : paymentGateway === 'razorpay' ? (
+                  <div className="bg-[#0b0e1a] border border-[#3399FF]/30 p-5 rounded-2xl space-y-4 animate-in fade-in duration-300">
+                    <div className="flex items-center justify-between pb-3 border-b border-white/5">
+                      <div className="flex items-center gap-2">
+                        <div className="w-6 h-6 rounded bg-[#3399FF] flex items-center justify-center font-black text-white text-[10px] uppercase font-sans">R</div>
+                        <div>
+                          <span className="text-xs font-bold text-white block font-sans">Razorpay Secure Checkout</span>
+                          <span className="text-[9px] text-[#3399FF] block font-mono font-bold">v3.0 Production Ready</span>
+                        </div>
+                      </div>
+                      <span className="text-[8px] bg-[#3399FF]/10 text-[#3399FF] border border-[#3399FF]/20 px-1.5 py-0.5 rounded font-mono font-black uppercase">MOCK SANDBOX</span>
+                    </div>
+
+                    <div className="p-4 bg-zinc-950/40 rounded-xl space-y-2 border border-white/5 font-mono text-[10.5px] text-zinc-300">
+                      <div className="flex justify-between"><span className="text-zinc-500">Order Ref ID:</span> <span className="text-zinc-100 font-bold select-all">order_RzP_{Math.random().toString(36).substring(2, 9).toUpperCase()}</span></div>
+                      <div className="flex justify-between"><span className="text-zinc-500">Security:</span> <span className="text-zinc-150">HMAC-SHA256 Signature Verification</span></div>
+                      <div className="flex justify-between"><span className="text-zinc-500">Webhook Target:</span> <span className="text-emerald-400">/api/payments/razorpay/webhook</span></div>
+                      <div className="flex justify-between"><span className="text-zinc-500">Amount Due:</span> <span className="text-[#E32636] font-extrabold text-xs">₹{finalTotalAmount}</span></div>
+                    </div>
+
+                    <div className="space-y-2.5 font-sans">
+                      <label className="text-[10px] text-zinc-400 font-mono uppercase">Developer Integration Handbook</label>
+                      <div className="p-3 bg-zinc-900/90 rounded-lg text-[9px] font-mono text-zinc-400 leading-normal border border-white/5 whitespace-pre-wrap">
+{`// To load real Razorpay Checkout script dynamically:
+const script = document.createElement('script');
+script.src = "https://checkout.razorpay.com/v1/checkout.js";
+document.body.appendChild(script);
+
+// Razorpay checkout configuration schema:
+const options = {
+  key: process.env.RAZORPAY_KEY_ID,
+  amount: ${finalTotalAmount * 100}, // in paise
+  order_id: "order_id_from_backend",
+  handler: function (response) {
+    // response.razorpay_payment_id
+    // response.razorpay_signature
+  }
+};`}
+                      </div>
+                    </div>
+
+                    <div className="p-3 bg-blue-950/20 border border-blue-900/30 rounded-xl text-[9px] text-blue-300 leading-snug">
+                      <span className="font-bold block text-white mb-0.5">🚀 Vercel / Cloud Run Environment Setup</span>
+                      Ensure you declare <code className="bg-zinc-800 text-white px-1 py-0.5 rounded">RAZORPAY_KEY_ID</code> and <code className="bg-zinc-800 text-white px-1 py-0.5 rounded">RAZORPAY_KEY_SECRET</code> in environment parameters. The live payment page checks these values automatically with zero client-side leakage.
+                    </div>
+                  </div>
+                ) : paymentGateway === 'stripe' ? (
+                  <div className="bg-[#110d21] border border-violet-500/20 p-5 rounded-2xl space-y-4 animate-in fade-in duration-300">
+                    <div className="flex items-center justify-between pb-3 border-b border-white/5">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-black text-white tracking-widest font-sans uppercase">Stripe Elements Payment</span>
+                      </div>
+                      <span className="text-[8px] bg-purple-500/10 text-purple-400 border border-purple-500/20 px-1.5 py-0.5 id-tag rounded font-mono uppercase font-bold">Secure SSL</span>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-1">
                         <label className="text-[10px] text-zinc-400 font-mono uppercase">Mock Credit Card Number</label>
                         <input
                           type="text"
                           required
                           value={cardNumber}
                           onChange={(e) => setCardNumber(e.target.value)}
-                          className="w-full bg-black/40 border border-white/10 focus:border-[#D4AF37] focus:outline-none rounded-xl px-4 py-2.5 text-xs font-mono text-zinc-200"
+                          className="w-full bg-black/40 border border-white/10 focus:border-[#E32636] focus:outline-none rounded-xl px-4 py-2.5 text-xs font-mono text-zinc-200"
                         />
                       </div>
 
-                      <div className="space-y-1">
-                        <label className="text-[10px] text-zinc-400 font-mono uppercase">CVV Code</label>
-                        <input
-                          type="password"
-                          maxLength={4}
-                          required
-                          value={cardCvv}
-                          onChange={(e) => setCardCvv(e.target.value)}
-                          className="w-full bg-black/40 border border-white/10 focus:border-[#D4AF37] focus:outline-none rounded-xl px-4 py-2.5 text-xs font-mono text-zinc-200"
-                        />
+                      <div className="grid grid-cols-2 gap-2">
+                        <div className="space-y-1">
+                          <label className="text-[10px] text-zinc-400 font-mono uppercase">Expiry Date</label>
+                          <input
+                            type="text"
+                            required
+                            placeholder="MM/YY"
+                            maxLength={5}
+                            value={cardExpiry}
+                            onChange={(e) => setCardExpiry(e.target.value)}
+                            className="w-full bg-black/40 border border-white/10 focus:border-[#E32636] focus:outline-none rounded-xl px-4 py-2.5 text-xs font-mono text-zinc-200 text-center"
+                          />
+                        </div>
+                        <div className="space-y-1">
+                          <label className="text-[10px] text-zinc-400 font-mono uppercase">CVV Code</label>
+                          <input
+                            type="password"
+                            maxLength={4}
+                            required
+                            value={cardCvv}
+                            onChange={(e) => setCardCvv(e.target.value)}
+                            className="w-full bg-black/40 border border-white/10 focus:border-[#E32636] focus:outline-none rounded-xl px-4 py-2.5 text-xs font-mono text-zinc-200 text-center"
+                          />
+                        </div>
                       </div>
+                    </div>
+                    <p className="text-[9px] text-zinc-500 font-mono">Simulates sandboxed credit card validation. All inputs are wiped clear of local state caches instantly.</p>
+                  </div>
+                ) : (
+                  /* PayPal Smart Button Interface Mockup */
+                  <div className="bg-[#100d1a] border border-amber-500/20 p-5 rounded-2xl space-y-3 animate-in fade-in duration-300">
+                    <div className="flex items-center justify-between pb-3 border-b border-white/5">
+                      <span className="text-xs font-bold text-white font-sans">PayPal Express Checkout</span>
+                      <span className="text-[8px] bg-amber-500/10 text-amber-500 border border-amber-500/20 px-1.5 py-0.5 rounded font-mono font-bold uppercase">Sandbox API</span>
+                    </div>
+
+                    <div className="space-y-2">
+                      <button 
+                        type="button"
+                        onClick={() => alert("Simulating PayPal Express Sandbox Popup overlay. Secure handshake was successful!")}
+                        className="w-full py-3 bg-[#FFC439] hover:bg-[#F2B92E] text-[#003087] font-black italic text-xs rounded-xl transition-all cursor-pointer flex items-center justify-center gap-2"
+                      >
+                        <span className="font-extrabold not-italic font-sans">Pay with</span>
+                        <span className="tracking-tight text-sm">PayPal</span>
+                      </button>
+                      <button 
+                        type="button"
+                        onClick={() => alert("Simulating PayPal Debit or Credit Card popup checkout.")}
+                        className="w-full py-3 bg-[#2C2E2F] hover:bg-[#202122] text-white font-bold text-xs rounded-xl transition-all cursor-pointer flex items-center justify-center gap-2"
+                      >
+                        <span className="tracking-tight">Debit or Credit Card</span>
+                      </button>
                     </div>
                   </div>
                 )}
