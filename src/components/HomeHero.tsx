@@ -43,6 +43,18 @@ export default function HomeHero({
   const [duration, setDuration] = useState(6.0); // 6 Secs looping sequence
   const videoRef = useRef<HTMLVideoElement>(null);
   const [activeScene, setActiveScene] = useState(0);
+  const [showControls, setShowControls] = useState(false);
+
+  // Auto-fade controls after 4 seconds of inactivity on touch/tap devices
+  useEffect(() => {
+    let timeoutId: any;
+    if (showControls) {
+      timeoutId = setTimeout(() => {
+        setShowControls(false);
+      }, 4000);
+    }
+    return () => clearTimeout(timeoutId);
+  }, [showControls]);
 
   // Sync simulated sequencer timer if the physical video fails or is loading
   useEffect(() => {
@@ -335,15 +347,16 @@ export default function HomeHero({
           {/* CINEMATIC THEATRICAL VIDEO PLAYER HUB */}
           <div 
             id="cinematic-video-frame" 
-            className="my-12 relative w-full aspect-[21/9] rounded-3xl bg-zinc-950 border border-white/10 shadow-[0_0_50px_rgba(227,38,54,0.15)] flex flex-col justify-end overflow-hidden group select-none"
+            onClick={() => setShowControls(prev => !prev)}
+            className="my-8 md:my-12 relative w-full aspect-[16/10] sm:aspect-[21/9] rounded-2xl md:rounded-3xl bg-zinc-950 border border-white/10 shadow-[0_0_50px_rgba(227,38,54,0.15)] flex flex-col justify-end overflow-hidden group select-none cursor-pointer"
           >
             {/* Widescreen cinema bars masking style */}
-            <div className="absolute inset-x-0 top-0 h-4 bg-black/90 z-20 pointer-events-none" />
-            <div className="absolute inset-x-0 bottom-0 h-4 bg-black/90 z-20 pointer-events-none" />
+            <div className="absolute inset-x-0 top-0 h-2 md:h-4 bg-black/90 z-20 pointer-events-none" />
+            <div className="absolute inset-x-0 bottom-0 h-2 md:h-4 bg-black/90 z-20 pointer-events-none" />
 
             {/* Glowing Red & Purple backlights on theatrical edges */}
-            <div className="absolute top-0 left-0 w-24 h-full bg-gradient-to-r from-[#E32636]/10 to-transparent pointer-events-none z-10" />
-            <div className="absolute top-0 right-0 w-24 h-full bg-gradient-to-l from-[#8A2BE2]/10 to-transparent pointer-events-none z-10" />
+            <div className="absolute top-0 left-0 w-16 md:w-24 h-full bg-gradient-to-r from-[#E32636]/10 to-transparent pointer-events-none z-10" />
+            <div className="absolute top-0 right-0 w-16 md:w-24 h-full bg-gradient-to-l from-[#8A2BE2]/10 to-transparent pointer-events-none z-10" />
 
             {/* Dynamic Real-time video player source */}
             {!videoError ? (
@@ -376,20 +389,20 @@ export default function HomeHero({
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 1.1 }}
                     transition={{ duration: 0.8 }}
-                    className="absolute inset-0 flex flex-col items-center justify-center bg-black/40"
+                    className="absolute inset-0 flex flex-col items-center justify-center bg-black/40 p-4"
                   >
                     {/* Volumetric spotlight background beam effects */}
                     <div className="absolute top-0 left-1/2 -translate-x-1/2 w-48 h-full bg-gradient-to-b from-white/10 via-white/2 to-transparent filter blur-md transform -skew-x-12 origin-top" />
                     
                     <motion.h2 
-                      className="text-5xl md:text-8xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-red-600 via-rose-500 to-red-900 filter drop-shadow-[0_0_35px_rgba(227,38,54,0.7)] uppercase font-display select-none cursor-default"
+                      className="text-4xl sm:text-6xl md:text-8xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-red-600 via-rose-500 to-red-900 filter drop-shadow-[0_0_35px_rgba(227,38,54,0.7)] uppercase font-display select-none cursor-default text-center"
                       style={{ textShadow: "0 0 40px rgba(227,38,54,0.4)" }}
                       animate={{ scale: [1, 1.05, 1] }}
                       transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
                     >
                       RANGREZ
                     </motion.h2>
-                    <span className="text-[9px] tracking-[0.5em] text-zinc-400 font-mono mt-4 block uppercase">
+                    <span className="text-[8px] sm:text-[9px] tracking-[0.4em] sm:tracking-[0.5em] text-zinc-400 font-mono mt-3 sm:mt-4 block uppercase text-center">
                       ★ THE DYER OF SOULS ★
                     </span>
                   </motion.div>
@@ -414,10 +427,10 @@ export default function HomeHero({
                     />
 
                     {/* Red lightning vector halos and energy arcs */}
-                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none scale-75 sm:scale-100">
                       {/* Inner red ring halo */}
                       <motion.div 
-                        className="w-48 h-48 md:w-80 md:h-80 border-2 border-red-600 rounded-full opacity-60 filter blur-[1px]"
+                        className="w-48 h-48 md:w-80 md:h-80 border-2 border-red-600 rounded-full opacity-65 filter blur-[1px]"
                         animate={{ scale: [0.95, 1.05, 0.95], rotate: 360 }}
                         transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
                       />
@@ -434,7 +447,7 @@ export default function HomeHero({
                         initial={{ opacity: 0, x: -30 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.2 }}
-                        className="bg-black/60 backdrop-blur-md border border-red-500/30 rounded-xl px-4 py-2 text-left hidden sm:block"
+                        className="bg-black/60 backdrop-blur-md border border-red-500/30 rounded-xl px-4 py-2 text-left hidden md:block"
                       >
                         <span className="text-[9px] font-mono tracking-widest text-[#D4AF37] uppercase block">ORIGINAL FUSION</span>
                         <h4 className="text-sm font-black text-white uppercase mt-0.5 tracking-tight">SOUL</h4>
@@ -444,7 +457,7 @@ export default function HomeHero({
                         initial={{ opacity: 0, x: 30 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.4 }}
-                        className="bg-black/60 backdrop-blur-md border border-red-500/30 rounded-xl px-4 py-2 text-right hidden sm:block"
+                        className="bg-black/60 backdrop-blur-md border border-red-500/30 rounded-xl px-4 py-2 text-right hidden md:block"
                       >
                         <span className="text-[9px] font-mono tracking-widest text-red-500 uppercase block font-bold">RAGAS & ACCENTS</span>
                         <h4 className="text-sm font-black text-white uppercase mt-0.5 tracking-tight">ENERGY</h4>
@@ -452,8 +465,8 @@ export default function HomeHero({
                     </div>
 
                     {/* Captions subtitles on film screen bottom */}
-                    <div className="absolute bottom-6 inset-x-0 text-center z-10 pointer-events-none">
-                      <span className="bg-black/80 text-white border border-white/10 rounded-lg px-6 py-1 text-xs md:text-sm font-semibold tracking-wide drop-shadow-lg inline-block uppercase">
+                    <div className="absolute bottom-12 md:bottom-6 inset-x-4 text-center z-10 pointer-events-none">
+                      <span className="bg-black/85 text-white border border-white/10 rounded-lg px-4 md:px-6 py-1 text-[10px] md:text-sm font-semibold tracking-wide drop-shadow-lg inline-block uppercase">
                         "WE DON'T JUST PLAY MUSIC, WE CREATE FEELINGS."
                       </span>
                     </div>
@@ -467,42 +480,59 @@ export default function HomeHero({
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.95 }}
                     transition={{ duration: 0.8 }}
-                    className="absolute inset-0 bg-gradient-to-b from-black via-[#10071c] to-black flex flex-col items-center justify-center p-6 text-center"
+                    className="absolute inset-0 bg-gradient-to-b from-black via-[#10071c] to-black flex flex-col items-center justify-center p-4 md:p-6 text-center"
                   >
-                    <Sparkles className="w-8 h-8 text-red-500 opacity-60 mb-3" />
-                    <h3 className="text-lg md:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-amber-200 to-rose-400 uppercase tracking-wide leading-tight max-w-3xl">
+                    <Sparkles className="w-6 h-6 md:w-8 md:h-8 text-red-500 opacity-60 mb-2 md:mb-3" />
+                    <h3 className="text-sm sm:text-lg md:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-amber-200 to-rose-400 uppercase tracking-wide leading-tight max-w-lg md:max-w-3xl">
                       A Transcendental Journey Connecting Sanskrit Frameworks to Live Heavy Amplification
                     </h3>
-                    <div className="flex gap-4 items-center justify-center mt-4">
-                      <span className="text-[8px] font-mono tracking-widest text-zinc-500 uppercase block">★★ SUFI FUSION ★★</span>
+                    <div className="flex gap-3 items-center justify-center mt-3 md:mt-4">
+                      <span className="text-[7px] sm:text-[8px] font-mono tracking-widest text-zinc-500 uppercase block">★★ SUFI FUSION ★★</span>
                       <div className="w-1.5 h-1.5 rounded-full bg-red-500" />
-                      <span className="text-[8px] font-mono tracking-widest text-zinc-500 uppercase block">★★ RANGREZ MUSIC ★★</span>
+                      <span className="text-[7px] sm:text-[8px] font-mono tracking-widest text-zinc-500 uppercase block">★★ RANGREZ MUSIC ★★</span>
                     </div>
                   </motion.div>
                 )}
               </div>
             )}
 
-            {/* CONTROLLERS & PLAYBACK OVERLAYS HUD (Displays beautifully on hover) */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 z-10 flex flex-col justify-between p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            {/* CONTROLLERS & PLAYBACK OVERLAYS HUD (Displays beautifully on hover or on tap) */}
+            <div 
+              className={`absolute inset-0 bg-gradient-to-t from-black/95 via-black/20 to-black/50 z-10 flex flex-col justify-between p-3 md:p-4 transition-all duration-300 ${
+                showControls ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none md:group-hover:opacity-100 md:group-hover:pointer-events-auto"
+              }`}
+            >
               {/* TOP HEADER */}
-              <div className="flex justify-between items-center bg-black/40 backdrop-blur-sm rounded-xl px-4 py-2 border border-white/[0.03]">
+              <div 
+                className="flex justify-between items-center bg-black/50 backdrop-blur-sm rounded-xl px-3 py-1.5 border border-white/[0.05]"
+                onClick={(e) => e.stopPropagation()}
+              >
                 <div className="flex items-center gap-2">
-                  <Film className="w-3.5 h-3.5 text-red-500 animate-pulse" />
-                  <span className="text-[9px] font-mono text-zinc-300 font-bold uppercase tracking-wider">
-                    {videoError ? "● RANGREZ CINEMATIC SEQUENCE [SIMULATED]" : "● PLAYING DIGITAL DIRECT VIDEO STREAM"}
+                  <Film className="w-3 h-3 text-red-500 animate-pulse" />
+                  <span className="text-[8px] sm:text-[9px] font-mono text-zinc-300 font-bold uppercase tracking-wider truncate max-w-[140px] sm:max-w-none">
+                    {videoError ? "● RANGREZ SIMULATION LOOP" : "● PLAYING DIRECT DIGITAL SOURCING"}
                   </span>
                 </div>
-                <div className="flex items-center gap-2 bg-red-600/20 text-red-400 border border-red-500/20 rounded-full px-2 py-0.5 text-[8px] font-mono uppercase font-black tracking-widest">
+                <div className="flex items-center gap-1.5 bg-red-650/20 text-red-400 border border-red-500/20 rounded-full px-2 py-0.5 text-[7px] sm:text-[8px] font-mono uppercase font-black tracking-widest">
                   <Zap className="w-2.5 h-2.5 animate-bounce" /> VEO ENGINE
                 </div>
               </div>
 
+              {/* TAP INDICATOR HINT overlay (only visible when HUD is hidden to assist users on mobile discovery) */}
+              {!showControls && (
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none bg-black/60 border border-white/10 rounded-full px-4 py-1.5 text-[8px] font-mono text-zinc-400 uppercase tracking-widest flex items-center gap-2 shadow-2xl opacity-80 group-hover:opacity-0 transition-opacity md:hidden">
+                  <Sparkles className="w-2.5 h-2.5 text-amber-400" /> Tap layer for controls
+                </div>
+              )}
+
               {/* BOTTOM CONTROL GRID */}
-              <div className="space-y-3 bg-black/60 backdrop-blur-md rounded-2xl p-4 border border-white/5 shadow-2xl">
+              <div 
+                className="space-y-2.5 bg-black/85 backdrop-blur-md rounded-xl md:rounded-2xl p-2.5 md:p-4 border border-white/10 shadow-2xl"
+                onClick={(e) => e.stopPropagation()}
+              >
                 {/* Slider progress track */}
-                <div className="flex items-center gap-3">
-                  <span className="text-[9px] font-mono text-zinc-400 min-w-[28px] text-right">
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <span className="text-[8px] sm:text-[9px] font-mono text-zinc-400 min-w-[28px] text-right">
                     {currentTime.toFixed(1)}s
                   </span>
                   <input
@@ -514,48 +544,48 @@ export default function HomeHero({
                     onChange={handleProgressChange}
                     className="flex-1 accent-[#E32636] h-1.5 bg-zinc-800 rounded-lg cursor-pointer transition-all hover:bg-zinc-700"
                   />
-                  <span className="text-[9px] font-mono text-zinc-400 min-w-[28px]">
+                  <span className="text-[8px] sm:text-[9px] font-mono text-zinc-400 min-w-[28px]">
                     {duration.toFixed(1)}s
                   </span>
                 </div>
 
                 {/* Function Buttons row */}
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between gap-2">
                   {/* Left segment */}
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2 sm:gap-3">
                     <button
                       onClick={handleTogglePlay}
-                      className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#E32636] to-[#af1f2b] text-white flex items-center justify-center shadow-lg transform hover:scale-105 transition-all text-xs border border-white/10 cursor-pointer"
+                      className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-gradient-to-tr from-[#E32636] to-[#af1f2b] text-white flex items-center justify-center shadow-lg transform active:scale-95 sm:hover:scale-105 transition-all text-xs border border-white/10 cursor-pointer"
                       title={isPlaying ? "Pause Intro Presentation" : "Play Intro Presentation"}
                     >
-                      {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 ml-0.5" />}
+                      {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5 ml-0.5" />}
                     </button>
 
                     <button
                       onClick={handleToggleMute}
-                      className="w-10 h-10 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-zinc-300 flex items-center justify-center transition-colors cursor-pointer"
+                      className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-white/[0.04] hover:bg-white/[0.08] active:bg-white/[0.12] border border-white/10 text-zinc-300 flex items-center justify-center transition-colors cursor-pointer"
                       title={isMuted ? "Unmute sound outputs" : "Mute sound outputs"}
                     >
-                      {isMuted ? <VolumeX className="w-4 h-4 text-red-400" /> : <Volume2 className="w-4 h-4 text-emerald-400" />}
+                      {isMuted ? <VolumeX className="w-3.5 h-3.5 text-red-400" /> : <Volume2 className="w-3.5 h-3.5 text-emerald-400" />}
                     </button>
 
-                    <div className="hidden md:flex flex-col text-left justify-center pl-2">
-                      <span className="text-[9px] font-mono text-zinc-400 uppercase tracking-widest leading-none">NOW PLAYING</span>
-                      <h4 className="text-xs font-bold text-white uppercase mt-1 tracking-tight">RANGREZ CINEMATIC BAND INTRO</h4>
+                    <div className="hidden sm:flex flex-col text-left justify-center pl-1">
+                      <span className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest leading-none">NOW PLAYING</span>
+                      <h4 className="text-[10px] md:text-xs font-bold text-white uppercase mt-1 tracking-tight">RANGREZ INTRO SEQUENCE</h4>
                     </div>
                   </div>
 
                   {/* Right segment */}
                   <div className="flex items-center gap-2">
-                    <span className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest hidden lg:inline mr-2">
+                    <span className="text-[7px] sm:text-[8px] font-mono text-zinc-550 uppercase tracking-widest hidden lg:inline mr-2">
                       TRANSITIONAL WATERMARK BRANDING [VEO]
                     </span>
                     <button
                       onClick={handleFullscreen}
-                      className="w-10 h-10 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-zinc-300 flex items-center justify-center transition-colors cursor-pointer"
+                      className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-white/[0.04] hover:bg-white/[0.08] active:bg-white/[0.12] border border-white/10 text-zinc-300 flex items-center justify-center transition-colors cursor-pointer"
                       title="Toggle Fullscreen Theatre"
                     >
-                      <Maximize2 className="w-4 h-4" />
+                      <Maximize2 className="w-3.5 h-3.5" />
                     </button>
                   </div>
                 </div>
